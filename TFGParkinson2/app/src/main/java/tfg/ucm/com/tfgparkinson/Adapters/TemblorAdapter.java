@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import tfg.ucm.com.tfgparkinson.Classes.Temblor;
 import tfg.ucm.com.tfgparkinson.R;
 
-public class HistorialAdapter extends ArrayAdapter<Temblor> {
+public class TemblorAdapter extends ArrayAdapter<Temblor> {
 
     private ArrayList<Temblor> temblores;
     private Context context;
 
-    public HistorialAdapter(Context context, int layoutResourceId, ArrayList<Temblor> temblores) {
+    public TemblorAdapter(Context context, int layoutResourceId, ArrayList<Temblor> temblores) {
         super(context, layoutResourceId, temblores);
         this.context = context;
         this.temblores = temblores;
@@ -34,15 +34,15 @@ public class HistorialAdapter extends ArrayAdapter<Temblor> {
         }
 
         TemblorHolder holder = new TemblorHolder();
-        holder.fecha_temblor = (TextView) item.findViewById(R.id.fechaTemblor);
         holder.hora_temblor = (TextView) item.findViewById(R.id.horaTemblor);
+        holder.duracion_temblor = (TextView) item.findViewById(R.id.duracionTemblor);
         holder.observaciones_temblor = (TextView) item.findViewById(R.id.observacionesTemblor);
         holder.opciones_temblor = (ImageView) item.findViewById(R.id.opcionesTemblor);
         item.setTag(holder);
 
         final Temblor temblor = temblores.get(position);
-        holder.fecha_temblor.setText(temblor.getFecha().toString());
         holder.hora_temblor.setText(temblor.getHora());
+        //holder.duracion_temblor.setText(temblor.getDuracion());
         holder.observaciones_temblor.setText(temblor.getObservaciones());
         holder.opciones_temblor.setVisibility(View.VISIBLE);
 
@@ -50,8 +50,8 @@ public class HistorialAdapter extends ArrayAdapter<Temblor> {
     }
 
     private static class TemblorHolder {
-        TextView fecha_temblor;
         TextView hora_temblor;
+        TextView duracion_temblor;
         TextView observaciones_temblor;
         ImageView opciones_temblor;
     }
