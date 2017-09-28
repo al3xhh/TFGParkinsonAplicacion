@@ -3,10 +3,14 @@ package tfg.ucm.com.tfgparkinson.Activities;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,7 +44,7 @@ public class HistorialActiviy extends AppCompatActivity {
         Temblor temblor14 = new Temblor(new Date(), "20:00", 1, "Estaba andando");
         Temblor temblor15 = new Temblor(new Date(), "20:00", 1, "Estaba leyendo");
 
-        ArrayList<Temblor> temblores = new ArrayList<>();
+        final ArrayList<Temblor> temblores = new ArrayList<>();
         temblores.add(temblor1);
         temblores.add(temblor2);
         temblores.add(temblor3);
@@ -63,6 +67,7 @@ public class HistorialActiviy extends AppCompatActivity {
         TextView textoActual;
 
         for(int i = 0; i < temblores.size(); i ++) {
+            final Temblor temblor = temblores.get(i);
             if(i % 3 == 0) {
                 vistaActual = layoutInflater.inflate(R.layout.dia_grafico, null, false);
                 textoActual = (TextView) vistaActual.findViewById(R.id.fecha);
@@ -73,6 +78,28 @@ public class HistorialActiviy extends AppCompatActivity {
                 textoActual.setText("Observaciones: " + temblores.get(i).getObservaciones());
                 textoActual = (TextView) vistaActual.findViewById(R.id.horaTemblor);
                 textoActual.setText("Hora: " + temblores.get(i).getHora());
+                ImageView opcionesTemblor = (ImageView) vistaActual.findViewById(R.id.opcionesTemblor);
+                opcionesTemblor.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final String observaciones = temblor.getObservaciones();
+                        PopupMenu popup = new PopupMenu(getBaseContext(), view);
+                        popup.getMenuInflater().inflate(R.menu.opciones_temblor, popup.getMenu());
+                        popup.show();
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem menuItem) {
+                                switch (menuItem.getItemId()) {
+                                    case R.id.borra_temblor:
+                                        break;
+                                    case R.id.editar_temblor:
+                                        break;
+                                }
+                                return true;
+                            }
+                        });
+                    }
+                });
                 //textoActual = (TextView) vistaActual.findViewById(R.id.duracionTemblor);
                 //textoActual.setText(temblores.get(i).getDuracion());
             }

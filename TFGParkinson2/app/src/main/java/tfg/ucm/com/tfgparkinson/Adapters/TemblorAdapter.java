@@ -2,10 +2,12 @@ package tfg.ucm.com.tfgparkinson.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -45,6 +47,26 @@ public class TemblorAdapter extends ArrayAdapter<Temblor> {
         //holder.duracion_temblor.setText(temblor.getDuracion());
         holder.observaciones_temblor.setText(temblor.getObservaciones());
         holder.opciones_temblor.setVisibility(View.VISIBLE);
+        holder.opciones_temblor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popup = new PopupMenu(context, view);
+                popup.getMenuInflater().inflate(R.menu.opciones_temblor, popup.getMenu());
+                popup.show();
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch (menuItem.getItemId()) {
+                            case R.id.borra_temblor:
+                                break;
+                            case R.id.editar_temblor:
+                                break;
+                        }
+                        return true;
+                    }
+                });
+            }
+        });
 
         return item;
     }
