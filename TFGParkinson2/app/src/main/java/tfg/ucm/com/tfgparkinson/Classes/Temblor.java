@@ -27,4 +27,16 @@ public class Temblor {
     public String getObservaciones() {
         return observaciones;
     }
+
+    public void setFecha(Date fecha) { this.fecha = fecha; }
+
+    public void setHora(String hora) { this.hora = hora; }
+
+    public void setDuracion(int duracion) {
+        this.duracion = duracion;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
 }

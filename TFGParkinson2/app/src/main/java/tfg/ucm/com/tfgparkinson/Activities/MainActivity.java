@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TimePicker hora = (TimePicker) findViewById(R.id.timePicker);
+        TimePicker hora = (TimePicker) findViewById(R.id.editarHora);
         hora.setIs24HourView(true);
 
         Button historial = (Button) findViewById(R.id.buttonHistorial);

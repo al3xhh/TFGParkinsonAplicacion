@@ -5,10 +5,10 @@
         android:id="@+id/borra_temblor"
         android:orderInCategory="100"
         android:title="Borrar"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
     <item
         android:id="@+id/editar_temblor"
         android:orderInCategory="100"
         android:title="Editar"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
 </menu>
