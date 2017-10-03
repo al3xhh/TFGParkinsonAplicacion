@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/botonAnyadirTemblor"
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        android:layout_weight="1"
+        android:background="@color/colorIndigo"
+        android:text="Añadir temblor"
+        android:textColor="@color/colorBlack"
+        android:textSize="24dp" />
+
+    <Button
+        android:id="@+id/botonEstoyTemblando"
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        android:layout_weight="1"
+        android:background="@color/colorBlue"
+        android:text="Estoy temblando"
+        android:textColor="@color/colorBlack"
+        android:textSize="24dp" />
+
+    <Button
+        android:id="@+id/botonVerHistorial"
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        android:layout_weight="1"
+        android:background="@color/colorCyan"
+        android:text="Ver historial"
+        android:textColor="@color/colorBlack"
+        android:textSize="24dp" />
+</LinearLayout>
