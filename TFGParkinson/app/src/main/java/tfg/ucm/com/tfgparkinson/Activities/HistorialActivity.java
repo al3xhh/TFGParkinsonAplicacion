@@ -81,7 +81,7 @@ public class HistorialActivity extends AppCompatActivity {
             } else {
                 vistaActual = layoutInflater.inflate(R.layout.representacion_temblor, null, false);
                 vistaActual.setBackgroundColor(colorActual);
-                textoActual = (TextView) vistaActual.findViewById(R.id.editarAnyadirHora);
+                textoActual = (TextView) vistaActual.findViewById(R.id.horaTemblor);
                 textoActual.setText("Hora: " + temblores.get(i).getHora());
                 textoActual = (TextView) vistaActual.findViewById(R.id.duracionTemblor);
                 textoActual.setText("Duración: " + temblores.get(i).getDuracion());
@@ -134,7 +134,7 @@ public class HistorialActivity extends AppCompatActivity {
     private void editar(final Temblor temblor) {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.editar_anyadir_temblor, null);
+        View dialogView = inflater.inflate(R.layout.editar_temblor, null);
         dialogBuilder.setView(dialogView);
 
         String[] hora = temblor.getHora().split(":");
@@ -144,10 +144,10 @@ public class HistorialActivity extends AppCompatActivity {
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        DatePicker datePicker = (DatePicker) dialogView.findViewById(R.id.editarAnyadirFecha);
-        TimePicker timePicker = (TimePicker) dialogView.findViewById(R.id.editarAnyadirHora);
-        EditText duracion = (EditText) dialogView.findViewById(R.id.editarAnyadirDuracion);
-        EditText observaciones = (EditText) dialogView.findViewById(R.id.editarAnyadirObservaciones);
+        DatePicker datePicker = (DatePicker) dialogView.findViewById(R.id.editarFecha);
+        TimePicker timePicker = (TimePicker) dialogView.findViewById(R.id.editarHora);
+        EditText duracion = (EditText) dialogView.findViewById(R.id.editarDuracion);
+        EditText observaciones = (EditText) dialogView.findViewById(R.id.editarObservciones);
 
         datePicker.updateDate(year, month, day);
         timePicker.setIs24HourView(true);

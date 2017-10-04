@@ -28,11 +28,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button estoyTemblando = (Button) findViewById(R.id.botonEstoyTemblando);
+        final Button estoyTemblando = (Button) findViewById(R.id.botonEstoyTemblando);
         estoyTemblando.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                anyadirTemblor();
+                estoyTemblando();
             }
         });
 
@@ -42,20 +42,22 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, HistorialActivity.class);
                 startActivity(i);
-
             }
         });
     }
 
+    /**
+     *
+     */
     private void anyadirTemblor() {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.editar_anyadir_temblor, null);
+        View dialogView = inflater.inflate(R.layout.anyadir_temblor, null);
 
-        final DatePicker fechaTemblor = (DatePicker) dialogView.findViewById(R.id.editarAnyadirFecha);
+        final DatePicker fechaTemblor = (DatePicker) dialogView.findViewById(R.id.anyadirFecha);
         fechaTemblor.setVisibility(View.GONE);
 
-        final TimePicker horaTemblor = (TimePicker) dialogView.findViewById(R.id.editarAnyadirHora);
+        final TimePicker horaTemblor = (TimePicker) dialogView.findViewById(R.id.anyadirHora);
         horaTemblor.setIs24HourView(true);
         horaTemblor.setVisibility(View.GONE);
 
@@ -89,6 +91,30 @@ public class MainActivity extends AppCompatActivity {
                     horaTemblor.setVisibility(View.GONE);
             }
         });
+
+        dialogBuilder.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //TODO aquí habrá que hacer persistentes los cambios en el fichero o base de datos
+            }
+        });
+
+        dialogBuilder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        dialogBuilder.setView(dialogView);
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void estoyTemblando(){
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.estoy_temblando, null);
+
 
         dialogBuilder.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
             @Override
