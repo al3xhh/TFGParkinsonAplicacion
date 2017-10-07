@@ -74,7 +74,7 @@
         android:layout_marginStart="16dp" />
 
     <Button
-        android:id="@+id/botonEntrar"
+        android:id="@+id/botonOk"
         android:layout_width="0dp"
         android:layout_height="230dp"
         android:layout_marginBottom="9dp"
@@ -82,10 +82,10 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:text="Entrar"
+        android:background="@color/colorBlue"
+        android:text="Comenzar"
         android:textColor="@color/colorBlack"
         android:textSize="24dp"
-        android:background="@color/colorBlue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"

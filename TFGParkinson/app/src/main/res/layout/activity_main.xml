@@ -10,7 +10,7 @@
         android:layout_weight="1"
         android:background="@color/colorIndigo"
         android:text="Añadir temblor"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/colorWhite"
         android:textSize="24dp" />
 
     <Button
@@ -20,7 +20,7 @@
         android:layout_weight="1"
         android:background="@color/colorBlue"
         android:text="Estoy temblando"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/colorWhite"
         android:textSize="24dp" />
 
     <Button
@@ -30,6 +30,6 @@
         android:layout_weight="1"
         android:background="@color/colorCyan"
         android:text="Ver historial"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/colorWhite"
         android:textSize="24dp" />
 </LinearLayout>
