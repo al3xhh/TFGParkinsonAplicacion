@@ -24,6 +24,8 @@ import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.Clases.Temblor;
 import tfg.ucm.com.tfgparkinson.R;
 
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+
 public class HistorialActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -40,51 +42,52 @@ public class HistorialActivity extends AppCompatActivity {
         View vistaActual;
         TextView textoActual;
         int colorActual = getColor(R.color.colorIndigo);
+        String fechaActual =  "", fechaAnterior = "";
 
         for(int i = 0; i < temblores.size(); i ++) {
-            final Temblor temblor = temblores.get(i);
-            if (i % 3 == 0) {
+            Temblor temblor = temblores.get(i);
+            fechaActual = temblor.getFecha();
+
+            if (!fechaActual.equals(fechaAnterior)) {
                 vistaActual = layoutInflater.inflate(R.layout.representacion_dia, null, false);
                 vistaActual.setBackgroundColor(colorActual);
                 textoActual = (TextView) vistaActual.findViewById(R.id.fechaTemblor);
                 textoActual.setText(temblor.getFecha());
-            } else {
-                vistaActual = layoutInflater.inflate(R.layout.representacion_temblor, null, false);
-                vistaActual.setBackgroundColor(colorActual);
-                textoActual = (TextView) vistaActual.findViewById(R.id.horaTemblor);
-                textoActual.setText("Hora: " + temblores.get(i).getHora());
-                textoActual = (TextView) vistaActual.findViewById(R.id.duracionTemblor);
-                textoActual.setText("Duración: " + temblores.get(i).getDuracion());
-                textoActual = (TextView) vistaActual.findViewById(R.id.observacionesTemblor);
-                textoActual.setText("Observaciones: " + temblores.get(i).getObservaciones());
-                ImageView opcionesTemblor = (ImageView) vistaActual.findViewById(R.id.opcionesTemblor);
-                opcionesTemblor.setBackgroundColor(colorActual);
-                opcionesTemblor.setOnClickListener(view -> {
-                    PopupMenu popup = new PopupMenu(getBaseContext(), view);
-                    popup.getMenuInflater().inflate(R.menu.opciones_temblor, popup.getMenu());
-                    popup.show();
-                    popup.setOnMenuItemClickListener(menuItem -> {
-                        switch (menuItem.getItemId()) {
-                            case R.id.borrar_temblor:
-                                borrar(temblor);
-                                break;
-                            case R.id.editar_temblor:
-                                editar(temblor);
-                                break;
-                        }
-                        return true;
-                    });
-                });
-                //TODO CAMBIAR ESTO POR LOS TEMBLORES DE CADA DIA
-                if((i - 2) % 3 == 0) {
-                    if(colorActual == getColor(R.color.colorIndigo))
-                        colorActual = getColor(R.color.colorBlue);
-                    else
-                        colorActual = getColor(R.color.colorIndigo);
-                }
+                historial.addView(vistaActual);
             }
+            vistaActual = layoutInflater.inflate(R.layout.representacion_temblor, null, false);
+            vistaActual.setBackgroundColor(colorActual);
+            textoActual = (TextView) vistaActual.findViewById(R.id.horaTemblor);
+            textoActual.setText("Hora: " + temblores.get(i).getHora());
+            textoActual = (TextView) vistaActual.findViewById(R.id.duracionTemblor);
+            textoActual.setText("Duración: " + temblores.get(i).getDuracion());
+            textoActual = (TextView) vistaActual.findViewById(R.id.observacionesTemblor);
+            textoActual.setText("Observaciones: " + temblores.get(i).getObservaciones());
+            ImageView opcionesTemblor = (ImageView) vistaActual.findViewById(R.id.opcionesTemblor);
+            opcionesTemblor.setBackgroundColor(colorActual);
+            opcionesTemblor.setOnClickListener(view -> {
+                PopupMenu popup = new PopupMenu(getBaseContext(), view);
+                popup.getMenuInflater().inflate(R.menu.opciones_temblor, popup.getMenu());
+                popup.show();
+                popup.setOnMenuItemClickListener(menuItem -> {
+                    switch (menuItem.getItemId()) {
+                        case R.id.borrar_temblor:
+                            borrar(temblor);
+                            break;
+                        case R.id.editar_temblor:
+                            editar(temblor);
+                            break;
+                    }
+                    return true;
+                });
+            });
+
+            if(i < temblores.size() - 1)
+                if(!fechaActual.equals(temblores.get(i + 1).getFecha()))
+                    colorActual = (colorActual == getColor(R.color.colorIndigo)) ? getColor(R.color.colorBlue) : getColor(R.color.colorIndigo);
 
             historial.addView(vistaActual);
+            fechaAnterior = temblor.getFecha();
         }
     }
 
@@ -118,6 +121,12 @@ public class HistorialActivity extends AppCompatActivity {
         observaciones.setText(temblor.getObservaciones());
 
         dialogBuilder.setPositiveButton("Editar", (dialog, which) -> {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), timePicker.getHour(), timePicker.getMinute());
+            Timestamp ts = new Timestamp(calendar.getTimeInMillis());
+            temblor.setTimestamp(ts);
+            temblor.setDuracion(Integer.parseInt(duracion.getText().toString()));
+            temblor.setObservaciones(observaciones.getText().toString());
             GestorBD bd = new GestorBD(this);
             bd.updateTemblor(temblor);
             reiniciarActivity();

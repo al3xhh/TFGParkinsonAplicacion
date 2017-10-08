@@ -15,9 +15,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.Clases.Temblor;
 import tfg.ucm.com.tfgparkinson.R;
@@ -134,8 +131,6 @@ public class MainActivity extends AppCompatActivity {
         final EditText observacionesTemblor = (EditText) dialogView.findViewById(R.id.estoyTemblandoObservaciones);
 
         dialogBuilder.setPositiveButton(getString(R.string.guardar), (dialog, which) -> {
-            Calendar fechaActual = GregorianCalendar.getInstance();
-
             Temblor temblor = new Temblor(Integer.parseInt(duracionTemblor.getText().toString()), observacionesTemblor.getText().toString());
             GestorBD bd = new GestorBD(this);
             bd.insertTemblor(temblor);
