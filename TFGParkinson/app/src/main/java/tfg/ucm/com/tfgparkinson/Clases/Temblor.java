@@ -92,7 +92,7 @@ public class Temblor {
     }
 
     private ArrayList<Integer> parseDiaYHora(String fecha, String hora) {
-        ArrayList<Integer> datos = new ArrayList<Integer>();
+        ArrayList<Integer> datos = new ArrayList<>();
         String[] tokensFecha = fecha.split("/");
         String[] tokensHora = hora.split(":");
 

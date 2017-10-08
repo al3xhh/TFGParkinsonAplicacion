@@ -1,5 +1,6 @@
 package tfg.ucm.com.tfgparkinson.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.Clases.Temblor;
@@ -28,15 +30,28 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button anyadirTemblor = (Button) findViewById(R.id.botonAnyadirTemblor);
-        anyadirTemblor.setOnClickListener(v -> anyadirTemblor());
+        anyadirTemblor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                anyadirTemblor();
+            }
+        });
 
         final Button estoyTemblando = (Button) findViewById(R.id.botonEstoyTemblando);
-        estoyTemblando.setOnClickListener(v -> estoyTemblando());
+        estoyTemblando.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                estoyTemblando();
+            }
+        });
 
         Button verHistorial = (Button) findViewById(R.id.botonVerHistorial);
-        verHistorial.setOnClickListener(v -> {
-            Intent i = new Intent(MainActivity.this, HistorialActivity.class);
-            startActivity(i);
+        verHistorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, HistorialActivity.class);
+                startActivity(i);
+            }
         });
     }
 
@@ -81,37 +96,60 @@ public class MainActivity extends AppCompatActivity {
         final EditText duracionTemblor = (EditText) dialogView.findViewById(R.id.anyadirDuracion);
         final EditText observacionesTemblor = (EditText) dialogView.findViewById(R.id.anyadirObservaciones);
 
-        cambiarFecha.setOnClickListener(v -> {
-            if(cambiarHora.isEnabled())
-                cambiarHora.setEnabled(false);
-            else
-                cambiarHora.setEnabled(true);
-            if(fechaTemblor.getVisibility() == View.GONE)
-                fechaTemblor.setVisibility(View.VISIBLE);
-            else
-                fechaTemblor.setVisibility(View.GONE);
+        cambiarFecha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(cambiarHora.isEnabled())
+                    cambiarHora.setEnabled(false);
+                else
+                    cambiarHora.setEnabled(true);
+                if(fechaTemblor.getVisibility() == View.GONE)
+                    fechaTemblor.setVisibility(View.VISIBLE);
+                else
+                    fechaTemblor.setVisibility(View.GONE);
+            }
         });
 
-        cambiarHora.setOnClickListener(v -> {
-            if(cambiarFecha.isEnabled())
-                cambiarFecha.setEnabled(false);
-            else
-                cambiarFecha.setEnabled(true);
-            if(horaTemblor.getVisibility() == View.GONE)
-                horaTemblor.setVisibility(View.VISIBLE);
-            else
-                horaTemblor.setVisibility(View.GONE);
+        cambiarHora.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(cambiarFecha.isEnabled())
+                    cambiarFecha.setEnabled(false);
+                else
+                    cambiarFecha.setEnabled(true);
+                if(horaTemblor.getVisibility() == View.GONE)
+                    horaTemblor.setVisibility(View.VISIBLE);
+                else
+                    horaTemblor.setVisibility(View.GONE);
+            }
         });
 
-        dialogBuilder.setPositiveButton(R.string.guardar, (dialog, which) -> {
-            Temblor temblor = new Temblor(fechaTemblor.getYear() + "/" + fechaTemblor.getMonth() + "/" + fechaTemblor.getDayOfMonth(),
-                    horaTemblor.getHour() + ":" + horaTemblor.getMinute(), Integer.parseInt(duracionTemblor.getText().toString()),
-                    observacionesTemblor.getText().toString());
-            GestorBD bd = new GestorBD(this);
-            bd.insertTemblor(temblor);
+        dialogBuilder.setPositiveButton(getString(R.string.guardar), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(duracionTemblor.getText().toString().trim().length() == 0 ||
+                        observacionesTemblor.getText().toString().trim().length() == 0) {
+                    Toast.makeText(getApplicationContext(), R.string.campoVacio, Toast.LENGTH_SHORT).show();
+                } else {
+                    try {
+                        Temblor temblor = new Temblor(fechaTemblor.getDayOfMonth() + "/" + fechaTemblor.getMonth() + "/" + fechaTemblor.getYear(),
+                                horaTemblor.getHour() + ":" + horaTemblor.getMinute(), Integer.parseInt(duracionTemblor.getText().toString()),
+                                observacionesTemblor.getText().toString());
+                        GestorBD bd = new GestorBD(getApplicationContext());
+                        bd.insertTemblor(temblor);
+                        Toast.makeText(getApplicationContext(), R.string.exitoRegistroTemblor, Toast.LENGTH_SHORT).show();
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(getApplicationContext(), R.string.duracionNoValida, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
         });
 
-        dialogBuilder.setNegativeButton(R.string.cancelar, (dialog, which) -> {
+        dialogBuilder.setNegativeButton(getString(R.string.cancelar), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
         });
 
         dialogBuilder.setView(dialogView);
@@ -130,13 +168,30 @@ public class MainActivity extends AppCompatActivity {
         final EditText duracionTemblor = (EditText) dialogView.findViewById(R.id.estoyTemblandoDuracion);
         final EditText observacionesTemblor = (EditText) dialogView.findViewById(R.id.estoyTemblandoObservaciones);
 
-        dialogBuilder.setPositiveButton(getString(R.string.guardar), (dialog, which) -> {
-            Temblor temblor = new Temblor(Integer.parseInt(duracionTemblor.getText().toString()), observacionesTemblor.getText().toString());
-            GestorBD bd = new GestorBD(this);
-            bd.insertTemblor(temblor);
+        dialogBuilder.setPositiveButton(getString(R.string.guardar), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(duracionTemblor.getText().toString().trim().length() == 0 ||
+                        observacionesTemblor.getText().toString().trim().length() == 0) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.campoVacio), Toast.LENGTH_SHORT).show();
+                } else {
+                    try {
+                        Temblor temblor = new Temblor(Integer.parseInt(duracionTemblor.getText().toString()), observacionesTemblor.getText().toString());
+                        GestorBD bd = new GestorBD(getApplicationContext());
+                        bd.insertTemblor(temblor);
+                        Toast.makeText(getApplicationContext(), R.string.exitoRegistroTemblor, Toast.LENGTH_SHORT).show();
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.duracionNoValida), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
         });
 
-        dialogBuilder.setNegativeButton(getString(R.string.cancelar), (dialog, which) -> {
+        dialogBuilder.setNegativeButton(getString(R.string.cancelar), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
         });
 
         dialogBuilder.setView(dialogView);

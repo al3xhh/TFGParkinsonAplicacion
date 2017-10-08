@@ -2,4 +2,7 @@
     <string name="app_name">TFG Parkinson</string>
     <string name="guardar">Guardar</string>
     <string name="cancelar">Cancelar</string>
+    <string name="campoVacio">Debes introducir duración y observaciones.</string>
+    <string name="duracionNoValida">Duración no válida.</string>
+    <string name="exitoRegistroTemblor">Temblor registrado con éxito.</string>
 </resources>

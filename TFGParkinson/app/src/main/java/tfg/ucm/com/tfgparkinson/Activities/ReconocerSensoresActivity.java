@@ -32,8 +32,11 @@ public class ReconocerSensoresActivity extends AppCompatActivity {
 
         final Button botonOK = (Button) findViewById(R.id.botonOk);
         botonOK.setVisibility(View.GONE);
-        botonOK.setOnClickListener(v -> {
-            onBackPressed();
+        botonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
         });
 
         new CountDownTimer(2000, 1000) {
