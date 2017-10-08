@@ -16,12 +16,11 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import tfg.ucm.com.tfgparkinson.Clases.BBDD.DAOS.DAODeleteTemblor;
-import tfg.ucm.com.tfgparkinson.Clases.BBDD.DAOS.DAOGetTemblores;
-import tfg.ucm.com.tfgparkinson.Clases.BBDD.DAOS.DAOUpdateTemblor;
+import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.Clases.Temblor;
 import tfg.ucm.com.tfgparkinson.R;
 
@@ -33,8 +32,8 @@ public class HistorialActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historial);
 
-        DAOGetTemblores daoGetTemblores = new DAOGetTemblores();
-        ArrayList<Temblor> temblores = daoGetTemblores.ejecutar();
+        GestorBD bd = new GestorBD(this);
+        ArrayList<Temblor> temblores = bd.getTemblores();
 
         LinearLayout historial = (LinearLayout) findViewById(R.id.historial);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
@@ -48,7 +47,7 @@ public class HistorialActivity extends AppCompatActivity {
                 vistaActual = layoutInflater.inflate(R.layout.representacion_dia, null, false);
                 vistaActual.setBackgroundColor(colorActual);
                 textoActual = (TextView) vistaActual.findViewById(R.id.fechaTemblor);
-                textoActual.setText("12/07/17");
+                textoActual.setText(temblor.getFecha());
             } else {
                 vistaActual = layoutInflater.inflate(R.layout.representacion_temblor, null, false);
                 vistaActual.setBackgroundColor(colorActual);
@@ -101,11 +100,10 @@ public class HistorialActivity extends AppCompatActivity {
         dialogBuilder.setView(dialogView);
 
         String[] hora = temblor.getHora().split(":");
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(temblor.getFecha());
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
+        String[] fecha = temblor.getFecha().split("/");
+        int year = Integer.parseInt(fecha[2]);
+        int month = Integer.parseInt(fecha[1]);
+        int day = Integer.parseInt(fecha[0]);
 
         DatePicker datePicker = (DatePicker) dialogView.findViewById(R.id.editarFecha);
         TimePicker timePicker = (TimePicker) dialogView.findViewById(R.id.editarHora);
@@ -120,8 +118,8 @@ public class HistorialActivity extends AppCompatActivity {
         observaciones.setText(temblor.getObservaciones());
 
         dialogBuilder.setPositiveButton("Editar", (dialog, which) -> {
-            DAOUpdateTemblor daoUpdateTemblor = new DAOUpdateTemblor(temblor);
-            daoUpdateTemblor.ejecutar();
+            GestorBD bd = new GestorBD(this);
+            bd.updateTemblor(temblor);
             reiniciarActivity();
         });
 
@@ -141,8 +139,8 @@ public class HistorialActivity extends AppCompatActivity {
         dialogBuilder.setTitle("Borrar temblor");
         dialogBuilder.setMessage("¿Realmente desea borrar el temblor?");
         dialogBuilder.setPositiveButton("Borrar", (dialog, which) -> {
-            DAODeleteTemblor daoDeleteTemblor = new DAODeleteTemblor(temblor);
-            daoDeleteTemblor.ejecutar();
+            GestorBD bd = new GestorBD(this);
+            bd.deleteTemblor(temblor);
             reiniciarActivity();
         });
         dialogBuilder.setNegativeButton("Cancelar", (dialog, which) -> {

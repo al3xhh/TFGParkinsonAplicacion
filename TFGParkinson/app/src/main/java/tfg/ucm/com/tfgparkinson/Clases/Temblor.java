@@ -40,6 +40,11 @@ public class Temblor {
         this.observaciones = observaciones;
     }
 
+    public Temblor(int duracion, String observaciones){
+        this.duracion = duracion;
+        this.observaciones = observaciones;
+    }
+
     public int getId() {
         return id;
     }
@@ -56,18 +61,20 @@ public class Temblor {
         this.timestamp = timestamp;
     }
 
-    public Date getFecha() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(this.timestamp.getTime());
+    public String getFecha() {
 
-        return calendar.getTime();
+        String[] tokens = timestamp.toString().split(" ");
+        String[] fecha = tokens[0].split("-");
+        String formatedFecha = fecha[2] + "/" + fecha[1] + "/" + fecha[0];
+
+        return formatedFecha;
     }
 
     public String getHora() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(this.timestamp.getTime());
+        String[] tokens = timestamp.toString().split(" ");
+        String[] hora = tokens[1].split(":");
 
-        return calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE);
+        return hora[0] + ":" + hora[1];
     }
 
     public int getDuracion() { return this.duracion; }
@@ -93,13 +100,13 @@ public class Temblor {
             for (int i = tokensFecha.length - 1; i >= 0; i--)
                 datos.add(Integer.parseInt(tokensFecha[i]));
 
-            for (int i = 0; i < tokensFecha.length; i++)
+            for (int i = 0; i < tokensHora.length; i++)
                 datos.add(Integer.parseInt(tokensHora[i]));
         }
         catch (NumberFormatException e) {
             datos = null;
         }
 
-        return null;
+        return datos;
     }
 }

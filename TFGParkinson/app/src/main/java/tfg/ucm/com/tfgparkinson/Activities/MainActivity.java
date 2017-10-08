@@ -18,7 +18,7 @@ import android.widget.TimePicker;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import tfg.ucm.com.tfgparkinson.Clases.BBDD.DAOS.DAOInsertTemblor;
+import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.Clases.Temblor;
 import tfg.ucm.com.tfgparkinson.R;
 
@@ -110,8 +110,8 @@ public class MainActivity extends AppCompatActivity {
             Temblor temblor = new Temblor(fechaTemblor.getYear() + "/" + fechaTemblor.getMonth() + "/" + fechaTemblor.getDayOfMonth(),
                     horaTemblor.getHour() + ":" + horaTemblor.getMinute(), Integer.parseInt(duracionTemblor.getText().toString()),
                     observacionesTemblor.getText().toString());
-            DAOInsertTemblor daoInsertTemblor = new DAOInsertTemblor(temblor);
-            daoInsertTemblor.ejecutar();
+            GestorBD bd = new GestorBD(this);
+            bd.insertTemblor(temblor);
         });
 
         dialogBuilder.setNegativeButton(R.string.cancelar, (dialog, which) -> {
@@ -136,11 +136,9 @@ public class MainActivity extends AppCompatActivity {
         dialogBuilder.setPositiveButton(getString(R.string.guardar), (dialog, which) -> {
             Calendar fechaActual = GregorianCalendar.getInstance();
 
-            Temblor temblor = new Temblor(fechaActual.get(Calendar.YEAR) + "/" + fechaActual.get(Calendar.MONTH) + "/" + fechaActual.get(Calendar.DAY_OF_MONTH),
-                    fechaActual.get(Calendar.HOUR) + ":" + fechaActual.get(Calendar.MINUTE), Integer.parseInt(duracionTemblor.getText().toString()),
-                    observacionesTemblor.getText().toString());
-            DAOInsertTemblor daoInsertTemblor = new DAOInsertTemblor(temblor);
-            daoInsertTemblor.ejecutar();
+            Temblor temblor = new Temblor(Integer.parseInt(duracionTemblor.getText().toString()), observacionesTemblor.getText().toString());
+            GestorBD bd = new GestorBD(this);
+            bd.insertTemblor(temblor);
         });
 
         dialogBuilder.setNegativeButton(getString(R.string.cancelar), (dialog, which) -> {
