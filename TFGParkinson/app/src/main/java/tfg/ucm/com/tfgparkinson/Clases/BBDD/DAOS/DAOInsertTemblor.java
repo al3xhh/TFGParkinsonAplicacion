@@ -25,7 +25,7 @@ public class DAOInsertTemblor {
     /**
      * Devuelve el id de la fila insertada o -1 si hay algun error
      * */
-    public long exjecutar(){
+    public long ejecutar(){
         SQLiteDatabase conexion = GestorBD.getConexion();
         ContentValues cv = new ContentValues();
 

@@ -18,8 +18,6 @@ public class Temblor {
     private int id;
     private Timestamp timestamp;
 
-
-
     public Temblor(int id, Timestamp ts, int duracion, String observaciones) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(ts.getTime());

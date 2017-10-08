@@ -1,13 +1,12 @@
 package tfg.ucm.com.tfgparkinson.Activities;
 
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -19,8 +18,10 @@ import android.widget.TimePicker;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
+import tfg.ucm.com.tfgparkinson.Clases.BBDD.DAOS.DAODeleteTemblor;
+import tfg.ucm.com.tfgparkinson.Clases.BBDD.DAOS.DAOGetTemblores;
+import tfg.ucm.com.tfgparkinson.Clases.BBDD.DAOS.DAOUpdateTemblor;
 import tfg.ucm.com.tfgparkinson.Clases.Temblor;
 import tfg.ucm.com.tfgparkinson.R;
 
@@ -32,38 +33,8 @@ public class HistorialActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historial);
 
-        Temblor temblor1 = new Temblor(new Date(), "18:00", 1, "Estaba tecleando");
-        Temblor temblor2 = new Temblor(new Date(), "20:00", 2, "Estaba usando el móvil");
-        Temblor temblor3 = new Temblor(new Date(), "21:00", 4, "Estaba fregando");
-        Temblor temblor4 = new Temblor(new Date(), "21:00", 5, "Estaba fregando");
-        Temblor temblor5 = new Temblor(new Date(), "14:00", 5, "Estaba andando");
-        Temblor temblor6 = new Temblor(new Date(), "15:00", 8, "Estaba leyendo");
-        Temblor temblor7 = new Temblor(new Date(), "18:00", 8, "Estaba tecleando");
-        Temblor temblor8 = new Temblor(new Date(), "20:00", 13, "Estaba usando el móvil");
-        Temblor temblor9 = new Temblor(new Date(), "20:00", 9, "Estaba fregando");
-        Temblor temblor10 = new Temblor(new Date(), "20:00", 34, "Estaba andando");
-        Temblor temblor11 = new Temblor(new Date(), "20:00", 3, "Estaba leyendo");
-        Temblor temblor12 = new Temblor(new Date(), "20:00", 9, "Estaba usando el móvil");
-        Temblor temblor13 = new Temblor(new Date(), "20:00", 2, "Estaba fregando");
-        Temblor temblor14 = new Temblor(new Date(), "20:00", 78, "Estaba andando");
-        Temblor temblor15 = new Temblor(new Date(), "20:00", 9, "Estaba leyendo");
-
-        final ArrayList<Temblor> temblores = new ArrayList<>();
-        temblores.add(temblor1);
-        temblores.add(temblor2);
-        temblores.add(temblor3);
-        temblores.add(temblor4);
-        temblores.add(temblor5);
-        temblores.add(temblor6);
-        temblores.add(temblor7);
-        temblores.add(temblor8);
-        temblores.add(temblor9);
-        temblores.add(temblor10);
-        temblores.add(temblor11);
-        temblores.add(temblor12);
-        temblores.add(temblor13);
-        temblores.add(temblor14);
-        temblores.add(temblor15);
+        DAOGetTemblores daoGetTemblores = new DAOGetTemblores();
+        ArrayList<Temblor> temblores = daoGetTemblores.ejecutar();
 
         LinearLayout historial = (LinearLayout) findViewById(R.id.historial);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
@@ -89,29 +60,21 @@ public class HistorialActivity extends AppCompatActivity {
                 textoActual.setText("Observaciones: " + temblores.get(i).getObservaciones());
                 ImageView opcionesTemblor = (ImageView) vistaActual.findViewById(R.id.opcionesTemblor);
                 opcionesTemblor.setBackgroundColor(colorActual);
-                opcionesTemblor.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        PopupMenu popup = new PopupMenu(getBaseContext(), view);
-                        popup.getMenuInflater().inflate(R.menu.opciones_temblor, popup.getMenu());
-                        popup.show();
-                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            @RequiresApi(api = Build.VERSION_CODES.M)
-                            @Override
-                            public boolean onMenuItemClick(MenuItem menuItem) {
-                                switch (menuItem.getItemId()) {
-                                    case R.id.borrar_temblor:
-                                        //TODO habrá que pasar el id del temblor que se quiere borrar
-                                        borrar();
-                                        break;
-                                    case R.id.editar_temblor:
-                                        editar(temblor);
-                                        break;
-                                }
-                                return true;
-                            }
-                        });
-                    }
+                opcionesTemblor.setOnClickListener(view -> {
+                    PopupMenu popup = new PopupMenu(getBaseContext(), view);
+                    popup.getMenuInflater().inflate(R.menu.opciones_temblor, popup.getMenu());
+                    popup.show();
+                    popup.setOnMenuItemClickListener(menuItem -> {
+                        switch (menuItem.getItemId()) {
+                            case R.id.borrar_temblor:
+                                borrar(temblor);
+                                break;
+                            case R.id.editar_temblor:
+                                editar(temblor);
+                                break;
+                        }
+                        return true;
+                    });
                 });
                 //TODO CAMBIAR ESTO POR LOS TEMBLORES DE CADA DIA
                 if((i - 2) % 3 == 0) {
@@ -156,17 +119,13 @@ public class HistorialActivity extends AppCompatActivity {
         duracion.setText(String.valueOf(temblor.getDuracion()));
         observaciones.setText(temblor.getObservaciones());
 
-        dialogBuilder.setPositiveButton("Editar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //TODO aquí habrá que hacer persistentes los cambios en el fichero o base de datos
-            }
+        dialogBuilder.setPositiveButton("Editar", (dialog, which) -> {
+            DAOUpdateTemblor daoUpdateTemblor = new DAOUpdateTemblor(temblor);
+            daoUpdateTemblor.ejecutar();
+            reiniciarActivity();
         });
 
-        dialogBuilder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
+        dialogBuilder.setNegativeButton("Cancelar", (dialog, which) -> {
         });
 
         AlertDialog alertDialog = dialogBuilder.create();
@@ -175,25 +134,27 @@ public class HistorialActivity extends AppCompatActivity {
 
     /**
      *
+     * @param temblor
      */
-    private void borrar() {
+    private void borrar(Temblor temblor) {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle("Borrar temblor");
         dialogBuilder.setMessage("¿Realmente desea borrar el temblor?");
-        dialogBuilder.setPositiveButton("Borrar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //TODO aquí habra que borrar el temblor del fichero o base de datos
-            }
+        dialogBuilder.setPositiveButton("Borrar", (dialog, which) -> {
+            DAODeleteTemblor daoDeleteTemblor = new DAODeleteTemblor(temblor);
+            daoDeleteTemblor.ejecutar();
+            reiniciarActivity();
         });
-        dialogBuilder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
+        dialogBuilder.setNegativeButton("Cancelar", (dialog, which) -> {
         });
 
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
+    }
+
+    private void reiniciarActivity() {
+        Intent i = getIntent();
+        finish();
+        startActivity(i);
     }
 }
