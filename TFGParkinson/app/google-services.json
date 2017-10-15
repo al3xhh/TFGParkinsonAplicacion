@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "755581361333",
+    "firebase_url": "https://tfg-parkinson.firebaseio.com",
+    "project_id": "tfg-parkinson",
+    "storage_bucket": "tfg-parkinson.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:755581361333:android:df0c309886c51cb2",
+        "android_client_info": {
+          "package_name": "tfg.ucm.com.tfgparkinson"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "755581361333-qt4s64irf7kdmt8o96epgc3fp6p98skt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tfg.ucm.com.tfgparkinson",
+            "certificate_hash": "4797dde6e28f39cf9c3172f981de031d1df94c66"
+          }
+        },
+        {
+          "client_id": "755581361333-30tldi45heq28eepc951jndivbfcac4k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9vUNBnBjvr6FQm0W26tjUf6NytXBWs7s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "755581361333-30tldi45heq28eepc951jndivbfcac4k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
