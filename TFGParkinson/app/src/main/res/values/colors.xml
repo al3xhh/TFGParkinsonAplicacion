@@ -8,4 +8,6 @@
     <color name="colorCyan">#00BCD4</color>
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorRed">#FF0000</color>
+    <color name="colorGreen">#00FF00</color>
 </resources>

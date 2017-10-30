@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="rangos_acelerometro">
+        <item>2G</item>
+        <item>4G</item>
+        <item>8G</item>
+        <item>16G</item>
+    </string-array>
+</resources>

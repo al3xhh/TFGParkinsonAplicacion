@@ -2,7 +2,26 @@
     <string name="app_name">TFG Parkinson</string>
     <string name="guardar">Guardar</string>
     <string name="cancelar">Cancelar</string>
-    <string name="campoVacio">Debes introducir duración y observaciones.</string>
-    <string name="duracionNoValida">Duración no válida.</string>
-    <string name="exitoRegistroTemblor">Temblor registrado con éxito.</string>
+    <string name="campo_vacio">Debes introducir duración y observaciones.</string>
+    <string name="duracion_no_valida">Duración no válida.</string>
+    <string name="exito_registro_temblor">Temblor registrado con éxito.</string>
+
+    <!-- Information/labels -->
+    <string name="no_connected_devices">No hay dispositivos conectados</string>
+    <string name="connected_device">Dispostivo conectado</string>
+    <string name="connected_devices">Dispositivos conectados</string>
+    <string name="new_ble_device">Nuevo dispostivo BLE encontrado:  </string>
+    <string name="dialog_title_inr_scan">Escaneando LE múltiple</string>
+    <string name="dialog_title_select_devices">Seleccione dispostivos</string>
+
+    <!-- Actions -->
+    <string name="action_scan">ESCANEAR</string>
+    <string name="action_connect">Conectar</string>
+    <string name="action_disconnect">DESCONECTAR</string>
+    <string name="action_scanning_devices">Escaneando dispositivos…</string>
+
+    <!-- Errors -->
+    <string name="error_no_ble_support">LE no soportado.</string>
+    <string name="error_not_valid_device">Dispostivo no válido: </string>
+    <string name="error_null_device">Dispositivo NULL</string>
 </resources>

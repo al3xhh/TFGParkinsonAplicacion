@@ -58,19 +58,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        Intent i;
         if (item.getItemId() == R.id.reconocer_sensores) {
-            Intent i = new Intent(MainActivity.this, ReconocerSensoresActivity.class);
-            startActivity(i);
-
-            return true;
+            i = new Intent(MainActivity.this, ReconocerSensoresActivity.class);
+        } else {
+            i = new Intent(MainActivity.this, EmparejarSensoresActivity.class);
         }
+
+        startActivity(i);
 
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.reconocer_sensores, menu);
+        getMenuInflater().inflate(R.menu.sensores, menu);
 
         return true;
     }
@@ -129,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if(duracionTemblor.getText().toString().trim().length() == 0 ||
                         observacionesTemblor.getText().toString().trim().length() == 0) {
-                    Toast.makeText(getApplicationContext(), R.string.campoVacio, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.campo_vacio, Toast.LENGTH_SHORT).show();
                 } else {
                     try {
                         Temblor temblor = new Temblor(fechaTemblor.getDayOfMonth() + "/" + fechaTemblor.getMonth() + "/" + fechaTemblor.getYear(),
@@ -137,9 +139,9 @@ public class MainActivity extends AppCompatActivity {
                                 observacionesTemblor.getText().toString());
                         GestorBD bd = new GestorBD(getApplicationContext());
                         bd.insertTemblor(temblor);
-                        Toast.makeText(getApplicationContext(), R.string.exitoRegistroTemblor, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.exito_registro_temblor, Toast.LENGTH_SHORT).show();
                     } catch (NumberFormatException e) {
-                        Toast.makeText(getApplicationContext(), R.string.duracionNoValida, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.duracion_no_valida, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -173,15 +175,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if(duracionTemblor.getText().toString().trim().length() == 0 ||
                         observacionesTemblor.getText().toString().trim().length() == 0) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.campoVacio), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.campo_vacio), Toast.LENGTH_SHORT).show();
                 } else {
                     try {
                         Temblor temblor = new Temblor(Integer.parseInt(duracionTemblor.getText().toString()), observacionesTemblor.getText().toString());
                         GestorBD bd = new GestorBD(getApplicationContext());
                         bd.insertTemblor(temblor);
-                        Toast.makeText(getApplicationContext(), R.string.exitoRegistroTemblor, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.exito_registro_temblor, Toast.LENGTH_SHORT).show();
                     } catch (NumberFormatException e) {
-                        Toast.makeText(getApplicationContext(), getString(R.string.duracionNoValida), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.duracion_no_valida), Toast.LENGTH_SHORT).show();
                     }
                 }
             }

@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -22,6 +24,7 @@
         </activity>
         <activity android:name=".Activities.ReconocerSensoresActivity"></activity>
         <activity android:name=".Activities.HistorialActivity"></activity>
+        <activity android:name=".Activities.EmparejarSensoresActivity"></activity>
     </application>
 
 </manifest>

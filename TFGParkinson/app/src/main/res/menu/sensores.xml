@@ -2,8 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/reconocer_sensores"
+    android:id="@+id/reconocer_sensores"
+    android:orderInCategory="100"
+    android:title="Reconocer"
+    app:showAsAction="always" />
+    <item
+        android:id="@+id/emparejar_sensores"
         android:orderInCategory="100"
-        android:title="Reconocer sensores"
+        android:title="Emparejar"
         app:showAsAction="always" />
 </menu>
