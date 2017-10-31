@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -47,6 +48,7 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
     private TextView mTextStatus;
     private Button mButtonScan;
     private Button mButtonDisconnect;
+    private ConstraintLayout mConfigLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +69,6 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
             startActivity(intent);
         }
 
-        statusCheck();
-
         // Check for BLE Support.
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             String message = getResources().getString(R.string.error_no_ble_support);
@@ -76,34 +76,6 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
             finish();
         }
     }
-
-    public void statusCheck() {
-        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            buildAlertMessageNoGps();
-
-        }
-    }
-
-    private void buildAlertMessageNoGps() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("¿Activar localicalización?")
-                .setCancelable(false)
-                .setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int id) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int id) {
-                        dialog.cancel();
-                    }
-                });
-        final AlertDialog alert = builder.create();
-        alert.show();
-    }
-
 
     @Override
     protected void onStop() {
@@ -120,6 +92,8 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
         mButtonScan.setOnClickListener(showAvailableDevices);
         mButtonDisconnect = (Button) findViewById(R.id.main_button_disconnect);
         mButtonDisconnect.setOnClickListener(disconnectFromDevices);
+        mConfigLayout = (ConstraintLayout) findViewById(R.id.configLayout);
+        mDevicesListView = (ListView) findViewById(R.id.main_list_devices);
     }
 
     /*
@@ -219,6 +193,8 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 dialog.dismiss();
+                mDevicesListView.setVisibility(View.GONE);
+                mConfigLayout.setVisibility(View.VISIBLE);
             }
         }).create();
         dialogBuilder.show();
@@ -230,6 +206,8 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
     private Button.OnClickListener showAvailableDevices = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            mDevicesListView.setVisibility(View.VISIBLE);
+            mConfigLayout.setVisibility(View.GONE);
             String title = mContext.getResources().getString(R.string.dialog_title_inr_scan);
             String message = mContext.getResources().getString(R.string.action_scanning_devices);
             final ProgressDialog progressDialog =
@@ -268,6 +246,8 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
             mButtonScan.setEnabled(true);
             mTextStatus.setText(getString(R.string.no_connected_devices));
             mTextStatus.setTextColor(getResources().getColor(R.color.colorRed));
+            mDevicesListView.setVisibility(View.GONE);
+            mConfigLayout.setVisibility(View.VISIBLE);
         }
     };
 
