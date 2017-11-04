@@ -58,6 +58,10 @@ public class MultiBLEService implements BluetoothAdapter.LeScanCallback,
         this.mConnectedGatts = new ArrayList<>();
     }
 
+    public void setOptions(HashMap<Integer, Byte> options) {
+        this.options = options;
+    }
+
     @Override
     public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
         if (device != null) {

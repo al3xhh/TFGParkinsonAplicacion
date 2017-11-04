@@ -24,12 +24,23 @@ public class Constantes {
     public static final Byte ACCL_ON_VALUE = 0x38;
     public static final Byte GYRO_ON_VALUE = 0x07;
     public static final Byte MAGN_ON_VALUE = 0x40;
-    public static final Byte ACCL_RANGE_2G = 0x00;
-    public static final Byte ACCL_RANGE_4G = 0x01;
-    public static final Byte ACCL_RANGE_8G = 0x02;
-    public static final Byte ACCL_RANGE_16G = 0x03;
+    private static final Byte ACCL_RANGE_2G = 0x00;
+    private static final Byte ACCL_RANGE_4G = 0x01;
+    private static final Byte ACCL_RANGE_8G = 0x02;
+    private static final Byte ACCL_RANGE_16G = 0x03;
 
     //valor generio para indicar que no se quiere usar esa funcionalidad
     public static final Byte OFF = 0x00;
 
+    public static Byte getRange(String value) {
+        if(value.equals("2G"))
+            return ACCL_RANGE_2G;
+        if(value.equals("4G"))
+            return ACCL_RANGE_4G;
+        if(value.equals("8G"))
+            return ACCL_RANGE_8G;
+        else
+            return ACCL_RANGE_16G;
+
+    }
 }

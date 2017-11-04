@@ -20,8 +20,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,17 +89,7 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
 
     private void initVariables() {
         mContext = EmparejarSensoresActivity.this;
-
-        HashMap<Integer, Byte> options = new HashMap<Integer, Byte>();
-        options.put(Constantes.GYRO_ON, Constantes.GYRO_ON_VALUE);
-        options.put(Constantes.ACCL_ON, Constantes.ACCL_ON_VALUE);
-        options.put(Constantes.MAGN_ON, Constantes.MAGN_ON_VALUE);
-        options.put(Constantes.WAKE_ON_MOTION, Constantes.OFF);
-        options.put(Constantes.ACCL_RANGE, Constantes.ACCL_RANGE_4G);
-        options.put(Constantes.PERIOD, new Byte((byte) 0x64));
-
-        mMultiBleService = new MultiBLEService(mContext, options); //crear hashMap y pasarlo como el segundo parametro
-
+        mMultiBleService = new MultiBLEService(mContext); //crear hashMap y pasarlo como el segundo parametro
         mTextStatus = (TextView) findViewById(R.id.main_text_status);
         mButtonScan = (Button) findViewById(R.id.main_button_scan);
         mButtonScan.setOnClickListener(showAvailableDevices);
@@ -120,7 +113,7 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
             values.put("name", String.format("%s - %s",
                     gatts.get(i).getDevice().getName(), gatts.get(i).getDevice().getAddress()));
             // Empty value for accelerometer until it's sensor is receiving data
-            values.put("accelerometer", "Accelerometer not available");
+            values.put("accelerometer", "Accelerometer and gyroscope not available");
             mDevicesData.add(values);
         }
 
@@ -216,6 +209,30 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
     private Button.OnClickListener showAvailableDevices = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            HashMap<Integer, Byte> options = new HashMap<>();
+
+            Spinner rangoAcelerometro = (Spinner) findViewById(R.id.rangoAcelerometro);
+            CheckBox acelerometro = (CheckBox) findViewById(R.id.acelerometroCheckBox);
+            CheckBox giroscopio = (CheckBox) findViewById(R.id.giroscopioCheckBox);
+            CheckBox magnetometro = (CheckBox) findViewById(R.id.magnetometroCheckBox);
+            Switch wakeOn = (Switch) findViewById(R.id.wakeOnSwitch);
+
+            if(acelerometro.isChecked())
+                options.put(Constantes.ACCL_ON, Constantes.ACCL_ON_VALUE);
+            if(giroscopio.isChecked())
+                options.put(Constantes.GYRO_ON, Constantes.GYRO_ON_VALUE);
+            if(magnetometro.isChecked())
+                options.put(Constantes.MAGN_ON, Constantes.MAGN_ON_VALUE);
+            if(!wakeOn.isChecked())
+                options.put(Constantes.WAKE_ON_MOTION, Constantes.OFF);
+
+            options.put(Constantes.ACCL_RANGE, Constantes.getRange(rangoAcelerometro.getSelectedItem().toString()));
+            options.put(Constantes.PERIOD, new Byte((byte) 0x64));
+
+            Log.d("Opciones", options.toString());
+
+            mMultiBleService.setOptions(options);
+
             mDevicesListView.setVisibility(View.VISIBLE);
             mConfigLayout.setVisibility(View.GONE);
             String title = mContext.getResources().getString(R.string.dialog_title_inr_scan);
@@ -275,8 +292,8 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
             int position = mMultiBleService.getSelectedDevices().indexOf(gatt.getDevice());
 
             // Update the accelerometer's value in the device's data and notify the listView adapter.
-            mDevicesData.get(position).put("accelerometer", String.format(Locale.getDefault(),
-                    "Accel. values: %d, %d, %d", accelX, accelY, accelZ));
+            mDevicesData.get(position).put("Data", String.format(Locale.getDefault(),
+                    "Accel. values: %d, %d, %d Gyro. values: %d, %d, %d", accelX, accelY, accelZ, gyroX, gyroY, gyroZ));
 
             ((BaseAdapter) mDevicesListView.getAdapter()).notifyDataSetChanged();
         }
