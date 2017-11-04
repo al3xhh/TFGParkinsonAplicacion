@@ -11,8 +11,11 @@ import android.util.Log;
 import android.util.SparseArray;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+
+import tfg.ucm.com.tfgparkinson.Clases.utils.Constantes;
 
 /**
  * Custom implementation of the Bluetooth GATT Callbacks for connection with multiple devices.
@@ -22,8 +25,9 @@ public class MultiBLECallback extends BluetoothGattCallback {
 
     private static final String TAG = MultiBLECallback.class.getSimpleName();
 
-    private final byte[] ENCENDER_ACC = new byte[]{0x38, 0x02};
-    private final byte[] ENCENDER_ACC_GYRO = new byte[]{0x3f, 0x02};
+
+    //Sensor options
+    private  HashMap<Integer, Byte> mOptions;
 
     // State Machine Tracking
     private Handler mHandler;
@@ -33,6 +37,18 @@ public class MultiBLECallback extends BluetoothGattCallback {
 
 
     // Multi BLE Callback public constructor.
+    public MultiBLECallback(Handler handler, HashMap<Integer, Byte> options) {
+        mOptions = options;
+        mHandler = handler;
+        mCurrentSensors = new SparseArray<>();
+
+        // Array containing the device's available sensor(s) to read. In our case, only accelerometer.
+        mBleSensors = new ArrayList<>();
+        mBleSensors.add(IMultiBLEMessageType.ACCELEROMETER_SERVICE);
+        // The ID of the first sensor.
+        mBleServiceId = mBleSensors.get(0);
+    }
+
     public MultiBLECallback(Handler handler) {
         mHandler = handler;
         mCurrentSensors = new SparseArray<>();
@@ -121,6 +137,7 @@ public class MultiBLECallback extends BluetoothGattCallback {
         // Once notifications are enabled, we move to the next sensor and start over with enable
         bleNextService(gatt);
         enableNextSensor(gatt);
+        setPeriod(gatt);
     }
 
     @Override
@@ -133,13 +150,21 @@ public class MultiBLECallback extends BluetoothGattCallback {
      * This is specific to the SensorTag to keep power low by disabling sensors you aren't using.
      */
     private void enableNextSensor(BluetoothGatt gatt) {
+        /*
+        * Gyro [0:2]
+        * Accl [3:5]
+        * Magn [6]
+        * Wake-on-Motion [7]
+        * Accl-range [8:9]
+        * */
         BluetoothGattCharacteristic characteristic;
         switch (mBleServiceId) {
             case IMultiBLEMessageType.ACCELEROMETER_SERVICE:
                 Log.e(TAG, "Enabling accelerometer service...");
+
                 characteristic = gatt.getService(IMultiBLEMessageType.ACCEL_SERVICE)
                         .getCharacteristic(IMultiBLEMessageType.ACCEL_CONFIG_CHAR);
-                characteristic.setValue(ENCENDER_ACC);
+                characteristic.setValue(getSensorConfiguration());
                 break;
 
             default:
@@ -230,4 +255,22 @@ public class MultiBLECallback extends BluetoothGattCallback {
         return UuidChar.toString().equals(IMultiBLEMessageType.ACCEL_DATA_CHAR.toString());
     }
 
+    private byte[] getSensorConfiguration() {
+        byte[] config = new byte[2];
+
+        config[0] = (byte) (mOptions.get(Constantes.ACCL_ON) | mOptions.get(Constantes.GYRO_ON) |
+                            mOptions.get(Constantes.MAGN_ON) | mOptions.get(Constantes.WAKE_ON_MOTION));
+        config[1] = mOptions.get(Constantes.ACCL_RANGE);
+
+        Log.e(TAG, "VALOR DE CONFIG" + config.toString());
+        return config;
+    }
+
+    private void setPeriod(BluetoothGatt gatt){
+        BluetoothGattCharacteristic characteristic = gatt.getService(IMultiBLEMessageType.ACCEL_SERVICE)
+                .getCharacteristic(IMultiBLEMessageType.ACCEL_PERIOD);
+        characteristic.setValue(new byte[]{mOptions.get(Constantes.PERIOD).byteValue()});
+
+        gatt.writeCharacteristic(characteristic);
+    }
 }

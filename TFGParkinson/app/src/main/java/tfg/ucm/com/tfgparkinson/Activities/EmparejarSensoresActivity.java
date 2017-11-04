@@ -33,6 +33,7 @@ import java.util.Map;
 
 import tfg.ucm.com.tfgparkinson.Clases.BLE.IMultiBLEAccelServiceDelegate;
 import tfg.ucm.com.tfgparkinson.Clases.BLE.MultiBLEService;
+import tfg.ucm.com.tfgparkinson.Clases.utils.Constantes;
 import tfg.ucm.com.tfgparkinson.R;
 
 public class EmparejarSensoresActivity extends AppCompatActivity implements IMultiBLEAccelServiceDelegate {
@@ -85,7 +86,16 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
 
     private void initVariables() {
         mContext = EmparejarSensoresActivity.this;
-        mMultiBleService = new MultiBLEService(mContext);
+
+        HashMap<Integer, Byte> options = new HashMap<Integer, Byte>();
+        options.put(Constantes.GYRO_ON, Constantes.GYRO_ON_VALUE);
+        options.put(Constantes.ACCL_ON, Constantes.ACCL_ON_VALUE);
+        options.put(Constantes.MAGN_ON, Constantes.MAGN_ON_VALUE);
+        options.put(Constantes.WAKE_ON_MOTION, Constantes.OFF);
+        options.put(Constantes.ACCL_RANGE, Constantes.ACCL_RANGE_4G);
+        options.put(Constantes.PERIOD, new Byte((byte) 0x64));
+
+        mMultiBleService = new MultiBLEService(mContext, options); //crear hashMap y pasarlo como el segundo parametro
 
         mTextStatus = (TextView) findViewById(R.id.main_text_status);
         mButtonScan = (Button) findViewById(R.id.main_button_scan);
@@ -267,6 +277,7 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
             // Update the accelerometer's value in the device's data and notify the listView adapter.
             mDevicesData.get(position).put("accelerometer", String.format(Locale.getDefault(),
                     "Accel. values: %d, %d, %d", accelX, accelY, accelZ));
+
             ((BaseAdapter) mDevicesListView.getAdapter()).notifyDataSetChanged();
         }
     }
