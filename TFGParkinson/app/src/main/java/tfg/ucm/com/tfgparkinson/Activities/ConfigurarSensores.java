@@ -40,6 +40,8 @@ public class ConfigurarSensores extends AppCompatActivity {
                 CheckBox magnetometro = (CheckBox) findViewById(R.id.magnetometroCheckBox);
                 Switch wakeOn = (Switch) findViewById(R.id.wakeOnSwitch);
 
+                options.put(Constantes.ACCL_RANGE, Constantes.getRange(rangoAcelerometro.getSelectedItem().toString()));
+
                 if(acelerometro.isChecked())
                     options.put(Constantes.ACCL_ON, Constantes.ACCL_ON_VALUE);
                 else
@@ -57,15 +59,20 @@ public class ConfigurarSensores extends AppCompatActivity {
                 if(periodo.getText().toString().equals(""))
                     options.put(Constantes.PERIOD, Constantes.DEFAULT_PERIOD);
                 else
-                    options.put(Constantes.PERIOD, Byte.valueOf((String.valueOf(Integer.parseInt(periodo.getText().toString()) / 10))));
+                    try {
+                        if (Integer.parseInt(periodo.getText().toString()) < 100 || Integer.parseInt(periodo.getText().toString()) > 2550)
+                            periodo.setError("Valor no válido, debe estar entre 100 y 2550");
+                        else {
+                            options.put(Constantes.PERIOD, Byte.valueOf((String.valueOf(Integer.parseInt(periodo.getText().toString()) / 10))));
+                            Log.d("Opciones", options.toString());
 
-                options.put(Constantes.ACCL_RANGE, Constantes.getRange(rangoAcelerometro.getSelectedItem().toString()));
-
-                Log.d("Opciones", options.toString());
-
-                Intent intent = new Intent(ConfigurarSensores.this, EmparejarSensoresActivity.class);
-                intent.putExtra("options", options);
-                startActivity(intent);
+                            Intent intent = new Intent(ConfigurarSensores.this, EmparejarSensoresActivity.class);
+                            intent.putExtra("options", options);
+                            startActivity(intent);
+                        }
+                    } catch (Exception e) {
+                        periodo.setError("Valor no válido");
+                    }
             }
         });
     }
