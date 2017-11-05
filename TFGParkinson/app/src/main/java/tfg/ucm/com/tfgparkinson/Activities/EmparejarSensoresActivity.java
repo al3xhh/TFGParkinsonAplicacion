@@ -52,14 +52,15 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
     private TextView mTextStatus;
     private Button mButtonScan;
     private Button mButtonDisconnect;
-    private ConstraintLayout mConfigLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emparejar_sensores);
 
-        initVariables();
+        Intent intent = getIntent();
+
+        initVariables((HashMap<Integer, Byte>)intent.getSerializableExtra("options"));
         checkForPermissions();
     }
 
@@ -87,15 +88,14 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
         mMultiBleService.disconnectFromDevices();
     }
 
-    private void initVariables() {
+    private void initVariables(HashMap<Integer, Byte> options) {
         mContext = EmparejarSensoresActivity.this;
-        mMultiBleService = new MultiBLEService(mContext); //crear hashMap y pasarlo como el segundo parametro
+        mMultiBleService = new MultiBLEService(mContext, options); //crear hashMap y pasarlo como el segundo parametro
         mTextStatus = (TextView) findViewById(R.id.main_text_status);
         mButtonScan = (Button) findViewById(R.id.main_button_scan);
         mButtonScan.setOnClickListener(showAvailableDevices);
         mButtonDisconnect = (Button) findViewById(R.id.main_button_disconnect);
         mButtonDisconnect.setOnClickListener(disconnectFromDevices);
-        mConfigLayout = (ConstraintLayout) findViewById(R.id.configLayout);
         mDevicesListView = (ListView) findViewById(R.id.main_list_devices);
     }
 
@@ -196,8 +196,6 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 dialog.dismiss();
-                mDevicesListView.setVisibility(View.GONE);
-                mConfigLayout.setVisibility(View.VISIBLE);
             }
         }).create();
         dialogBuilder.show();
@@ -209,32 +207,6 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
     private Button.OnClickListener showAvailableDevices = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            HashMap<Integer, Byte> options = new HashMap<>();
-
-            Spinner rangoAcelerometro = (Spinner) findViewById(R.id.rangoAcelerometro);
-            CheckBox acelerometro = (CheckBox) findViewById(R.id.acelerometroCheckBox);
-            CheckBox giroscopio = (CheckBox) findViewById(R.id.giroscopioCheckBox);
-            CheckBox magnetometro = (CheckBox) findViewById(R.id.magnetometroCheckBox);
-            Switch wakeOn = (Switch) findViewById(R.id.wakeOnSwitch);
-
-            if(acelerometro.isChecked())
-                options.put(Constantes.ACCL_ON, Constantes.ACCL_ON_VALUE);
-            if(giroscopio.isChecked())
-                options.put(Constantes.GYRO_ON, Constantes.GYRO_ON_VALUE);
-            if(magnetometro.isChecked())
-                options.put(Constantes.MAGN_ON, Constantes.MAGN_ON_VALUE);
-            if(!wakeOn.isChecked())
-                options.put(Constantes.WAKE_ON_MOTION, Constantes.OFF);
-
-            options.put(Constantes.ACCL_RANGE, Constantes.getRange(rangoAcelerometro.getSelectedItem().toString()));
-            options.put(Constantes.PERIOD, new Byte((byte) 0x64));
-
-            Log.d("Opciones", options.toString());
-
-            mMultiBleService.setOptions(options);
-
-            mDevicesListView.setVisibility(View.VISIBLE);
-            mConfigLayout.setVisibility(View.GONE);
             String title = mContext.getResources().getString(R.string.dialog_title_inr_scan);
             String message = mContext.getResources().getString(R.string.action_scanning_devices);
             final ProgressDialog progressDialog =
@@ -273,8 +245,6 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
             mButtonScan.setEnabled(true);
             mTextStatus.setText(getString(R.string.no_connected_devices));
             mTextStatus.setTextColor(getResources().getColor(R.color.colorRed));
-            mDevicesListView.setVisibility(View.GONE);
-            mConfigLayout.setVisibility(View.VISIBLE);
         }
     };
 
@@ -292,8 +262,8 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
             int position = mMultiBleService.getSelectedDevices().indexOf(gatt.getDevice());
 
             // Update the accelerometer's value in the device's data and notify the listView adapter.
-            mDevicesData.get(position).put("Data", String.format(Locale.getDefault(),
-                    "Accel. values: %d, %d, %d Gyro. values: %d, %d, %d", accelX, accelY, accelZ, gyroX, gyroY, gyroZ));
+            mDevicesData.get(position).put("accelerometer", String.format(Locale.getDefault(),
+                    "Accel. values: %d, %d, %d\n Gyro. values: %d, %d, %d", accelX, accelY, accelZ, gyroX, gyroY, gyroZ));
 
             ((BaseAdapter) mDevicesListView.getAdapter()).notifyDataSetChanged();
         }

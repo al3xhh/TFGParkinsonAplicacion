@@ -21,6 +21,7 @@ public class Constantes {
     public static final Integer PERIOD = 5;
 
     //Valores para el HasMap<Integer, Byte> usado para pasar parametros entre la vista y las clases bluetooth
+    public static final Byte DEFAULT_PERIOD = 0x64;
     public static final Byte ACCL_ON_VALUE = 0x38;
     public static final Byte GYRO_ON_VALUE = 0x07;
     public static final Byte MAGN_ON_VALUE = 0x40;

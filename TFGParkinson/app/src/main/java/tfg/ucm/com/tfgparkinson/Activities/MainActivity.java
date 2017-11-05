@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.reconocer_sensores) {
             i = new Intent(MainActivity.this, ReconocerSensoresActivity.class);
         } else {
-            i = new Intent(MainActivity.this, EmparejarSensoresActivity.class);
+            i = new Intent(MainActivity.this, ConfigurarSensores.class);
         }
 
         startActivity(i);
