@@ -19,7 +19,7 @@ public class Constantes {
     public static final Integer WAKE_ON_MOTION = 3;
     public static final Integer ACCL_RANGE = 4;
     public static final Integer PERIOD = 5;
-
+    public static final Integer CONFIG = 6;
     //Valores para el HasMap<Integer, Byte> usado para pasar parametros entre la vista y las clases bluetooth
     public static final Byte DEFAULT_PERIOD = 0x64;
     public static final Byte ACCL_ON_VALUE = 0x38;

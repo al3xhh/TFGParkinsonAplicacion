@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 import tfg.ucm.com.tfgparkinson.Clases.utils.Constantes;
+import tfg.ucm.com.tfgparkinson.Clases.utils.OpcionesVO;
 
 /**
  * Custom implementation of the Bluetooth GATT Callbacks for connection with multiple devices.
@@ -37,8 +38,8 @@ public class MultiBLECallback extends BluetoothGattCallback {
 
 
     // Multi BLE Callback public constructor.
-    public MultiBLECallback(Handler handler, HashMap<Integer, Byte> options) {
-        mOptions = options;
+    public MultiBLECallback(Handler handler, OpcionesVO options) {
+        mOptions = options.getSensorsOptions();
         mHandler = handler;
         mCurrentSensors = new SparseArray<>();
 

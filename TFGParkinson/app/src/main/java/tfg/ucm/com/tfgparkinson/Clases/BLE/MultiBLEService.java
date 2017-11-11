@@ -11,6 +11,7 @@ import android.os.Message;
 import android.util.Log;
 import android.util.SparseArray;
 
+import tfg.ucm.com.tfgparkinson.Clases.utils.OpcionesVO;
 import tfg.ucm.com.tfgparkinson.R;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class MultiBLEService implements BluetoothAdapter.LeScanCallback,
     private Activity mActivity;
     private IMultiBLEAccelServiceDelegate mDelegate;
     //opciones ajenas a Bluetooth (opciones configuracions sensor)
-    private HashMap<Integer, Byte> options;
+    private OpcionesVO options;
 
     // BLE Components
     private BluetoothAdapter mBluetoothAdapter;
@@ -50,7 +51,7 @@ public class MultiBLEService implements BluetoothAdapter.LeScanCallback,
         this.mConnectedGatts = new ArrayList<>();
     }
 
-    public MultiBLEService(Context context, HashMap<Integer, Byte> options) {
+    public MultiBLEService(Context context, OpcionesVO options) {
         this.options = options;
         this.mContext = context;
         this.mActivity = (Activity) context;
@@ -58,7 +59,7 @@ public class MultiBLEService implements BluetoothAdapter.LeScanCallback,
         this.mConnectedGatts = new ArrayList<>();
     }
 
-    public void setOptions(HashMap<Integer, Byte> options) {
+    public void setOptions(OpcionesVO options) {
         this.options = options;
     }
 
@@ -109,7 +110,7 @@ public class MultiBLEService implements BluetoothAdapter.LeScanCallback,
     public void setupBluetoothConnection() {
         ProgressDialog messageNotifier = new ProgressDialog(mContext);
         mBluetoothDevices = new SparseArray<>();
-        mMultiBleHandler = new MultiBLEHandler(messageNotifier, this);
+        mMultiBleHandler = new MultiBLEHandler(messageNotifier, this, options);
         mMultiBleCallback = new MultiBLECallback(mMultiBleHandler, options);
         mBluetoothAdapter = ((BluetoothManager)
                 mContext.getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter();

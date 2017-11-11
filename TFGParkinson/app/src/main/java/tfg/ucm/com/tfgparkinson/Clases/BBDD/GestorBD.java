@@ -8,8 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import tfg.ucm.com.tfgparkinson.Clases.Temblor;
 import tfg.ucm.com.tfgparkinson.Clases.utils.Constantes;
@@ -31,30 +33,23 @@ public class GestorBD extends SQLiteOpenHelper {
     }
 
     public void onCreate(SQLiteDatabase db){
-        db.execSQL("CREATE TABLE TB_SENSORES ( " +
-                            "NOMBRE VARCHAR NOT NULL, " +
-                            "PRIMARY KEY (NOMBRE));");
+        db.execSQL("CREATE TABLE TB_POSICIONES ( " +
+                            "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                            "POSICIONES VARCHAR NOT NULL UNIQUE);");
 
         db.execSQL("CREATE TABLE TB_DATOS_SENSOR ( " +
-                            "SENSOR VARCHAR NOT NULL, " +
-                            "TIMESTAMP DATETIME NOT NULL DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime')), " +
+                            "POSICIONES INTEGER NOT NULL, " +
+                            "DB_TIMESTAMP DATETIME NOT NULL DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime')), " +
+                            "APP_TIMESTAMP DATETIME NOT NULL," +
                             "DATOS VARCHAR NOT NULL," +
-                            "PRIMARY KEY (SENSOR, TIMESTAMP)," +
-                            "FOREIGN KEY (SENSOR) REFERENCES TB_SENSORES (NOMBRE));");
+                            "PRIMARY KEY (POSICIONES, TIMESTAMP)," +
+                            "FOREIGN KEY (POSICIONES) REFERENCES TB_POSICIONES(ID));");
 
         db.execSQL("CREATE TABLE TB_TEMBLORES ( " +
                             "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                             "DURACION INTEGER NOT NULL, " +
                             "OBSERVACIONES VARCHAR, " +
                             "TIMESTAMP_INICIO DATETIME DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime')));");
-
-        /*db.execSQL("CREATE TABLE TB_INFO_TEMBLOR ( " +
-                            "NOMBRE_SENSOR VARCHAR NOT NULL," +
-                            "TIMESTAMP_SENSOR DATETIME NOT NULL, " +
-                            "TEMBLOR NUMER NOT NULL, " +
-                            "PRIMARY KEY (NOMBRE_SENSOR, TIMESTAMP_SENSOR, TEMBLOR), " +
-                            "FOREIGN KEY (NOMBRE_SENSOR, TIMESTAMP_SENSOR) REFERENCES TB_DATOS_SENSOR (SENSOR, TIMESTAMP)," +
-                            "FOREIGN KEY (TEMBLOR) REFERENCES TB_TEMBLORES (ID));");*/
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
@@ -64,10 +59,10 @@ public class GestorBD extends SQLiteOpenHelper {
     }
 
     public ArrayList<Temblor> getTemblores() {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Temblor> temblores = new ArrayList<Temblor>();
 
-        Cursor cursor = db.rawQuery("SELECT OID, * FROM TB_TEMBLORES ORDER BY TIMESTAMP_INICIO ASC", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM TB_TEMBLORES ORDER BY TIMESTAMP_INICIO ASC", null);
 
         try{
             while (cursor.moveToNext())
@@ -120,9 +115,85 @@ public class GestorBD extends SQLiteOpenHelper {
         db.close();
     }
 
+    public boolean checkPosicion(String posiciones){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Temblor> temblores = new ArrayList<Temblor>();
+        int count = -1;
+        boolean exists = false;
+
+        Cursor cursor = db.rawQuery("SELECT count(*) FROM TB_POSICIONES WHERE POSICIONES = ?", new String[]{posiciones});
+
+        try{
+            while (cursor.moveToNext())
+                count = cursor.getInt(0);
+        } finally {
+            cursor.close();
+            db.close();
+        }
+
+        if (count > 0) exists = true;
+
+        return exists;
+    }
+
+    public void insertPosicion(String posiciones){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("POSICIONES", posiciones);
+
+        db.insert("TB_POSICIONES", null, cv);
+
+        db.close();
+    }
+
+    public int getPosicionID(String posiciones){
+        int id = -1;
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Temblor> temblores = new ArrayList<Temblor>();
+
+        Cursor cursor = db.rawQuery("SELECT ID FROM TB_POSICIONES WHERE POSICIONES = ?", new String[]{posiciones});
+
+        try{
+            while (cursor.moveToNext())
+                id = cursor.getInt(0);
+        } finally {
+            cursor.close();
+            db.close();
+        }
+
+        return id;
+
+    }
+
+    public void insertDatosSensor(int[] data, int posicionesID){
+        Calendar calendar = Calendar.getInstance();
+        Timestamp ts = new Timestamp(calendar.getTimeInMillis());
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("POSICIONES", posicionesID);
+        cv.put("APP_TIMESTAMP", ts.toString());
+        cv.put("DATOS", intArrayToString(data));
+
+        db.insert("TB_DATOS_SENSOR", null, cv);
+
+        db.close();
+
+    }
+
     public void vaciarTabla(String tabla){
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + tabla);
         db.close();
+    }
+
+    private String intArrayToString(int[] data){
+        String intArray = data[0] + "";
+
+        for (int i = 1; i < data.length; i++)
+            intArray += "," + data[i];
+
+        return intArray;
     }
 }

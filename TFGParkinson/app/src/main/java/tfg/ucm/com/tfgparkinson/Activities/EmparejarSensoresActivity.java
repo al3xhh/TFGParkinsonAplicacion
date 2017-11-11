@@ -37,6 +37,7 @@ import java.util.Map;
 import tfg.ucm.com.tfgparkinson.Clases.BLE.IMultiBLEAccelServiceDelegate;
 import tfg.ucm.com.tfgparkinson.Clases.BLE.MultiBLEService;
 import tfg.ucm.com.tfgparkinson.Clases.utils.Constantes;
+import tfg.ucm.com.tfgparkinson.Clases.utils.OpcionesVO;
 import tfg.ucm.com.tfgparkinson.R;
 
 public class EmparejarSensoresActivity extends AppCompatActivity implements IMultiBLEAccelServiceDelegate {
@@ -88,7 +89,7 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
         mMultiBleService.disconnectFromDevices();
     }
 
-    private void initVariables(HashMap<Integer, Byte> options) {
+    private void initVariables(OpcionesVO options) {
         mContext = EmparejarSensoresActivity.this;
         mMultiBleService = new MultiBLEService(mContext, options); //crear hashMap y pasarlo como el segundo parametro
         mTextStatus = (TextView) findViewById(R.id.main_text_status);

@@ -3,9 +3,13 @@ package tfg.ucm.com.tfgparkinson.Clases.BLE;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+
+import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
+import tfg.ucm.com.tfgparkinson.Clases.utils.OpcionesVO;
 
 /**
  * Custom Handler implementation to process Message and Runnable
@@ -19,12 +23,21 @@ public class MultiBLEHandler extends Handler {
     private IMultiBLEAccelDataReceiverDelegate mDelegate;
     private ProgressDialog mProgressDialog;
     private boolean mStopCapture;
+    private int posicionesSensores;
 
     // Public constructor of Multi BLE Handler.
     public MultiBLEHandler(ProgressDialog dialog, IMultiBLEAccelDataReceiverDelegate delegate) {
         // Delegate of the IMultiBLEAccelDataReceiverDelegate class to update the view.
         this.mDelegate = delegate;
 
+        this.mProgressDialog = dialog;
+        this.mStopCapture = false;
+    }
+
+    public MultiBLEHandler(ProgressDialog dialog, IMultiBLEAccelDataReceiverDelegate delegate, OpcionesVO opciones) {
+        // Delegate of the IMultiBLEAccelDataReceiverDelegate class to update the view.
+        this.mDelegate = delegate;
+        this.posicionesSensores = opciones.getSensorPositions();
         this.mProgressDialog = dialog;
         this.mStopCapture = false;
     }
