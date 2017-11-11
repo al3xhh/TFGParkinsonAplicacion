@@ -88,7 +88,8 @@ public class ConfigurarSensores extends AppCompatActivity {
                 String positions = checkPositions((ListView) findViewById(R.id.listaSensores));
                 if(!positions.equals("-1")) {
                     GestorBD gestorBD = new GestorBD(getApplicationContext());
-                    gestorBD.insertPosicion(positions);
+                    if(!gestorBD.checkPosicion(positions))
+                        gestorBD.insertPosicion(positions);
 
                     OpcionesVO opcionesVO = new OpcionesVO();
                     opcionesVO.setSensorsOptions(options);
