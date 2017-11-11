@@ -58,10 +58,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        Intent i;
-        if (item.getItemId() == R.id.reconocer_sensores) {
-            i = new Intent(MainActivity.this, ReconocerSensoresActivity.class);
-        } else {
+        Intent i = null;
+        if (item.getItemId() == R.id.emparejar_sensores) {
             i = new Intent(MainActivity.this, ConfigurarSensores.class);
         }
 

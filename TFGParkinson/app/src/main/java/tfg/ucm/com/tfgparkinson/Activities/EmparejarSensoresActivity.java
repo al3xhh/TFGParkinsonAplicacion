@@ -61,7 +61,7 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
 
         Intent intent = getIntent();
 
-        initVariables((HashMap<Integer, Byte>)intent.getSerializableExtra("options"));
+        initVariables((OpcionesVO) intent.getSerializableExtra("options"));
         checkForPermissions();
     }
 

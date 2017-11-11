@@ -8,12 +8,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.Clases.utils.Constantes;
+import tfg.ucm.com.tfgparkinson.Clases.utils.OpcionesVO;
 import tfg.ucm.com.tfgparkinson.R;
 
 /**
@@ -26,6 +32,15 @@ public class ConfigurarSensores extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configurar_sensores);
+
+        ListView listaSensores = (ListView) findViewById(R.id.listaSensores);
+
+        ArrayList<String> macs = new ArrayList<>();
+        macs.add("00:00:00:00:00:00");
+        macs.add("00:00:00:00:00:01");
+
+        AdaptadorSensores adaptadorSensores = new AdaptadorSensores(getApplicationContext(), R.layout.representacion_item_lista, macs);
+        listaSensores.setAdapter(adaptadorSensores);
 
         Button comenzar = (Button) findViewById(R.id.botonComenzar);
         comenzar.setOnClickListener(new View.OnClickListener() {
@@ -65,15 +80,54 @@ public class ConfigurarSensores extends AppCompatActivity {
                         else {
                             options.put(Constantes.PERIOD, Byte.valueOf((String.valueOf(Integer.parseInt(periodo.getText().toString()) / 10))));
                             Log.d("Opciones", options.toString());
-
-                            Intent intent = new Intent(ConfigurarSensores.this, EmparejarSensoresActivity.class);
-                            intent.putExtra("options", options);
-                            startActivity(intent);
                         }
                     } catch (Exception e) {
                         periodo.setError("Valor no válido");
                     }
+
+                String positions = checkPositions((ListView) findViewById(R.id.listaSensores));
+                if(!positions.equals("-1")) {
+                    GestorBD gestorBD = new GestorBD(getApplicationContext());
+                    gestorBD.insertPosicion(positions);
+
+                    OpcionesVO opcionesVO = new OpcionesVO();
+                    opcionesVO.setSensorsOptions(options);
+                    opcionesVO.setSensorPositions(gestorBD.getPosicionID(positions));
+
+                    Intent intent = new Intent(ConfigurarSensores.this, EmparejarSensoresActivity.class);
+                    intent.putExtra("options", opcionesVO);
+                    startActivity(intent);
+                }
             }
         });
+    }
+
+    private String checkPositions(ListView list) {
+        View v1, v2;
+        StringBuilder ret = new StringBuilder();
+
+        for(int i = 0; i < list.getCount(); i++) {
+            v1 = list.getChildAt(i);
+            Spinner bodyPartsI = (Spinner) v1.findViewById(R.id.partesCuerpo);
+            String selectedI = bodyPartsI.getSelectedItem().toString();
+            TextView macI = (TextView) v1.findViewById(R.id.macSensor);
+            String selectedMacI = macI.getText().toString();
+            ret.append(selectedMacI).append(";").append(selectedI).append(";");
+
+            for(int j = 0; j < list.getCount(); j++) {
+                v2 = list.getChildAt(j);
+                Spinner bodyPartsJ = (Spinner) v2.findViewById(R.id.partesCuerpo);
+                String selectedJ = bodyPartsJ.getSelectedItem().toString();
+                TextView macJ = (TextView) v2.findViewById(R.id.macSensor);
+                String selectedMacJ = macJ.getText().toString();
+
+                if(!selectedMacI.equals(selectedMacJ) && selectedI.equals(selectedJ)) {
+                    macJ.setError("Parte de cuerpo elegida ya");
+                    return "-1";
+                }
+            }
+        }
+
+        return ret.toString();
     }
 }

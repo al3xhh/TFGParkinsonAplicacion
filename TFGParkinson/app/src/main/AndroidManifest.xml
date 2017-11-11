@@ -22,7 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.ReconocerSensoresActivity"></activity>
         <activity android:name=".Activities.HistorialActivity"></activity>
         <activity android:name=".Activities.EmparejarSensoresActivity"></activity>
         <activity android:name=".Activities.ConfigurarSensores"></activity>
