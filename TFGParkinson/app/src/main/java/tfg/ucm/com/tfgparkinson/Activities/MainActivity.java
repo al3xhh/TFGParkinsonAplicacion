@@ -17,11 +17,17 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.Clases.Temblor;
+import tfg.ucm.com.tfgparkinson.Clases.utils.RespuestaServidor;
+import tfg.ucm.com.tfgparkinson.Clases.utils.Servidor;
 import tfg.ucm.com.tfgparkinson.R;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RespuestaServidor {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -53,6 +59,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        Servidor servidor = new Servidor(getApplicationContext(), "http://192.168.1.35:5000/hello");
+        servidor.setDelegate(this);
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("HOLA", "ADIÓS");
+
+        servidor.sendData(params);
     }
 
     @Override
@@ -197,5 +211,10 @@ public class MainActivity extends AppCompatActivity {
         dialogBuilder.setView(dialogView);
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
+    }
+
+    @Override
+    public void processFinish(JSONObject response) {
+        Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_SHORT).show();
     }
 }
