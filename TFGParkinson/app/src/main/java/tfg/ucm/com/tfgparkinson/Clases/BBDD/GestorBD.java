@@ -24,7 +24,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class GestorBD extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 4;
 
     private static final String DATABASE_NAME = Constantes.NOMBRE_BD;
 
@@ -42,7 +42,7 @@ public class GestorBD extends SQLiteOpenHelper {
                             "DB_TIMESTAMP DATETIME NOT NULL DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime')), " +
                             "APP_TIMESTAMP DATETIME NOT NULL," +
                             "DATOS VARCHAR NOT NULL," +
-                            "PRIMARY KEY (POSICIONES, TIMESTAMP)," +
+                            "PRIMARY KEY (POSICIONES, DB_TIMESTAMP)," +
                             "FOREIGN KEY (POSICIONES) REFERENCES TB_POSICIONES(ID));");
 
         db.execSQL("CREATE TABLE TB_TEMBLORES ( " +
@@ -53,7 +53,9 @@ public class GestorBD extends SQLiteOpenHelper {
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
-        db.execSQL("DROP DATABASE");
+        db.execSQL("DROP TABLE TB_DATOS_SENSOR");
+        db.execSQL("DROP TABLE TB_TEMBLORES");
+        db.execSQL("DROP TABLE TB_POSICIONES");
 
         this.onCreate(db);
     }
@@ -117,7 +119,6 @@ public class GestorBD extends SQLiteOpenHelper {
 
     public boolean checkPosicion(String posiciones){
         SQLiteDatabase db = this.getReadableDatabase();
-        ArrayList<Temblor> temblores = new ArrayList<Temblor>();
         int count = -1;
         boolean exists = false;
 

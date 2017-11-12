@@ -1,5 +1,6 @@
 package tfg.ucm.com.tfgparkinson.Clases.utils;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -7,5 +8,5 @@ import org.json.JSONObject;
  */
 
 public interface RespuestaServidor {
-    void processFinish(JSONObject response);
+    void processFinish(JSONArray response);
 }

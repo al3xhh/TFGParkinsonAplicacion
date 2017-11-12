@@ -17,6 +17,9 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -59,14 +62,6 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
                 startActivity(i);
             }
         });
-
-        Servidor servidor = new Servidor(MainActivity.this, "http://192.168.1.35:5000/hello");
-        servidor.setDelegate(this);
-
-        HashMap<String, String> params = new HashMap<>();
-        params.put("HOLA", "ADIÓS");
-
-        servidor.sendData(params);
     }
 
     @Override
@@ -214,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
     }
 
     @Override
-    public void processFinish(JSONObject response) {
+    public void processFinish(JSONArray response) {
         Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_SHORT).show();
     }
 }
