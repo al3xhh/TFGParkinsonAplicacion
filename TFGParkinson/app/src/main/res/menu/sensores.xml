@@ -2,8 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/enviar_datos"
+        android:orderInCategory="100"
+        android:title="Enviar"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/emparejar_sensores"
         android:orderInCategory="100"
         android:title="Emparejar"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>

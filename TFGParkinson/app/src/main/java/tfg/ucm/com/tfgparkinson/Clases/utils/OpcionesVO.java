@@ -1,5 +1,7 @@
 package tfg.ucm.com.tfgparkinson.Clases.utils;
 
+import android.content.Context;
+
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -10,6 +12,7 @@ import java.util.HashMap;
 public class OpcionesVO implements Serializable {
     private HashMap<Integer, Byte> sensorsOptions;
     private int sensorPositions;
+    private Context context;
 
     public HashMap<Integer, Byte> getSensorsOptions() {
         return sensorsOptions;
@@ -19,11 +22,19 @@ public class OpcionesVO implements Serializable {
         this.sensorsOptions = sensorsOptions;
     }
 
+    public Context getContext() {
+        return context;
+    }
+
     public int getSensorPositions() {
         return sensorPositions;
     }
 
     public void setSensorPositions(int sensorPositions) {
         this.sensorPositions = sensorPositions;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 }

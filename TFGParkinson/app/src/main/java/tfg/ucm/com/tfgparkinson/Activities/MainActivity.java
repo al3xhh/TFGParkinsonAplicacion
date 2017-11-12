@@ -67,8 +67,11 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        Intent i = null;
-        if (item.getItemId() == R.id.emparejar_sensores) {
+        Intent i;
+
+        if(item.getItemId() == R.id.enviar_datos) {
+            i = null;
+        } else {
             i = new Intent(MainActivity.this, ConfigurarSensores.class);
         }
 

@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,7 +27,7 @@ import tfg.ucm.com.tfgparkinson.R;
  * Created by al3x_hh on 05/11/2017.
  */
 
-public class ConfigurarSensores extends AppCompatActivity {
+public class ConfigurarSensores extends AppCompatActivity implements Serializable {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +95,7 @@ public class ConfigurarSensores extends AppCompatActivity {
                     OpcionesVO opcionesVO = new OpcionesVO();
                     opcionesVO.setSensorsOptions(options);
                     opcionesVO.setSensorPositions(gestorBD.getPosicionID(positions));
+                    opcionesVO.setContext(ConfigurarSensores.this);
 
                     Intent intent = new Intent(ConfigurarSensores.this, EmparejarSensoresActivity.class);
                     intent.putExtra("options", opcionesVO);
