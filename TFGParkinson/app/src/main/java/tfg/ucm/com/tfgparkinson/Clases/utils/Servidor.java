@@ -1,5 +1,6 @@
 package tfg.ucm.com.tfgparkinson.Clases.utils;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 
@@ -33,6 +34,11 @@ public class Servidor {
     }
 
     public void sendData(HashMap<String, String> params) {
+        final ProgressDialog progressDialog = new ProgressDialog(this.context);
+
+        progressDialog.setMessage("Los datos están siendo procesados en el servidor");
+        progressDialog.show();
+
         RequestQueue queue = Volley.newRequestQueue(context);
 
         // Request a string response from the provided URL.
@@ -42,11 +48,13 @@ public class Servidor {
                     public void onResponse(JSONObject response) {
                         Log.d("RESPUESTA", response.toString());
                         delegate.processFinish(response);
+                        progressDialog.dismiss();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("ERROR", error.toString());
+                progressDialog.dismiss();
             }
         });
 

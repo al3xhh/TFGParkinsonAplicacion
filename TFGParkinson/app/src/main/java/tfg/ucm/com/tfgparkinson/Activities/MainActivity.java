@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
             }
         });
 
-        Servidor servidor = new Servidor(getApplicationContext(), "http://192.168.1.35:5000/hello");
+        Servidor servidor = new Servidor(MainActivity.this, "http://192.168.1.35:5000/hello");
         servidor.setDelegate(this);
 
         HashMap<String, String> params = new HashMap<>();
