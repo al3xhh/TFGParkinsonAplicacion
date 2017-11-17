@@ -19,7 +19,7 @@ public interface IMultiBLEAccelDataReceiverDelegate {
      * @param gyroY  value received for the gyroscope's y axis.
      * @param gyroZ  value received for the gyroscope's z axis.
      */
-    void updateAccelerometer(BluetoothGatt gatt, int accelX, int accelY, int accelZ,
-                             int gyroX, int gyroY, int gyroZ);
+    void updateAccelerometer(BluetoothGatt gatt, float accelX, float accelY, float accelZ,
+                             float gyroX, float gyroY, float gyroZ);
 
 }

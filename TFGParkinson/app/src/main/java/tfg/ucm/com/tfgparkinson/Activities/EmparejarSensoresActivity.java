@@ -250,12 +250,12 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
     };
 
     @Override
-    public void updateAccelerometerValues(BluetoothGatt gatt, int accelX, int accelY, int accelZ,
-                                          int gyroX, int gyroY, int gyroZ) {
-        Log.d(TAG, String.format("DEVICE: %s ACCELEROMETER: X: %d Y: %d Z: %d",
+    public void updateAccelerometerValues(BluetoothGatt gatt, float accelX, float accelY, float accelZ,
+                                          float gyroX, float gyroY, float gyroZ) {
+        Log.d(TAG, String.format("DEVICE: %s ACCELEROMETER: X: %f Y: %f Z: %f",
                 gatt.getDevice(), accelX, accelY, accelZ));
 
-        Log.d(TAG, String.format("DEVICE: %s GYROSCOPE: X: %d Y: %d Z: %d",
+        Log.d(TAG, String.format("DEVICE: %s GYROSCOPE: X: %f Y: %f Z: %f",
                 gatt.getDevice(), gyroX, gyroY, gyroZ));
 
         if (mMultiBleService.getSelectedDevices() != null) {
@@ -264,7 +264,7 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
 
             // Update the accelerometer's value in the device's data and notify the listView adapter.
             mDevicesData.get(position).put("accelerometer", String.format(Locale.getDefault(),
-                    "Accel. values: %d, %d, %d\n Gyro. values: %d, %d, %d", accelX, accelY, accelZ, gyroX, gyroY, gyroZ));
+                    "Accel. values: %f, %f, %f\n Gyro. values: %f, %f, %f", accelX, accelY, accelZ, gyroX, gyroY, gyroZ));
 
             ((BaseAdapter) mDevicesListView.getAdapter()).notifyDataSetChanged();
         }

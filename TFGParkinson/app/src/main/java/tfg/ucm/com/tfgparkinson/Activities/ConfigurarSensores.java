@@ -95,7 +95,6 @@ public class ConfigurarSensores extends AppCompatActivity implements Serializabl
                     OpcionesVO opcionesVO = new OpcionesVO();
                     opcionesVO.setSensorsOptions(options);
                     opcionesVO.setSensorPositions(gestorBD.getPosicionID(positions));
-                    opcionesVO.setContext(ConfigurarSensores.this);
 
                     Intent intent = new Intent(ConfigurarSensores.this, EmparejarSensoresActivity.class);
                     intent.putExtra("options", opcionesVO);

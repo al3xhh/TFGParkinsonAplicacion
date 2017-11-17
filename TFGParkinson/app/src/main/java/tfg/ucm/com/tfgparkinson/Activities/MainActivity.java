@@ -1,5 +1,6 @@
 package tfg.ucm.com.tfgparkinson.Activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -7,6 +8,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,12 +34,20 @@ import tfg.ucm.com.tfgparkinson.R;
 
 public class MainActivity extends AppCompatActivity implements RespuestaServidor {
 
+    public static Context appContext;
+
+    @Override
+    public Context getApplicationContext() {
+        return super.getApplicationContext();
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        appContext = getApplicationContext();
         Button anyadirTemblor = (Button) findViewById(R.id.botonAnyadirTemblor);
         anyadirTemblor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
                 startActivity(i);
             }
         });
+        GestorBD bd = new GestorBD(getApplicationContext());
+
+        Log.w("MainActivity", "TABLAAAAAAAAAAAAAAAAAAAAAAA\n" + bd.getTb_datos_sensor().toString());
     }
 
     @Override

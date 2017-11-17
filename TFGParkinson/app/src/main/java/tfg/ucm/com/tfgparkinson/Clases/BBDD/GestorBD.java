@@ -8,6 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -24,7 +28,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class GestorBD extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     private static final String DATABASE_NAME = Constantes.NOMBRE_BD;
 
@@ -38,11 +42,12 @@ public class GestorBD extends SQLiteOpenHelper {
                             "POSICIONES VARCHAR NOT NULL UNIQUE);");
 
         db.execSQL("CREATE TABLE TB_DATOS_SENSOR ( " +
+                            "SENSOR VARCHAR NOT NULL,"+
                             "POSICIONES INTEGER NOT NULL, " +
                             "DB_TIMESTAMP DATETIME NOT NULL DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime')), " +
                             "APP_TIMESTAMP DATETIME NOT NULL," +
                             "DATOS VARCHAR NOT NULL," +
-                            "PRIMARY KEY (POSICIONES, DB_TIMESTAMP)," +
+                            "PRIMARY KEY (POSICIONES, DB_TIMESTAMP, SENSOR)," +
                             "FOREIGN KEY (POSICIONES) REFERENCES TB_POSICIONES(ID));");
 
         db.execSQL("CREATE TABLE TB_TEMBLORES ( " +
@@ -167,7 +172,7 @@ public class GestorBD extends SQLiteOpenHelper {
 
     }
 
-    public void insertDatosSensor(int[] data, int posicionesID){
+    public void insertDatosSensor(float[] data, int posicionesID, String sensor){
         Calendar calendar = Calendar.getInstance();
         Timestamp ts = new Timestamp(calendar.getTimeInMillis());
         SQLiteDatabase db = this.getWritableDatabase();
@@ -175,7 +180,8 @@ public class GestorBD extends SQLiteOpenHelper {
 
         cv.put("POSICIONES", posicionesID);
         cv.put("APP_TIMESTAMP", ts.toString());
-        cv.put("DATOS", intArrayToString(data));
+        cv.put("DATOS", floatArrayToString(data));
+        cv.put("SENSOR", sensor);
 
         db.insert("TB_DATOS_SENSOR", null, cv);
 
@@ -189,12 +195,95 @@ public class GestorBD extends SQLiteOpenHelper {
         db.close();
     }
 
-    private String intArrayToString(int[] data){
-        String intArray = data[0] + "";
+    public JSONArray getTb_posiciones(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        JSONArray tabla = new JSONArray();
+        Cursor cursor = db.rawQuery("SELECT * FROM TB_POSICIONES", null);
+
+        try{
+            while (cursor.moveToNext()){
+                JSONObject tupla = new JSONObject();
+
+                tupla.put("id", cursor.getInt(0));
+                tupla.put("posiciones", cursor.getString(1));
+
+                tabla.put(tupla);
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+        finally {
+            cursor.close();
+            db.close();
+        }
+
+        return tabla;
+    }
+
+    public JSONArray getTb_datos_sensor(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        JSONArray tabla = new JSONArray();
+        Cursor cursor = db.rawQuery("SELECT * FROM TB_DATOS_SENSOR", null);
+
+        try{
+            while (cursor.moveToNext()){
+                JSONObject tupla = new JSONObject();
+
+                tupla.put("sensor", cursor.getString(0));
+                tupla.put("posiciones", cursor.getInt(1));
+                tupla.put("db_timestamp", cursor.getString(2));
+                tupla.put("app_timestamp", cursor.getString(3));
+                tupla.put("datos", cursor.getString(4));
+
+                tabla.put(tupla);
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+        finally {
+            cursor.close();
+            db.close();
+        }
+
+        return tabla;
+    }
+
+    public JSONArray getTb_temlobres(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        JSONArray tabla = new JSONArray();
+        Cursor cursor = db.rawQuery("SELECT * FROM TB_TEMBLORES", null);
+
+        try{
+            while (cursor.moveToNext()){
+                JSONObject tupla = new JSONObject();
+
+                tupla.put("id", cursor.getInt(0));
+                tupla.put("duracion", cursor.getInt(1));
+                tupla.put("observaciones", cursor.getString(2));
+                tupla.put("timestamp_inicio", cursor.getString(3));
+
+                tabla.put(tupla);
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+        finally {
+            cursor.close();
+            db.close();
+        }
+
+        return tabla;
+    }
+
+    private String floatArrayToString(float[] data){
+        String floatArray = data[0] + "";
 
         for (int i = 1; i < data.length; i++)
-            intArray += "," + data[i];
+            floatArray += "," + data[i];
 
-        return intArray;
+        return floatArray;
     }
 }

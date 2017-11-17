@@ -145,8 +145,8 @@ public class MultiBLEService implements BluetoothAdapter.LeScanCallback,
 
 
     @Override
-    public void updateAccelerometer(BluetoothGatt gatt, int accelX, int accelY, int accelZ,
-                                    int gyroX, int gyroY, int gyroZ) {
+    public void updateAccelerometer(BluetoothGatt gatt, float accelX, float accelY, float accelZ,
+                                    float gyroX, float gyroY, float gyroZ) {
         if (mDelegate != null) {
             mDelegate.updateAccelerometerValues(gatt, accelX, accelY, accelZ, gyroX, gyroY, gyroZ);
         }

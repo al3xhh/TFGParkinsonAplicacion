@@ -8,7 +8,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import tfg.ucm.com.tfgparkinson.Activities.MainActivity;
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
+import tfg.ucm.com.tfgparkinson.Clases.utils.Constantes;
 import tfg.ucm.com.tfgparkinson.Clases.utils.OpcionesVO;
 
 /**
@@ -24,6 +26,7 @@ public class MultiBLEHandler extends Handler {
     private ProgressDialog mProgressDialog;
     private boolean mStopCapture;
     private int posicionesSensores;
+    private byte accRange;
 
     // Public constructor of Multi BLE Handler.
     public MultiBLEHandler(ProgressDialog dialog, IMultiBLEAccelDataReceiverDelegate delegate) {
@@ -38,6 +41,7 @@ public class MultiBLEHandler extends Handler {
         // Delegate of the IMultiBLEAccelDataReceiverDelegate class to update the view.
         this.mDelegate = delegate;
         this.posicionesSensores = opciones.getSensorPositions();
+        this.accRange = opciones.getSensorsOptions().get(Constantes.ACCL_RANGE);
         this.mProgressDialog = dialog;
         this.mStopCapture = false;
     }
@@ -94,13 +98,15 @@ public class MultiBLEHandler extends Handler {
     private void updateAccelerometerValue16(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
         if (mDelegate != null) {
-            int[] accelerometer = getAccelData16(characteristic);
+            float[] accelerometer = getAccelData16(characteristic);
+            GestorBD bd = new GestorBD(MainActivity.appContext);
+            bd.insertDatosSensor(accelerometer, this.posicionesSensores, gatt.getDevice().toString());
             mDelegate.updateAccelerometer(gatt, accelerometer[0], accelerometer[1],
                     accelerometer[2], accelerometer[3], accelerometer[4], accelerometer[5]);
         }
     }
 
-    public int[] getAccelData16(BluetoothGattCharacteristic characteristic) {
+    public float[] getAccelData16(BluetoothGattCharacteristic characteristic) {
         /*bytes   data
         * 0,1   >> GyroX
         * 2,3   >> GyroY
@@ -113,17 +119,17 @@ public class MultiBLEHandler extends Handler {
         * 16,17 >> MagnZ
         * */
 
-        int[] result = new int[6];
+        float[] result = new float[6];
         byte[] value = characteristic.getValue();
 
         // Three first values for the accelerometer data
-        result[0] = getIntFromByteArray(value, 6);
-        result[1] = getIntFromByteArray(value, 8);
-        result[2] = getIntFromByteArray(value, 10);
+        result[0] = sensorMpu9250AccConvert(getIntFromByteArray(value, 6));
+        result[1] = sensorMpu9250AccConvert(getIntFromByteArray(value, 8));
+        result[2] = sensorMpu9250AccConvert(getIntFromByteArray(value, 10));
         // Three last values for the gyroscope data
-        result[3] = getIntFromByteArray(value, 0);
-        result[4] = getIntFromByteArray(value, 2);
-        result[5] = getIntFromByteArray(value, 4);
+        result[3] = sensorMpu9250GyroConvert(getIntFromByteArray(value, 0));
+        result[4] = sensorMpu9250GyroConvert(getIntFromByteArray(value, 2));
+        result[5] = sensorMpu9250GyroConvert(getIntFromByteArray(value, 4));
 
         return result;
     }
@@ -139,4 +145,24 @@ public class MultiBLEHandler extends Handler {
         return result;
     }
 
+    float sensorMpu9250GyroConvert(int data) {
+        //-- calculate rotation, unit deg/s, range -250, +250
+
+        return (data * 1.0f) / (65536 / 500);
+    }
+
+    float sensorMpu9250AccConvert(int rawData) {
+        float v;
+
+        if (accRange == Constantes.ACCL_RANGE_2G)
+            v = (rawData * 1.0f) / (32768 / 2);
+        else if (accRange == Constantes.ACCL_RANGE_4G)
+            v = (rawData * 1.0f) / (32768/4);
+        else if (accRange == Constantes.ACCL_RANGE_8G)
+            v = (rawData * 1.0f) / (32768/8);
+        else
+            v = (rawData * 1.0f) / (32768/16);
+
+        return v;
+    }
 }
