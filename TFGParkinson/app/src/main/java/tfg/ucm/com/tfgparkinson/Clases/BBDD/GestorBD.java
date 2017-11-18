@@ -13,7 +13,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -28,7 +30,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class GestorBD extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     private static final String DATABASE_NAME = Constantes.NOMBRE_BD;
 
@@ -42,12 +44,12 @@ public class GestorBD extends SQLiteOpenHelper {
                             "POSICIONES VARCHAR NOT NULL UNIQUE);");
 
         db.execSQL("CREATE TABLE TB_DATOS_SENSOR ( " +
+                            "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                             "SENSOR VARCHAR NOT NULL,"+
                             "POSICIONES INTEGER NOT NULL, " +
                             "DB_TIMESTAMP DATETIME NOT NULL DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime')), " +
                             "APP_TIMESTAMP DATETIME NOT NULL," +
                             "DATOS VARCHAR NOT NULL," +
-                            "PRIMARY KEY (POSICIONES, DB_TIMESTAMP, SENSOR)," +
                             "FOREIGN KEY (POSICIONES) REFERENCES TB_POSICIONES(ID));");
 
         db.execSQL("CREATE TABLE TB_TEMBLORES ( " +
@@ -230,11 +232,12 @@ public class GestorBD extends SQLiteOpenHelper {
             while (cursor.moveToNext()){
                 JSONObject tupla = new JSONObject();
 
-                tupla.put("sensor", cursor.getString(0));
-                tupla.put("posiciones", cursor.getInt(1));
-                tupla.put("db_timestamp", cursor.getString(2));
-                tupla.put("app_timestamp", cursor.getString(3));
-                tupla.put("datos", cursor.getString(4));
+                tupla.put("id", cursor.getInt(0));
+                tupla.put("sensor", cursor.getString(1));
+                tupla.put("posiciones", cursor.getInt(2));
+                tupla.put("db_timestamp", Timestamp.valueOf(cursor.getString(3)).getTime());
+                tupla.put("app_timestamp", Timestamp.valueOf(cursor.getString(4)).getTime());
+                tupla.put("datos", cursor.getString(5));
 
                 tabla.put(tupla);
             }
@@ -262,7 +265,7 @@ public class GestorBD extends SQLiteOpenHelper {
                 tupla.put("id", cursor.getInt(0));
                 tupla.put("duracion", cursor.getInt(1));
                 tupla.put("observaciones", cursor.getString(2));
-                tupla.put("timestamp_inicio", cursor.getString(3));
+                tupla.put("timestamp_inicio", Timestamp.valueOf(cursor.getString(3)).getTime());
 
                 tabla.put(tupla);
             }

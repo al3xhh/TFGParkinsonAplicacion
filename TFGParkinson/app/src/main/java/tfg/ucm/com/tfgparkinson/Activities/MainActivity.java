@@ -20,6 +20,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.Clases.Temblor;
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
         });
         GestorBD bd = new GestorBD(getApplicationContext());
 
-        Log.w("MainActivity", "TABLAAAAAAAAAAAAAAAAAAAAAAA\n" + bd.getTb_datos_sensor().toString());
+        Log.w("MainActivity", "TABLA\n" + bd.getTb_datos_sensor().toString());
     }
 
     @Override
@@ -82,7 +83,8 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
         if(item.getItemId() == R.id.enviar_datos) {
             GestorBD bd = new GestorBD(getApplicationContext());
             JSONArray sensores = bd.getTb_datos_sensor();
-            enviarDatosServidor("http://192.168.0.163:5050/datos_sensor", sensores);
+            Log.w("MainActivity", "Datos enviados\n" + sensores.toString());
+            enviarDatosServidor("http://192.168.1.108:5050/datos_sensor", sensores);
         } else {
             i = new Intent(MainActivity.this, ConfigurarSensores.class);
             startActivity(i);
