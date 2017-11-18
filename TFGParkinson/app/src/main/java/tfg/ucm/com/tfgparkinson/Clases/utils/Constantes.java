@@ -32,16 +32,4 @@ public class Constantes {
 
     //valor generio para indicar que no se quiere usar esa funcionalidad
     public static final Byte OFF = 0x00;
-
-    public static Byte getRange(String value) {
-        if(value.equals("2G"))
-            return ACCL_RANGE_2G;
-        if(value.equals("4G"))
-            return ACCL_RANGE_4G;
-        if(value.equals("8G"))
-            return ACCL_RANGE_8G;
-        else
-            return ACCL_RANGE_16G;
-
-    }
 }

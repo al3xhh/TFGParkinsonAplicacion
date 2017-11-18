@@ -46,7 +46,7 @@ public class Servidor {
         RequestQueue queue = Volley.newRequestQueue(context);
 
         // Request a string response from the provided URL.
-        JsonArrayRequest request_json = null;
+        JsonArrayRequest request_json;
 
         request_json = new JsonArrayRequest(method, url, params,
                 new Response.Listener<JSONArray>() {

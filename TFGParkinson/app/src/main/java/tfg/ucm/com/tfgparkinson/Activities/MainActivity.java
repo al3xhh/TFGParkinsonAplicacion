@@ -19,18 +19,15 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-
 import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.HashMap;
 
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.Clases.Temblor;
 import tfg.ucm.com.tfgparkinson.Clases.utils.RespuestaServidor;
 import tfg.ucm.com.tfgparkinson.Clases.utils.Servidor;
 import tfg.ucm.com.tfgparkinson.R;
+
+import static com.android.volley.Request.Method.POST;
 
 public class MainActivity extends AppCompatActivity implements RespuestaServidor {
 
@@ -80,15 +77,16 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        Intent i;
+        Intent i = null;
 
         if(item.getItemId() == R.id.enviar_datos) {
-            i = null;
+            GestorBD bd = new GestorBD(getApplicationContext());
+            JSONArray sensores = bd.getTb_datos_sensor();
+            enviarDatosServidor("http://192.168.0.163:5050/datos_sensor", sensores);
         } else {
             i = new Intent(MainActivity.this, ConfigurarSensores.class);
+            startActivity(i);
         }
-
-        startActivity(i);
 
         return super.onOptionsItemSelected(item);
     }
@@ -226,6 +224,15 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
 
     @Override
     public void processFinish(JSONArray response) {
-        Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_SHORT).show();
+        Log.d("RESPUESTAAAAAAA", "LLEGO");
+        GestorBD bd = new GestorBD(getApplicationContext());
+        bd.vaciarTabla("TB_DATOS_SENSOR");
+    }
+
+    private void enviarDatosServidor(String url, JSONArray params) {
+        Log.d("DATOSSSSS", params.toString());
+        Servidor servidor = new Servidor(MainActivity.this, url);
+        servidor.setDelegate(MainActivity.this);
+        servidor.sendData(params, POST);
     }
 }

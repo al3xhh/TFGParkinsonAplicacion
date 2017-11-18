@@ -56,7 +56,7 @@ public class ConfigurarSensores extends AppCompatActivity implements Serializabl
                 CheckBox magnetometro = (CheckBox) findViewById(R.id.magnetometroCheckBox);
                 Switch wakeOn = (Switch) findViewById(R.id.wakeOnSwitch);
 
-                options.put(Constantes.ACCL_RANGE, Constantes.getRange(rangoAcelerometro.getSelectedItem().toString()));
+                options.put(Constantes.ACCL_RANGE, getRange(rangoAcelerometro.getSelectedItem().toString()));
 
                 if(acelerometro.isChecked())
                     options.put(Constantes.ACCL_ON, Constantes.ACCL_ON_VALUE);
@@ -102,6 +102,18 @@ public class ConfigurarSensores extends AppCompatActivity implements Serializabl
                 }
             }
         });
+    }
+
+    private static Byte getRange(String value) {
+        if(value.equals("2G"))
+            return Constantes.ACCL_RANGE_2G;
+        if(value.equals("4G"))
+            return Constantes.ACCL_RANGE_4G;
+        if(value.equals("8G"))
+            return Constantes.ACCL_RANGE_8G;
+        else
+            return Constantes.ACCL_RANGE_16G;
+
     }
 
     private String checkPositions(ListView list) {
