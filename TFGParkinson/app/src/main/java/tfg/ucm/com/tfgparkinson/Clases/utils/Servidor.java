@@ -4,21 +4,17 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 
-import com.android.volley.NetworkResponse;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 
 /**
  * Created by al3x_hh on 12/11/2017.
@@ -55,12 +51,25 @@ public class Servidor {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d("RESPUESTA", response.toString());
-                        delegate.processFinish(response);
+                        String [] splittedUrl = url.split("/");
+                        delegate.processFinish(splittedUrl[splittedUrl.length - 1]);
                         progressDialog.dismiss();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                try {
+                    StringBuilder builder = new StringBuilder(error.getMessage());
+                    builder.replace(0, 30, "");
+                    JSONObject message = new JSONObject(builder.toString());
+
+                    if(message.get("_status").equals("OK")) {
+                        String [] splittedUrl = url.split("/");
+                        delegate.processFinish(splittedUrl[splittedUrl.length - 1]);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 VolleyLog.d("ERROR LISTENER", error.getMessage());
                 progressDialog.dismiss();
             }

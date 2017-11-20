@@ -193,7 +193,7 @@ public class GestorBD extends SQLiteOpenHelper {
 
     public void vaciarTabla(String tabla){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE * FROM " + tabla);
+        db.execSQL("DELETE FROM " + tabla);
         db.close();
     }
 

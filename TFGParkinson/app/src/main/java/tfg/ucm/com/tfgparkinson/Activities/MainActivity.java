@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
             GestorBD bd = new GestorBD(getApplicationContext());
             JSONArray sensores = bd.getTb_datos_sensor();
             Log.w("MainActivity", "Datos enviados\n" + sensores.toString());
-            enviarDatosServidor("http://192.168.1.108:5050/datos_sensor", sensores);
+            enviarDatosServidor("http://192.168.1.36:5050/datos_sensor", sensores);
         } else {
             i = new Intent(MainActivity.this, ConfigurarSensores.class);
             startActivity(i);
@@ -225,10 +225,13 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
     }
 
     @Override
-    public void processFinish(JSONArray response) {
-        Log.d("RESPUESTAAAAAAA", "LLEGO");
-        GestorBD bd = new GestorBD(getApplicationContext());
-        bd.vaciarTabla("TB_DATOS_SENSOR");
+    public void processFinish(String response) {
+        if(response.equals("datos_sensor")) {
+            GestorBD bd = new GestorBD(getApplicationContext());
+            bd.vaciarTabla("TB_DATOS_SENSOR");
+        }
+
+        Toast.makeText(getApplicationContext(), "Datos enviados correctamente", Toast.LENGTH_SHORT).show();
     }
 
     private void enviarDatosServidor(String url, JSONArray params) {

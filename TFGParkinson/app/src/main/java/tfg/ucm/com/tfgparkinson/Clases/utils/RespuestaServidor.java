@@ -8,5 +8,5 @@ import org.json.JSONObject;
  */
 
 public interface RespuestaServidor {
-    void processFinish(JSONArray response);
+    void processFinish(String response);
 }
