@@ -24,18 +24,23 @@ import tfg.ucm.com.tfgparkinson.Clases.utils.Constantes;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.provider.Settings.Secure;
+
 /**
  * Created by chris on 07/10/2017.
  */
 
 public class GestorBD extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     private static final String DATABASE_NAME = Constantes.NOMBRE_BD;
 
+    private Context context;
+
     public GestorBD(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     public void onCreate(SQLiteDatabase db){
@@ -208,7 +213,7 @@ public class GestorBD extends SQLiteOpenHelper {
 
                 tupla.put("id", cursor.getInt(0));
                 tupla.put("posiciones", cursor.getString(1));
-
+                tupla.put("device_id", Secure.getString(context.getContentResolver(), Secure.ANDROID_ID));
                 tabla.put(tupla);
             }
         }
@@ -238,7 +243,7 @@ public class GestorBD extends SQLiteOpenHelper {
                 tupla.put("db_timestamp", Timestamp.valueOf(cursor.getString(3)).getTime());
                 tupla.put("app_timestamp", Timestamp.valueOf(cursor.getString(4)).getTime());
                 tupla.put("datos", cursor.getString(5));
-
+                tupla.put("device_id", Secure.getString(context.getContentResolver(), Secure.ANDROID_ID));
                 tabla.put(tupla);
             }
         }
@@ -266,7 +271,7 @@ public class GestorBD extends SQLiteOpenHelper {
                 tupla.put("duracion", cursor.getInt(1));
                 tupla.put("observaciones", cursor.getString(2));
                 tupla.put("timestamp_inicio", Timestamp.valueOf(cursor.getString(3)).getTime());
-
+                tupla.put("device_id", Secure.getString(context.getContentResolver(), Secure.ANDROID_ID));
                 tabla.put(tupla);
             }
         }
