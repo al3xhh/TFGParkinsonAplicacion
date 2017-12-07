@@ -281,6 +281,21 @@ public class GestorBD extends SQLiteOpenHelper {
         return tabla;
     }
 
+    public int getNumFilas(String tabla){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT count(*) FROM ?", new String[]{tabla});
+        int count = -1;
+        try{
+            while (cursor.moveToNext())
+                count = cursor.getInt(0);
+        } finally {
+            cursor.close();
+            db.close();
+        }
+
+        return count;
+    }
+
     private String floatArrayToString(float[] data){
         String floatArray = data[0] + "";
 
