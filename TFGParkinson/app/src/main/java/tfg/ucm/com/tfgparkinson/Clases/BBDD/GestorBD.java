@@ -32,7 +32,7 @@ import android.provider.Settings.Secure;
 
 public class GestorBD extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
 
     private static final String DATABASE_NAME = Constantes.NOMBRE_BD;
 
@@ -288,7 +288,7 @@ public class GestorBD extends SQLiteOpenHelper {
 
     public int getNumFilas(String tabla){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT count(*) FROM ?", new String[]{tabla});
+        Cursor cursor = db.rawQuery("SELECT count(*) FROM " + tabla, null);
         int count = -1;
         try{
             while (cursor.moveToNext())
