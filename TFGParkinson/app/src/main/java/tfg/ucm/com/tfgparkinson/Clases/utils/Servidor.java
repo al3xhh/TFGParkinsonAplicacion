@@ -59,14 +59,16 @@ public class Servidor {
             @Override
             public void onErrorResponse(VolleyError error) {
                 try {
-                    StringBuilder builder = new StringBuilder(error.getMessage());
-                    builder.replace(0, 30, "");
-                    JSONObject message = new JSONObject(builder.toString());
+                    if (error.getMessage() != null){
+                        StringBuilder builder = new StringBuilder(error.getMessage());
+                        builder.replace(0, 30, "");
+                        JSONObject message = new JSONObject(builder.toString());
 
-                    if(message.get("_status").equals("OK")) {
-                        String [] splittedUrl = url.split("/");
-                        delegate.processFinish(splittedUrl[splittedUrl.length - 1]);
-                    }
+                        if (message.get("_status").equals("OK")) {
+                            String[] splittedUrl = url.split("/");
+                            delegate.processFinish(splittedUrl[splittedUrl.length - 1]);
+                        }
+                }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

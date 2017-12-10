@@ -32,7 +32,7 @@ import android.provider.Settings.Secure;
 
 public class GestorBD extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 10;
 
     private static final String DATABASE_NAME = Constantes.NOMBRE_BD;
 
@@ -46,7 +46,8 @@ public class GestorBD extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db){
         db.execSQL("CREATE TABLE TB_POSICIONES ( " +
                             "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                            "POSICIONES VARCHAR NOT NULL UNIQUE);");
+                            "POSICIONES VARCHAR NOT NULL UNIQUE," +
+                            "ENVIADO VARCHAR(1) DEFAULT ('N'));");
 
         db.execSQL("CREATE TABLE TB_DATOS_SENSOR ( " +
                             "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -61,7 +62,8 @@ public class GestorBD extends SQLiteOpenHelper {
                             "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                             "DURACION INTEGER NOT NULL, " +
                             "OBSERVACIONES VARCHAR, " +
-                            "TIMESTAMP_INICIO DATETIME DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime')));");
+                            "TIMESTAMP_INICIO DATETIME DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime'))," +
+                            "ENVIADO VARCHAR(1) DEFAULT ('N'));");
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
@@ -205,7 +207,7 @@ public class GestorBD extends SQLiteOpenHelper {
     public JSONArray getTb_posiciones(){
         SQLiteDatabase db = this.getReadableDatabase();
         JSONArray tabla = new JSONArray();
-        Cursor cursor = db.rawQuery("SELECT * FROM TB_POSICIONES", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM TB_POSICIONES WHERE ENVIADO = 'N'", null);
 
         try{
             while (cursor.moveToNext()){
@@ -261,7 +263,7 @@ public class GestorBD extends SQLiteOpenHelper {
     public JSONArray getTb_temlobres(){
         SQLiteDatabase db = this.getReadableDatabase();
         JSONArray tabla = new JSONArray();
-        Cursor cursor = db.rawQuery("SELECT * FROM TB_TEMBLORES", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM TB_TEMBLORES WHERE ENVIADO = 'N'", null);
 
         try{
             while (cursor.moveToNext()){
@@ -299,6 +301,18 @@ public class GestorBD extends SQLiteOpenHelper {
         }
 
         return count;
+    }
+
+    public void updateEnviado(String estado, String tabla){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        String[] whereArgs = new String[]{estado};
+
+        cv.put("ENVIADO", estado);
+
+        db.update(tabla, cv, "ENVIADO <> ?", whereArgs);
+
+        db.close();
     }
 
     private String floatArrayToString(float[] data){

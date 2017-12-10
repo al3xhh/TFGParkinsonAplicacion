@@ -32,4 +32,11 @@ public class Constantes {
 
     //valor generio para indicar que no se quiere usar esa funcionalidad
     public static final Byte OFF = 0x00;
+
+    //Nombres de tablas
+    public static final String TB_TEMBLORES = "TB_TEMBLORES";
+    public static final String TB_POSICINES = "TB_POSICIONES";
+    public static final String TB_DATOS_SENSOR = "TB_DATOS_SENSOR";
+
+
 }

@@ -126,6 +126,9 @@ public class MultiBLEHandler extends Handler {
         result[0] = sensorMpu9250AccConvert(getIntFromByteArray(value, 6));
         result[1] = sensorMpu9250AccConvert(getIntFromByteArray(value, 8));
         result[2] = sensorMpu9250AccConvert(getIntFromByteArray(value, 10));
+        /*result[0] = sensorMpu9250AccConvert(characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 6));
+        result[1] = sensorMpu9250AccConvert(characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 8));
+        result[2] = sensorMpu9250AccConvert(characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 10));*/
         // Three last values for the gyroscope data
         result[3] = sensorMpu9250GyroConvert(getIntFromByteArray(value, 0));
         result[4] = sensorMpu9250GyroConvert(getIntFromByteArray(value, 2));
@@ -137,23 +140,27 @@ public class MultiBLEHandler extends Handler {
     private int getIntFromByteArray(byte[] byteArray, int offset) {
         int result, high, low;
 
-        high = byteArray[offset];
-        low = byteArray[offset + 1];
-        result = ((high & 0x000000FF) << 8) | (low & 0x000000FF);
-        result = (result > 32767) ? result - 65536 : result;
+        high = byteArray[offset + 1];
+        low = byteArray[offset];
+
+        low = low & 0xFF;
+
+        result = (high << 8) + low;
 
         return result;
     }
 
-    float sensorMpu9250GyroConvert(int data) {
+    private float sensorMpu9250GyroConvert(int data) {
         //-- calculate rotation, unit deg/s, range -250, +250
 
         return (data * 1.0f) / (65536 / 500);
     }
 
-    float sensorMpu9250AccConvert(int rawData) {
+    private float sensorMpu9250AccConvert(int rawData) {
         float v;
 
+        //32768 => max val positivo de un entero de 16 bits
+        //(rawData * 1.0f) / (32768 / 2) como max(rawData) = 3268 al dividir limitamos el numero entre -2 y 2
         if (accRange == Constantes.ACCL_RANGE_2G)
             v = (rawData * 1.0f) / (32768 / 2);
         else if (accRange == Constantes.ACCL_RANGE_4G)

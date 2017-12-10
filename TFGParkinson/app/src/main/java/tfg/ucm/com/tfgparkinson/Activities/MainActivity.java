@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.Clases.Temblor;
+import tfg.ucm.com.tfgparkinson.Clases.utils.Constantes;
 import tfg.ucm.com.tfgparkinson.Clases.utils.RespuestaServidor;
 import tfg.ucm.com.tfgparkinson.Clases.utils.Servidor;
 import tfg.ucm.com.tfgparkinson.R;
@@ -83,8 +84,13 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
         if(item.getItemId() == R.id.enviar_datos) {
             GestorBD bd = new GestorBD(getApplicationContext());
             JSONArray sensores = bd.getTb_datos_sensor();
+            JSONArray posiciones = bd.getTb_posiciones();
+            JSONArray temblores = bd.getTb_temlobres();
             Log.w("MainActivity", "Datos enviados\n" + sensores.toString());
-            enviarDatosServidor("http://192.168.1.36:5050/datos_sensor", sensores);
+            enviarDatosServidor("http://192.168.1.108:5050/posiciones", posiciones);
+            enviarDatosServidor("http://192.168.1.108:5050/datos_sensor", sensores);
+            if (temblores.length() > 0)
+                enviarDatosServidor("http://192.168.1.108:5050/temblores", temblores);
         } else {
             i = new Intent(MainActivity.this, ConfigurarSensores.class);
             startActivity(i);
@@ -229,6 +235,8 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
         if(response.equals("datos_sensor")) {
             GestorBD bd = new GestorBD(getApplicationContext());
             bd.vaciarTabla("TB_DATOS_SENSOR");
+            bd.updateEnviado("S", Constantes.TB_POSICINES);
+            bd.updateEnviado("S", Constantes.TB_TEMBLORES);
         }
 
         Toast.makeText(getApplicationContext(), "Datos enviados correctamente", Toast.LENGTH_SHORT).show();
