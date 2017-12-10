@@ -97,6 +97,12 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.sensores, menu);
 
+        GestorBD bd = new GestorBD(getApplicationContext());
+        int sensorDataCount = bd.getNumFilas("TB_DATOS_SENSOR");
+
+        if(sensorDataCount == 0)
+            menu.getItem(0).setVisible(false);
+
         return true;
     }
 
@@ -239,5 +245,11 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
         Servidor servidor = new Servidor(MainActivity.this, url);
         servidor.setDelegate(MainActivity.this);
         servidor.sendData(params, POST);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        invalidateOptionsMenu();
     }
 }
