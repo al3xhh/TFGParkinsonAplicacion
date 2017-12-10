@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -21,6 +23,8 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.sql.Time;
 
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.Clases.Temblor;
@@ -71,8 +75,16 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
                 startActivity(i);
             }
         });
-        GestorBD bd = new GestorBD(getApplicationContext());
 
+        final FloatingActionButton anyadirMedicacion = (FloatingActionButton) findViewById(R.id.anyadirMedicacion);
+        anyadirMedicacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                anyadirMedicacion();
+            }
+        });
+
+        GestorBD bd = new GestorBD(getApplicationContext());
         Log.w("MainActivity", "TABLA\n" + bd.getTb_datos_sensor().toString());
     }
 
@@ -102,6 +114,12 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.sensores, menu);
+
+        GestorBD bd = new GestorBD(getApplicationContext());
+        int sensorDataCount = bd.getNumFilas("TB_DATOS_SENSOR");
+
+        if(sensorDataCount == 0)
+            menu.getItem(0).setVisible(false);
 
         return true;
     }
@@ -155,6 +173,8 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
             }
         });
 
+        dialogBuilder.setTitle("Añadir temblor");
+
         dialogBuilder.setPositiveButton(getString(R.string.guardar), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -199,6 +219,8 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
         final EditText duracionTemblor = (EditText) dialogView.findViewById(R.id.estoyTemblandoDuracion);
         final EditText observacionesTemblor = (EditText) dialogView.findViewById(R.id.estoyTemblandoObservaciones);
 
+        dialogBuilder.setTitle("Estoy temblando");
+
         dialogBuilder.setPositiveButton(getString(R.string.guardar), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -230,6 +252,47 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
         alertDialog.show();
     }
 
+    /**
+     * Función que añade una medicación para el usuario.
+     */
+    private void anyadirMedicacion(){
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.anyadir_medicacion, null);
+
+        final EditText nombreMedicacion = (EditText) dialogView.findViewById(R.id.nombreMedicacion);
+        final EditText intervaloMedicacion = (EditText) dialogView.findViewById(R.id.intervaloMedicacion);
+        final TimePicker horaMedicacion = (TimePicker) dialogView.findViewById(R.id.horaMedicacion);
+        final CheckBox lunes = (CheckBox) dialogView.findViewById(R.id.lunes);
+        final CheckBox martes = (CheckBox) dialogView.findViewById(R.id.martes);
+        final CheckBox miercoles = (CheckBox) dialogView.findViewById(R.id.miercoles);
+        final CheckBox jueves = (CheckBox) dialogView.findViewById(R.id.jueves);
+        final CheckBox viernes = (CheckBox) dialogView.findViewById(R.id.viernes);
+        final CheckBox sabado = (CheckBox) dialogView.findViewById(R.id.sabado);
+        final CheckBox domingo = (CheckBox) dialogView.findViewById(R.id.domingo);
+
+        horaMedicacion.setIs24HourView(true);
+        dialogBuilder.setTitle("Añadir medicación");
+
+        dialogBuilder.setPositiveButton(getString(R.string.guardar), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        dialogBuilder.setNegativeButton(getString(R.string.cancelar), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+
+        dialogBuilder.setView(dialogView);
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
     @Override
     public void processFinish(String response) {
         if(response.equals("datos_sensor")) {
@@ -247,5 +310,11 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
         Servidor servidor = new Servidor(MainActivity.this, url);
         servidor.setDelegate(MainActivity.this);
         servidor.sendData(params, POST);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        invalidateOptionsMenu();
     }
 }
