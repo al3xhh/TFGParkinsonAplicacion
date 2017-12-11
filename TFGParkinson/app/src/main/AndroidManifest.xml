@@ -26,6 +26,7 @@
         <activity android:name=".Activities.HistorialActivity"></activity>
         <activity android:name=".Activities.EmparejarSensoresActivity"></activity>
         <activity android:name=".Activities.ConfigurarSensores"></activity>
+        <activity android:name=".Activities.ListadoMedicamentosActivity"></activity>
     </application>
 
 </manifest>

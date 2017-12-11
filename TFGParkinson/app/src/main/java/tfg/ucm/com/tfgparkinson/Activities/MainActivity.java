@@ -76,6 +76,15 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
             }
         });
 
+        Button verMedicamentos = (Button) findViewById(R.id.botonVerMedicamentos);
+        verMedicamentos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, ListadoMedicamentosActivity.class);
+                startActivity(i);
+            }
+        });
+
         final FloatingActionButton anyadirMedicacion = (FloatingActionButton) findViewById(R.id.anyadirMedicacion);
         anyadirMedicacion.setOnClickListener(new View.OnClickListener() {
             @Override
