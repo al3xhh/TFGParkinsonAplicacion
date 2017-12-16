@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -57,6 +58,11 @@ public class ListadoMedicamentosActivity extends AppCompatActivity {
         m2dias.add("D");
         Medicamento m2 = new Medicamento("Medicamento 2", "4", new Timestamp(System.currentTimeMillis()), m2dias);
         medicamentos.add(m2);
+
+        if(medicamentos.size() == 0) {
+            ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView);
+            scrollView.setVisibility(View.GONE);
+        }
 
         for(int i = 0; i < medicamentos.size(); i ++) {
             final Medicamento medicamento = medicamentos.get(i);

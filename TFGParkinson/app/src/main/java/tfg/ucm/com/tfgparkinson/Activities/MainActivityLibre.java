@@ -22,9 +22,6 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.sql.Time;
 
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.Clases.Temblor;
@@ -35,7 +32,7 @@ import tfg.ucm.com.tfgparkinson.R;
 
 import static com.android.volley.Request.Method.POST;
 
-public class MainActivity extends AppCompatActivity implements RespuestaServidor {
+public class MainActivityLibre extends AppCompatActivity implements RespuestaServidor {
 
     public static Context appContext;
 
@@ -48,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_libre);
 
         appContext = getApplicationContext();
         Button anyadirTemblor = (Button) findViewById(R.id.botonAnyadirTemblor);
@@ -71,30 +68,13 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
         verHistorial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, HistorialActivity.class);
+                Intent i = new Intent(MainActivityLibre.this, HistorialActivity.class);
                 startActivity(i);
-            }
-        });
-
-        Button verMedicamentos = (Button) findViewById(R.id.botonVerMedicamentos);
-        verMedicamentos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, ListadoMedicamentosActivity.class);
-                startActivity(i);
-            }
-        });
-
-        final FloatingActionButton anyadirMedicacion = (FloatingActionButton) findViewById(R.id.anyadirMedicacion);
-        anyadirMedicacion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                anyadirMedicacion();
             }
         });
 
         GestorBD bd = new GestorBD(getApplicationContext());
-        Log.w("MainActivity", "TABLA\n" + bd.getTb_datos_sensor().toString());
+        Log.w("MainActivityLibre", "TABLA\n" + bd.getTb_datos_sensor().toString());
     }
 
     @Override
@@ -107,13 +87,13 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
             JSONArray sensores = bd.getTb_datos_sensor();
             JSONArray posiciones = bd.getTb_posiciones();
             JSONArray temblores = bd.getTb_temlobres();
-            Log.w("MainActivity", "Datos enviados\n" + sensores.toString());
+            Log.w("MainActivityLibre", "Datos enviados\n" + sensores.toString());
             enviarDatosServidor("http://192.168.1.108:5050/posiciones", posiciones);
             enviarDatosServidor("http://192.168.1.108:5050/datos_sensor", sensores);
             if (temblores.length() > 0)
                 enviarDatosServidor("http://192.168.1.108:5050/temblores", temblores);
         } else {
-            i = new Intent(MainActivity.this, ConfigurarSensores.class);
+            i = new Intent(MainActivityLibre.this, ConfigurarSensores.class);
             startActivity(i);
         }
 
@@ -261,47 +241,6 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
         alertDialog.show();
     }
 
-    /**
-     * Función que añade una medicación para el usuario.
-     */
-    private void anyadirMedicacion(){
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.anyadir_medicacion, null);
-
-        final EditText nombreMedicacion = (EditText) dialogView.findViewById(R.id.nombreMedicacion);
-        final EditText intervaloMedicacion = (EditText) dialogView.findViewById(R.id.intervaloMedicacion);
-        final TimePicker horaMedicacion = (TimePicker) dialogView.findViewById(R.id.horaMedicacion);
-        final CheckBox lunes = (CheckBox) dialogView.findViewById(R.id.lunes);
-        final CheckBox martes = (CheckBox) dialogView.findViewById(R.id.martes);
-        final CheckBox miercoles = (CheckBox) dialogView.findViewById(R.id.miercoles);
-        final CheckBox jueves = (CheckBox) dialogView.findViewById(R.id.jueves);
-        final CheckBox viernes = (CheckBox) dialogView.findViewById(R.id.viernes);
-        final CheckBox sabado = (CheckBox) dialogView.findViewById(R.id.sabado);
-        final CheckBox domingo = (CheckBox) dialogView.findViewById(R.id.domingo);
-
-        horaMedicacion.setIs24HourView(true);
-        dialogBuilder.setTitle("Añadir medicación");
-
-        dialogBuilder.setPositiveButton(getString(R.string.guardar), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-
-        dialogBuilder.setNegativeButton(getString(R.string.cancelar), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-
-
-        dialogBuilder.setView(dialogView);
-        AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.show();
-    }
-
     @Override
     public void processFinish(String response) {
         if(response.equals("datos_sensor")) {
@@ -316,8 +255,8 @@ public class MainActivity extends AppCompatActivity implements RespuestaServidor
 
     private void enviarDatosServidor(String url, JSONArray params) {
         Log.d("DATOSSSSS", params.toString());
-        Servidor servidor = new Servidor(MainActivity.this, url);
-        servidor.setDelegate(MainActivity.this);
+        Servidor servidor = new Servidor(MainActivityLibre.this, url);
+        servidor.setDelegate(MainActivityLibre.this);
         servidor.sendData(params, POST);
     }
 

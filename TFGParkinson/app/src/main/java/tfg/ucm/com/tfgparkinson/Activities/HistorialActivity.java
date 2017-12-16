@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -46,6 +47,11 @@ public class HistorialActivity extends AppCompatActivity {
         TextView textoActual;
         int colorActual = getColor(R.color.colorIndigo);
         String fechaActual, fechaAnterior = "";
+
+        if(temblores.size() == 0) {
+            ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView);
+            scrollView.setVisibility(View.GONE);
+        }
 
         for(int i = 0; i < temblores.size(); i ++) {
             final Temblor temblor = temblores.get(i);

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -12,22 +11,22 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/botonAnyadirTemblor"
+            android:id="@+id/botonAnyadirActividad"
             android:layout_width="match_parent"
             android:layout_height="210dp"
             android:layout_weight="1"
             android:background="@color/colorIndigo"
-            android:text="Añadir temblor"
+            android:text="Añadir actividad"
             android:textColor="@color/colorWhite"
             android:textSize="24dp" />
 
         <Button
-            android:id="@+id/botonEstoyTemblando"
+            android:id="@+id/botonAnyadirMedicamento"
             android:layout_width="match_parent"
             android:layout_height="210dp"
             android:layout_weight="1"
             android:background="@color/colorBlue"
-            android:text="Estoy temblando"
+            android:text="Añadir medicamento"
             android:textColor="@color/colorWhite"
             android:textSize="24dp" />
 
@@ -36,13 +35,13 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/botonVerHistorial"
+                android:id="@+id/botonVerGraficos"
                 android:layout_width="220dp"
                 android:layout_height="210dp"
                 android:layout_gravity="left"
                 android:layout_weight="1"
                 android:background="@color/colorCyan"
-                android:text="Ver historial"
+                android:text="Ver gráficos"
                 android:textColor="@color/colorWhite"
                 android:textSize="16sp" />
 
@@ -57,22 +56,5 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="16sp" />
         </TableRow>
-
     </LinearLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/anyadirMedicacion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@color/colorIndigo"
-        android:clickable="true"
-        android:focusable="true"
-        android:src="@drawable/ic_add_black_24dp"
-        app:backgroundTint="@color/colorIndigo" />
-
-
 </RelativeLayout>

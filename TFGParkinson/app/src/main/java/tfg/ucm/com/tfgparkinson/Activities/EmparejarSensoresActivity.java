@@ -10,21 +10,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,13 +31,12 @@ import java.util.Map;
 
 import tfg.ucm.com.tfgparkinson.Clases.BLE.IMultiBLEAccelServiceDelegate;
 import tfg.ucm.com.tfgparkinson.Clases.BLE.MultiBLEService;
-import tfg.ucm.com.tfgparkinson.Clases.utils.Constantes;
 import tfg.ucm.com.tfgparkinson.Clases.utils.OpcionesVO;
 import tfg.ucm.com.tfgparkinson.R;
 
 public class EmparejarSensoresActivity extends AppCompatActivity implements IMultiBLEAccelServiceDelegate {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = MainActivityLibre.class.getSimpleName();
     private static final int PERMISSION_LOCATION_REQUEST_CODE = 1001;
 
     private Context mContext;
