@@ -1,5 +1,8 @@
 package tfg.ucm.com.tfgparkinson.Activities;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -70,8 +73,9 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
         verGraficos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivityActividad.this, GraficosActivity.class);
-                startActivity(i);
+                /*Intent i = new Intent(MainActivityActividad.this, GraficosActivity.class);
+                startActivity(i);*/
+                notificacion();
             }
         });
 
@@ -218,5 +222,38 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
     public void onStart() {
         super.onStart();
         invalidateOptionsMenu();
+    }
+
+
+    private void notificacion() {
+        Intent intent = new Intent(this, NotificationReceiverActivity.class);
+        PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
+
+        Intent intentConfirm = new Intent(this, NotificationReceiverActivity.class);
+        intentConfirm.setAction("CONFIRM");
+        intentConfirm.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+
+        Intent intentCancel = new Intent(this, NotificationReceiverActivity.class);
+        intentCancel.setAction("CANCEL");
+        intentCancel.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        PendingIntent pendingIntentConfirm = PendingIntent.getBroadcast(this, 0, intentConfirm, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntentCancel = PendingIntent.getBroadcast(this, 1, intentCancel, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        // Build notification
+        // Actions are just fake
+        Notification noti = new Notification.Builder(this)
+                .setContentTitle("¿Se ha tomado la pastilla?")
+                .setSmallIcon(R.drawable.ic_access_time_black_24dp)
+                .setContentIntent(pIntent)
+                .addAction(R.drawable.ic_done_black_24dp, "Si", pendingIntentConfirm)
+                .addAction(R.drawable.ic_clear_black_24dp, "No", pendingIntentCancel)
+                .build();
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        // hide the notification after its selected
+        noti.flags |= Notification.FLAG_AUTO_CANCEL;
+
+        notificationManager.notify(0, noti);
     }
 }
