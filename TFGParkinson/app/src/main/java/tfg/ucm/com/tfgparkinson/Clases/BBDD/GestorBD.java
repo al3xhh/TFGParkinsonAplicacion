@@ -19,6 +19,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import tfg.ucm.com.tfgparkinson.Clases.Medicamento;
 import tfg.ucm.com.tfgparkinson.Clases.Temblor;
 import tfg.ucm.com.tfgparkinson.Clases.utils.Constantes;
 
@@ -32,7 +33,7 @@ import android.provider.Settings.Secure;
 
 public class GestorBD extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
 
     private static final String DATABASE_NAME = Constantes.NOMBRE_BD;
 
@@ -64,7 +65,71 @@ public class GestorBD extends SQLiteOpenHelper {
                             "OBSERVACIONES VARCHAR, " +
                             "TIMESTAMP_INICIO DATETIME DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime'))," +
                             "ENVIADO VARCHAR(1) DEFAULT ('N'));");
+
+        db.execSQL("CREATE TABLE TB_MEDICAMENTOS ( " +
+                "NOMBRE PRIMARY KEY, " +
+                "DIAS VARCHAR NOT NULL, " +
+                "HORA DATETIME NOT NULL, " +
+                "MINUTOS_DESCARTAR NUMBER NOT NULL);");
     }
+
+
+    public void deleteMedicamento(String medicamento) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String[] whereArgs = new String[]{medicamento};
+
+        db.delete("TB_MEDICAMENTOS", "NOMBRE = ?", whereArgs);
+
+        db.close();
+    }
+
+    public void insertMedicamento(Medicamento medicamento) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("NOMBRE", medicamento.getNombre());
+        cv.put("DIAS", medicamento.getDiasFormateados());
+        cv.put("HORA", medicamento.getTimestamp().toString());
+        cv.put("MINUTOS_DESCARTAR", medicamento.getIntervalo());
+
+        db.insert("TB_MEDICAMENTOS", null, cv);
+
+        db.close();
+    }
+
+    public void updateMedicamento(Medicamento medicamento) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        String[] whereArgs = new String[]{medicamento.getNombre()};
+
+        cv.put("DIAS", medicamento.getDiasFormateados());
+        cv.put("HORA", medicamento.getTimestamp().toString());
+        cv.put("MINUTOS_DESCARTAR", medicamento.getIntervalo());
+
+        db.update("TB_MEDICAMENTOS", cv, "NOMBRE = ?", whereArgs);
+
+        db.close();
+    }
+
+    public ArrayList<Medicamento> getMedicamentos(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Medicamento> medicamentos = new ArrayList<Medicamento>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM TB_MEDICAMENTOS ORDER BY NOMBRE ASC", null);
+
+        try{
+            while (cursor.moveToNext())
+                medicamentos.add(new Medicamento(cursor.getString(1), cursor.getString(4), cursor.getString(3), cursor.getString(2)));
+        } finally {
+            cursor.close();
+            db.close();
+        }
+
+        return medicamentos;
+    }
+
+
+
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
         db.execSQL("DROP TABLE TB_DATOS_SENSOR");
