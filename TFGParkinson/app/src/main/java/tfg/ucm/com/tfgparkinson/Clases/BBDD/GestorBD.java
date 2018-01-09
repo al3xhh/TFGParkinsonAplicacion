@@ -146,8 +146,8 @@ public class GestorBD extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM TB_TEMBLORES ORDER BY TIMESTAMP_INICIO ASC", null);
 
         try{
-            while (cursor.moveToNext())
-                temblores.add(new Temblor(cursor.getInt(1), Timestamp.valueOf(cursor.getString(4)), cursor.getInt(2), cursor.getString(3)));
+            while (cursor.moveToNext()) {
+                temblores.add(new Temblor(cursor.getInt(0), Timestamp.valueOf(cursor.getString(3)), cursor.getInt(1), cursor.getString(2))); }
         } finally {
             cursor.close();
             db.close();
