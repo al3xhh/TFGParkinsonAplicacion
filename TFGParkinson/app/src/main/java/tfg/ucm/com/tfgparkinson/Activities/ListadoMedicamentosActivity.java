@@ -19,6 +19,7 @@ import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -40,24 +41,13 @@ public class ListadoMedicamentosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historial);
 
+        GestorBD bd = new GestorBD(this);
+        ArrayList<Medicamento> medicamentos = bd.getMedicamentos();
+
         LinearLayout historial = (LinearLayout) findViewById(R.id.historial);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
         View vistaActual;
         TextView textoActual;
-
-        ArrayList<Medicamento> medicamentos = new ArrayList<>();
-        ArrayList<String> m1dias = new ArrayList<>();
-        m1dias.add("L");
-        m1dias.add("X");
-        m1dias.add("V");
-        Medicamento m1 = new Medicamento("Medicamento 1", "3", new Timestamp(System.currentTimeMillis()), m1dias);
-        medicamentos.add(m1);
-        ArrayList<String> m2dias = new ArrayList<>();
-        m2dias.add("M");
-        m2dias.add("J");
-        m2dias.add("D");
-        Medicamento m2 = new Medicamento("Medicamento 2", "4", new Timestamp(System.currentTimeMillis()), m2dias);
-        medicamentos.add(m2);
 
         if(medicamentos.size() == 0) {
             ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView);
@@ -73,9 +63,9 @@ public class ListadoMedicamentosActivity extends AppCompatActivity {
             textoActual = (TextView) vistaActual.findViewById(R.id.diasMedicamento);
             textoActual.setText("Dias: " + medicamento.getDiasFormateados());
             textoActual = (TextView) vistaActual.findViewById(R.id.horaMedicamento);
-            textoActual.setText("Hora: " + medicamento.getTimestamp());
+            textoActual.setText("Hora: " + medicamento.getHora());
             textoActual = (TextView) vistaActual.findViewById(R.id.tiempoMedicamento);
-            textoActual.setText("Intervalo: " + medicamento.getIntervalo());
+            textoActual.setText("Intervalo: " + medicamento.getIntervalo() + " minutos");
             ImageView opcionesTemblor = (ImageView) vistaActual.findViewById(R.id.opcionesMedicamento);
             opcionesTemblor.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -123,7 +113,12 @@ public class ListadoMedicamentosActivity extends AppCompatActivity {
         final CheckBox domingo = (CheckBox) dialogView.findViewById(R.id.domingo);
 
         nombre.setText(medicamento.getNombre());
-        intervalo.setText(medicamento.getIntervalo());
+        nombre.setEnabled(false);
+        nombre.setEnabled(false);
+        intervalo.setText(String.valueOf(medicamento.getIntervalo()));
+        horaMedicacion.setIs24HourView(true);
+        horaMedicacion.setHour(Integer.parseInt(medicamento.getHora().split(":")[0]));
+        horaMedicacion.setMinute(Integer.parseInt(medicamento.getHora().split(":")[1]));
 
         int size = medicamento.getDias().size();
         String dia;
@@ -151,6 +146,34 @@ public class ListadoMedicamentosActivity extends AppCompatActivity {
         dialogBuilder.setPositiveButton("Editar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                ArrayList<String> dias = new ArrayList<>();
+
+                if(lunes.isChecked())
+                    dias.add("L");
+                if(martes.isChecked())
+                    dias.add("M");
+                if(miercoles.isChecked())
+                    dias.add("X");
+                if(jueves.isChecked())
+                    dias.add("J");
+                if(viernes.isChecked())
+                    dias.add("V");
+                if(sabado.isChecked())
+                    dias.add("S");
+                if(domingo.isChecked())
+                    dias.add("D");
+
+                try {
+                    Medicamento medicamento = new Medicamento(nombre.getText().toString(),
+                            Integer.parseInt(intervalo.getText().toString()), horaMedicacion.getHour() + ":" +
+                            horaMedicacion.getMinute(), dias);
+
+                    GestorBD bd = new GestorBD(getApplicationContext());
+                    bd.updateMedicamento(medicamento);
+                    reiniciarActivity();
+                } catch (NumberFormatException e) {
+                    Toast.makeText(getApplicationContext(), R.string.intervalo_no_valido, Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -173,7 +196,9 @@ public class ListadoMedicamentosActivity extends AppCompatActivity {
         dialogBuilder.setPositiveButton("Borrar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                GestorBD bd = new GestorBD(getApplicationContext());
+                bd.deleteMedicamento(medicamento);
+                reiniciarActivity();
             }
         });
 

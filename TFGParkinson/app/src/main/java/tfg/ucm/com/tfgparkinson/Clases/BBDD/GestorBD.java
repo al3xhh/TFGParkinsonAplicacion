@@ -19,6 +19,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import tfg.ucm.com.tfgparkinson.Clases.Actividad;
 import tfg.ucm.com.tfgparkinson.Clases.Medicamento;
 import tfg.ucm.com.tfgparkinson.Clases.Temblor;
 import tfg.ucm.com.tfgparkinson.Clases.utils.Constantes;
@@ -33,7 +34,7 @@ import android.provider.Settings.Secure;
 
 public class GestorBD extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 12;
 
     private static final String DATABASE_NAME = Constantes.NOMBRE_BD;
 
@@ -71,12 +72,31 @@ public class GestorBD extends SQLiteOpenHelper {
                 "DIAS VARCHAR NOT NULL, " +
                 "HORA DATETIME NOT NULL, " +
                 "MINUTOS_DESCARTAR NUMBER NOT NULL);");
+
+        db.execSQL("CREATE TABLE TB_ACTIVIDADES ( " +
+                "NOMBRE VARCHAR, " +
+                "INTERVALO NUMBER NOT NULL, " +
+                "HORA DATETIME NOT NULL," +
+                "PRIMARY KEY (NOMBRE,HORA));");
+
     }
 
-
-    public void deleteMedicamento(String medicamento) {
+    public void insertActividad(Actividad actividad) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String[] whereArgs = new String[]{medicamento};
+        ContentValues cv = new ContentValues();
+
+        cv.put("NOMBRE", actividad.getNombre());
+        cv.put("INTERVALO", actividad.getIntervalo());
+        cv.put("HORA", actividad.getHora().toString());
+
+        db.insert("TB_ACTIVIDAD", null, cv);
+
+        db.close();
+    }
+
+    public void deleteMedicamento(Medicamento medicamento) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String[] whereArgs = new String[]{medicamento.getNombre()};
 
         db.delete("TB_MEDICAMENTOS", "NOMBRE = ?", whereArgs);
 
@@ -118,8 +138,17 @@ public class GestorBD extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM TB_MEDICAMENTOS ORDER BY NOMBRE ASC", null);
 
         try{
-            while (cursor.moveToNext())
-                medicamentos.add(new Medicamento(cursor.getString(1), cursor.getString(4), cursor.getString(3), cursor.getString(2)));
+            while (cursor.moveToNext()) {
+                String[] splitDias = cursor.getString(1).split("-");
+                ArrayList<String> dias = new ArrayList<>();
+
+                for(int i = 0; i < splitDias.length; i ++) {
+                    dias.add(splitDias[i]);
+                }
+
+                medicamentos.add(new Medicamento(cursor.getString(0), Integer.parseInt(cursor.getString(3)),
+                        cursor.getString(2), dias));
+            }
         } finally {
             cursor.close();
             db.close();

@@ -3,8 +3,13 @@
     <string name="guardar">Guardar</string>
     <string name="cancelar">Cancelar</string>
     <string name="campo_vacio">Debes introducir duración y observaciones.</string>
+
+    <!-- Toasts messages -->
     <string name="duracion_no_valida">Duración no válida.</string>
     <string name="exito_registro_temblor">Temblor registrado con éxito.</string>
+    <string name="intervalo_no_valido">Intervalo no válido.</string>
+    <string name="exito_registro_medicamento">Medicamento registrado con éxito.</string>
+    <string name="exito_registro_actividad">Actividad registrada con éxito.</string>
 
     <!-- Information/labels -->
     <string name="no_connected_devices">No hay dispositivos conectados</string>

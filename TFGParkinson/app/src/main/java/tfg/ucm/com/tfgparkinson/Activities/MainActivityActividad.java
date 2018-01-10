@@ -27,7 +27,11 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
+
+import tfg.ucm.com.tfgparkinson.Clases.Actividad;
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
+import tfg.ucm.com.tfgparkinson.Clases.Medicamento;
 import tfg.ucm.com.tfgparkinson.Clases.Temblor;
 import tfg.ucm.com.tfgparkinson.Clases.utils.Constantes;
 import tfg.ucm.com.tfgparkinson.Clases.utils.RespuestaServidor;
@@ -134,7 +138,7 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.anyadir_actividad, null);
 
-        final Spinner actividad = (Spinner) dialogView.findViewById(R.id.seleccionarActividad);
+        final Spinner nombreActividad = (Spinner) dialogView.findViewById(R.id.seleccionarActividad);
         final EditText duracion = (EditText) dialogView.findViewById(R.id.duracionActividad);
         final TimePicker horaInicio = (TimePicker) dialogView.findViewById(R.id.horaInicioActividad);
 
@@ -143,7 +147,15 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
         dialogBuilder.setPositiveButton(getString(R.string.guardar), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                try {
+                    Actividad actividad = new Actividad(nombreActividad.getSelectedItem().toString(),
+                            Integer.parseInt(duracion.getText().toString()), horaInicio.getHour() + ":" + horaInicio.getMinute());
+                    GestorBD gestorBD = new GestorBD(getApplicationContext());
+                    gestorBD.insertActividad(actividad);
+                    Toast.makeText(getApplicationContext(), R.string.exito_registro_actividad, Toast.LENGTH_SHORT).show();
+                } catch (NumberFormatException e) {
+                    Toast.makeText(getApplicationContext(), R.string.duracion_no_valida, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -181,8 +193,38 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
         horaMedicacion.setIs24HourView(true);
         dialogBuilder.setTitle("Añadir medicación");
         dialogBuilder.setPositiveButton(getString(R.string.guardar), new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                ArrayList<String> dias = new ArrayList<>();
+
+                if(lunes.isChecked())
+                    dias.add("L");
+                if(martes.isChecked())
+                    dias.add("M");
+                if(miercoles.isChecked())
+                    dias.add("X");
+                if(jueves.isChecked())
+                    dias.add("J");
+                if(viernes.isChecked())
+                    dias.add("V");
+                if(sabado.isChecked())
+                    dias.add("S");
+                if(domingo.isChecked())
+                    dias.add("D");
+
+                try {
+                    Medicamento medicamento = new Medicamento(nombreMedicacion.getText().toString(),
+                            Integer.parseInt(intervaloMedicacion.getText().toString()), horaMedicacion.getHour() + ":" +
+                            horaMedicacion.getMinute(), dias);
+
+                    GestorBD bd = new GestorBD(getApplicationContext());
+                    bd.insertMedicamento(medicamento);
+                    Toast.makeText(getApplicationContext(), R.string.exito_registro_medicamento, Toast.LENGTH_SHORT).show();
+                } catch (NumberFormatException e) {
+                    Toast.makeText(getApplicationContext(), R.string.intervalo_no_valido, Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 

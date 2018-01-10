@@ -2,6 +2,7 @@ package tfg.ucm.com.tfgparkinson.Clases;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by al3x_hh on 11/12/2017.
@@ -10,14 +11,26 @@ import java.util.ArrayList;
 public class Medicamento {
 
     private String nombre;
-    private String intervalo;
+    private int intervalo;
     private Timestamp timestamp;
     private ArrayList<String> dias;
 
-    public Medicamento(String nombre, String intervalo, Timestamp timestamp, ArrayList<String> dias) {
+    public Medicamento(String nombre, int intervalo, String hora, ArrayList<String> dias) {
+        Calendar calendar = Calendar.getInstance();
+
+        if(hora.contains("-")) {
+            calendar.set(Calendar.HOUR, Integer.parseInt(hora.split(" ")[1].split(":")[0]));
+            calendar.set(Calendar.MINUTE, Integer.parseInt(hora.split(" ")[1].split(":")[1]));
+        } else {
+            calendar.set(Calendar.HOUR, Integer.parseInt(hora.split(":")[0]));
+            calendar.set(Calendar.MINUTE, Integer.parseInt(hora.split(":")[1]));
+        }
+
+        Timestamp ts = new Timestamp(calendar.getTimeInMillis());
+
         this.nombre = nombre;
         this.intervalo = intervalo;
-        this.timestamp = timestamp;
+        this.timestamp = ts;
         this.dias = dias;
     }
 
@@ -25,7 +38,7 @@ public class Medicamento {
         return nombre;
     }
 
-    public String getIntervalo() {
+    public int getIntervalo() {
         return intervalo;
     }
 
@@ -41,7 +54,7 @@ public class Medicamento {
         this.nombre = nombre;
     }
 
-    public void setIntervalo(String intervalo) {
+    public void setIntervalo(int intervalo) {
         this.intervalo = intervalo;
     }
 
@@ -53,6 +66,13 @@ public class Medicamento {
         this.dias = dias;
     }
 
+    public String getHora() {
+        String[] tokens = timestamp.toString().split(" ");
+        String[] hora = tokens[1].split(":");
+
+        return hora[0] + ":" + hora[1];
+    }
+
     public String getDiasFormateados() {
         int size = dias.size();
         StringBuilder ret = new StringBuilder();
@@ -61,7 +81,7 @@ public class Medicamento {
             ret.append(dias.get(i));
 
             if(i != size - 1)
-                ret.append(" - ");
+                ret.append("-");
         }
 
         return ret.toString();
