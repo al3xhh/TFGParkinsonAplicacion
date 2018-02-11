@@ -34,7 +34,7 @@ import android.provider.Settings.Secure;
 
 public class GestorBD extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 13;
 
     private static final String DATABASE_NAME = Constantes.NOMBRE_BD;
 
@@ -68,16 +68,16 @@ public class GestorBD extends SQLiteOpenHelper {
                             "ENVIADO VARCHAR(1) DEFAULT ('N'));");
 
         db.execSQL("CREATE TABLE TB_MEDICAMENTOS ( " +
-                "NOMBRE PRIMARY KEY, " +
-                "DIAS VARCHAR NOT NULL, " +
-                "HORA DATETIME NOT NULL, " +
-                "MINUTOS_DESCARTAR NUMBER NOT NULL);");
+                            "NOMBRE VARCHAR PRIMARY KEY, " +
+                            "DIAS VARCHAR NOT NULL, " +
+                            "HORA DATETIME NOT NULL, " +
+                            "MINUTOS_DESCARTAR NUMBER NOT NULL);");
 
         db.execSQL("CREATE TABLE TB_ACTIVIDADES ( " +
-                "NOMBRE VARCHAR, " +
-                "INTERVALO NUMBER NOT NULL, " +
-                "HORA DATETIME NOT NULL," +
-                "PRIMARY KEY (NOMBRE,HORA));");
+                            "NOMBRE VARCHAR, " +
+                            "INTERVALO NUMBER NOT NULL, " +
+                            "HORA DATETIME NOT NULL," +
+                            "PRIMARY KEY (NOMBRE,HORA));");
 
     }
 
@@ -383,6 +383,62 @@ public class GestorBD extends SQLiteOpenHelper {
 
         return tabla;
     }
+
+    public JSONArray getTb_medicamentos(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        JSONArray tabla = new JSONArray();
+        Cursor cursor = db.rawQuery("SELECT * FROM TB_MEDICAMENTOS", null);
+
+        try{
+            while (cursor.moveToNext()){
+                JSONObject tupla = new JSONObject();
+
+                tupla.put("nombre", cursor.getString(0));
+                tupla.put("dias", cursor.getString(1));
+                tupla.put("hora", cursor.getString(2));
+                tupla.put("minutos_descartar", cursor.getInt(3));
+                tupla.put("device_id", Secure.getString(context.getContentResolver(), Secure.ANDROID_ID));
+                tabla.put(tupla);
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+        finally {
+            cursor.close();
+            db.close();
+        }
+
+        return tabla;
+    }
+
+    public JSONArray getTb_actividades(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        JSONArray tabla = new JSONArray();
+        Cursor cursor = db.rawQuery("SELECT * FROM TB_ACTIVIDADES", null);
+
+        try{
+            while (cursor.moveToNext()){
+                JSONObject tupla = new JSONObject();
+
+                tupla.put("nombre", cursor.getString(0));
+                tupla.put("intervalo", cursor.getInt(1));
+                tupla.put("hora", cursor.getString(2));
+                tupla.put("device_id", Secure.getString(context.getContentResolver(), Secure.ANDROID_ID));
+                tabla.put(tupla);
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+        finally {
+            cursor.close();
+            db.close();
+        }
+
+        return tabla;
+    }
+
 
     public int getNumFilas(String tabla){
         SQLiteDatabase db = this.getReadableDatabase();
