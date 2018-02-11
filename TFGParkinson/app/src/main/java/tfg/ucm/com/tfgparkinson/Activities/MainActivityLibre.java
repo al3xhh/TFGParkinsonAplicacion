@@ -248,9 +248,10 @@ public class MainActivityLibre extends AppCompatActivity implements RespuestaSer
             bd.vaciarTabla("TB_DATOS_SENSOR");
             bd.updateEnviado("S", Constantes.TB_POSICINES);
             bd.updateEnviado("S", Constantes.TB_TEMBLORES);
+            Toast.makeText(getApplicationContext(), "Datos enviados correctamente", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Error al enviar los datos, inténtelo más tarde", Toast.LENGTH_SHORT).show();
         }
-
-        Toast.makeText(getApplicationContext(), "Datos enviados correctamente", Toast.LENGTH_SHORT).show();
     }
 
     private void enviarDatosServidor(String url, JSONArray params) {

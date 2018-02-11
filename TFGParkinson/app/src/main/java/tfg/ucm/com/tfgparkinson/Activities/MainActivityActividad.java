@@ -191,7 +191,7 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
         final CheckBox domingo = (CheckBox) dialogView.findViewById(R.id.domingo);
 
         horaMedicacion.setIs24HourView(true);
-        dialogBuilder.setTitle("Añadir medicación");
+        dialogBuilder.setTitle("Añadir medicamento");
         dialogBuilder.setPositiveButton(getString(R.string.guardar), new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override

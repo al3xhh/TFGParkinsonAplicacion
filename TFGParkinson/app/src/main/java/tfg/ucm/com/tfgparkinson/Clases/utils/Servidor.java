@@ -70,6 +70,7 @@ public class Servidor {
                         }
                 }
                 } catch (JSONException e) {
+                    delegate.processFinish("ERROR");
                     e.printStackTrace();
                 }
                 VolleyLog.d("ERROR LISTENER", error.getMessage());

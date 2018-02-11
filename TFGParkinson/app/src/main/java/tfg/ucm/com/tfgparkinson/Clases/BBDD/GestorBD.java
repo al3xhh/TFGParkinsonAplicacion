@@ -164,6 +164,8 @@ public class GestorBD extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE TB_DATOS_SENSOR");
         db.execSQL("DROP TABLE TB_TEMBLORES");
         db.execSQL("DROP TABLE TB_POSICIONES");
+        db.execSQL("DROP TABLE TB_MEDICAMENTOS");
+        db.execSQL("DROP TABLE TB_ACTIVIDADES");
 
         this.onCreate(db);
     }
