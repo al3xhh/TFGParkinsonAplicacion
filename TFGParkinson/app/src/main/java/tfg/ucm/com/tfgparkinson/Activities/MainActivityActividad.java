@@ -26,6 +26,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -103,11 +104,19 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
             JSONArray sensores = bd.getTb_datos_sensor();
             JSONArray posiciones = bd.getTb_posiciones();
             JSONArray temblores = bd.getTb_temlobres();
-            Log.w("MainActivityLibre", "Datos enviados\n" + sensores.toString());
-            enviarDatosServidor("http://192.168.1.108:5050/posiciones", posiciones);
-            enviarDatosServidor("http://192.168.1.108:5050/datos_sensor", sensores);
+            JSONArray medicamentos = bd.getTb_medicamentos();
+            JSONArray actividades = bd.getTb_actividades();
+
+            if (posiciones.length() > 0)
+                enviarDatosServidor("http://10.153.44.52:5050/posiciones", posiciones);
+            if (sensores.length() > 0)
+                enviarDatosServidor("http://10.153.44.52:5050/datos_sensor", sensores);
+            if (medicamentos.length() > 0)
+                enviarDatosServidor("http://10.153.44.52:5050/medicamentos", medicamentos);
+            if (actividades.length() > 0)
+                enviarDatosServidor("http://10.153.44.52:5050/actividades", actividades);
             if (temblores.length() > 0)
-                enviarDatosServidor("http://192.168.1.108:5050/temblores", temblores);
+                enviarDatosServidor("http://10.153.44.52:5050/temblores", temblores);
         } else {
             i = new Intent(MainActivityActividad.this, ConfigurarSensores.class);
             startActivity(i);
@@ -122,8 +131,10 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
 
         GestorBD bd = new GestorBD(getApplicationContext());
         int sensorDataCount = bd.getNumFilas("TB_DATOS_SENSOR");
+        int medicamentoDataCount = bd.getNumFilas("TB_MEDICAMENTOS");
+        int actividadDataCount = bd.getNumFilas("TB_ACTIVIDADES");
 
-        if(sensorDataCount == 0)
+        if(sensorDataCount == 0 && medicamentoDataCount == 0 && actividadDataCount == 0)
             menu.getItem(0).setVisible(false);
 
         return true;
