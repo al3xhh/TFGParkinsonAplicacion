@@ -89,7 +89,7 @@ public class GestorBD extends SQLiteOpenHelper {
         cv.put("INTERVALO", actividad.getIntervalo());
         cv.put("HORA", actividad.getHora().toString());
 
-        db.insert("TB_ACTIVIDAD", null, cv);
+        db.insert("TB_ACTIVIDADES", null, cv);
 
         db.close();
     }
