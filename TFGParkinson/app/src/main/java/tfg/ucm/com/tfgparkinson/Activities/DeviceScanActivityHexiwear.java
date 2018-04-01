@@ -57,13 +57,18 @@ public class DeviceScanActivityHexiwear extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_scan_hexiwear);
 
+        Intent i = getIntent();
+
+        ArrayList<BluetoothDevice> selectedDevices = (ArrayList<BluetoothDevice>) i.getSerializableExtra("devices");
+
         mHandler = new Handler();
-        mScanTitle = (TextView) findViewById(R.id.scanTitle);
+        mDeviceAddress = selectedDevices.get(0).getAddress();
+        //mScanTitle = (TextView) findViewById(R.id.scanTitle);
 
         final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
         if (mBluetoothAdapter == null) {
-            Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -71,7 +76,7 @@ public class DeviceScanActivityHexiwear extends AppCompatActivity {
         checkNotificationEnabled();
         LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, new IntentFilter("Msg"));
         ComponentName name = startService(new Intent(DeviceScanActivityHexiwear.this, NotificationService.class));
-        //registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         scanLeDevice(true);
         Intent gattServiceIntent = new Intent(DeviceScanActivityHexiwear.this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
@@ -80,8 +85,8 @@ public class DeviceScanActivityHexiwear extends AppCompatActivity {
     private void displayGattServices(List<BluetoothGattService> gattServices) {
         if (gattServices == null) return;
         String uuid = null;
-        String unknownServiceString = getResources().getString(R.string.unknown_service);
-        String unknownCharaString = getResources().getString(R.string.unknown_characteristic);
+        //String unknownServiceString = getResources().getString(R.string.unknown_service);
+        //String unknownCharaString = getResources().getString(R.string.unknown_characteristic);
         ArrayList<HashMap<String, String>> gattServiceData = new ArrayList<HashMap<String, String>>();
         ArrayList<ArrayList<HashMap<String, String>>> gattCharacteristicData = new ArrayList<ArrayList<HashMap<String, String>>>();
         mGattCharacteristics.clear();
@@ -114,6 +119,17 @@ public class DeviceScanActivityHexiwear extends AppCompatActivity {
             mGattCharacteristics.add(charas);
             gattCharacteristicData.add(gattCharacteristicGroupData);
         }
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(device!=null) {
+                    ApplicationSession.getInstance().setBluetoothDevice(device);
+                }
+                Intent intent = new Intent(DeviceScanActivityHexiwear.this, HexiwearHomeActivity.class);
+                startActivity(intent);
+            }
+        }, 1500);
     }
 
 
@@ -191,7 +207,7 @@ public class DeviceScanActivityHexiwear extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
-                mScanTitle.setText(R.string.device_connected);
+                //mScanTitle.setText(R.string.device_connected);
                 invalidateOptionsMenu();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 invalidateOptionsMenu();
@@ -210,8 +226,7 @@ public class DeviceScanActivityHexiwear extends AppCompatActivity {
         @Override
         public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
             try {
-                //TODO
-                if (device.getAddress().equals(KWARP_ADDRESS)) {
+                if (device.getAddress().equals(mDeviceAddress)) {
                     mBluetoothLeService.connect(mDeviceAddress);
                     DeviceScanActivityHexiwear.this.device = device;
                     scanLeDevice(false);
@@ -237,7 +252,7 @@ public class DeviceScanActivityHexiwear extends AppCompatActivity {
         super.onDestroy();
         unregisterReceiver(mGattUpdateReceiver);
         mBluetoothLeService = null;
-        stopService(new Intent(DeviceScanActivity.this, NotificationService.class));
+        stopService(new Intent(DeviceScanActivityHexiwear.this, NotificationService.class));
         mGattCharacteristics.clear();
         unbindService(mServiceConnection);
     }

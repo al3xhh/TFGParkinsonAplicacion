@@ -149,9 +149,21 @@ public class BluetoothLeService extends Service {
 
     private void broadcastUpdate(final String action,final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(action);
-        Integer data = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16,0);
+        byte[] data = characteristic.getValue();
+
+        final int acceXintVal = ((int) data[1] << 8) | (data[0] & 0xff);
+        float xfloatVal = (float) acceXintVal / 100;
+
+        final int aceeYintVal = ((int) data[3] << 8) | (data[2] & 0xff);
+        float yfloatVal = (float) aceeYintVal / 100;
+
+        final int acceZintVal = ((int) data[5] << 8) | (data[4] & 0xff);
+        float zfloatVal = (float) acceZintVal / 100;
+
+        String a = String.format("%.2f %s;%.2f %s;%.2f %s", xfloatVal, "g", yfloatVal, "g", zfloatVal, "g");
+
         String uuid = characteristic.getUuid().toString();
-        intent.putExtra(EXTRA_DATA, data);
+        intent.putExtra(EXTRA_DATA, a);
         intent.putExtra(EXTRA_CHAR, new String(uuid));
         sendBroadcast(intent);
     }

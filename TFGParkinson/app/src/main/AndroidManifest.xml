@@ -24,6 +24,7 @@
         <activity android:name=".Activities.EmparejarSensoresActivity" />
         <activity android:name=".Activities.ConfigurarSensores" />
         <activity android:name=".Activities.ListadoMedicamentosActivity" />
+        <activity android:name=".Activities.HexiwearHomeActivity" />
         <activity android:name=".Activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,6 +32,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".Clases.services.NotificationService"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".Clases.services.BluetoothLeService"
+            android:enabled="true" />
+
+        <service
+            android:name=".Clases.services.SynchronizationService"
+            android:enabled="true"
+            android:exported="true" />
 
         <receiver android:name=".Activities.NotificationReceiverActivity" />
 

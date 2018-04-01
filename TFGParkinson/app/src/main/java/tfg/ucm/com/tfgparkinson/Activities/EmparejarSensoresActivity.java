@@ -48,6 +48,9 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
     private Button mButtonScan;
     private Button mButtonDisconnect;
 
+    private boolean hexiwear;
+    private boolean noHexiwear;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,7 +150,7 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
 
         // ArrayList to keep the selected devices
         final ArrayList<Integer> selectedItems = new ArrayList<>();
-        ArrayList<String> devicesList = new ArrayList<>();
+        final ArrayList<String> devicesList = new ArrayList<>();
 
         // Get the list of available devices
         for (int i = 0; i < mMultiBleService.getBluetoothDevices().size(); i++) {
@@ -163,6 +166,11 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
                     public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
                         if (isChecked) {
                             // If the user checked the item, add it to the selected items
+                            if(devicesList.get(indexSelected).contains("HEXIWEAR"))
+                                hexiwear = true;
+                            else
+                                noHexiwear = true;
+
                             selectedItems.add(indexSelected);
                         } else if (selectedItems.contains(indexSelected)) {
                             // Else, if the item is already in the array, remove it
@@ -181,11 +189,19 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
                         }
                         Log.i(TAG, String.format("Selected devices: %s", selectedDevices.toString()));
 
-                        // Connect with the devices
-                        mMultiBleService.connectToDevices(selectedDevices);
-                        mButtonScan.setEnabled(false);
-                        mButtonDisconnect.setEnabled(true);
-                        dialog.dismiss();
+                        if(noHexiwear && !hexiwear) {
+                            // Connect with the devices
+                            mMultiBleService.connectToDevices(selectedDevices);
+                            mButtonScan.setEnabled(false);
+                            mButtonDisconnect.setEnabled(true);
+                            dialog.dismiss();
+                        } else if (hexiwear && !noHexiwear) {
+                            Intent i = new Intent(EmparejarSensoresActivity.this, DeviceScanActivityHexiwear.class);
+                            i.putExtra("devices", selectedDevices);
+                            startActivity(i);
+                        } else {
+                            Toast.makeText(EmparejarSensoresActivity.this, "Los sensores deben ser del mismo tipo", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
