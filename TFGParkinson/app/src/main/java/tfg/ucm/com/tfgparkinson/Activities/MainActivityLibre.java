@@ -74,7 +74,7 @@ public class MainActivityLibre extends AppCompatActivity implements RespuestaSer
         });
 
         GestorBD bd = new GestorBD(getApplicationContext());
-        Log.w("MainActivityLibre", "TABLA\n" + bd.getTb_datos_sensor().toString());
+        //Log.w("MainActivityLibre", "TABLA\n" + bd.getTb_datos_sensor().toString());
     }
 
     @Override

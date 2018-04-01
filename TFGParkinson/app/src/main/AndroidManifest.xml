@@ -17,21 +17,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.MainActivityLibre"></activity>
-        <activity android:name=".Activities.GraficosActivity"></activity>
-        <activity android:name=".Activities.MainActivityActividad"></activity>
+        <activity android:name=".Activities.MainActivityLibre" />
+        <activity android:name=".Activities.GraficosActivity" />
+        <activity android:name=".Activities.MainActivityActividad" />
         <activity android:name=".Activities.HistorialActivity" />
         <activity android:name=".Activities.EmparejarSensoresActivity" />
         <activity android:name=".Activities.ConfigurarSensores" />
         <activity android:name=".Activities.ListadoMedicamentosActivity" />
         <activity android:name=".Activities.LoginActivity">
             <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+
         <receiver android:name=".Activities.NotificationReceiverActivity" />
+
+        <activity android:name=".Activities.DeviceScanActivityHexiwear"></activity>
     </application>
 
 </manifest>

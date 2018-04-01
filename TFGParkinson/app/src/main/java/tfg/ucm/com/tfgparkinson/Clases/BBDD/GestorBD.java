@@ -27,6 +27,7 @@ import tfg.ucm.com.tfgparkinson.Clases.utils.Constantes;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.provider.Settings.Secure;
+import android.widget.Toast;
 
 /**
  * Created by chris on 07/10/2017.
@@ -34,7 +35,7 @@ import android.provider.Settings.Secure;
 
 public class GestorBD extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 20;
 
     private static final String DATABASE_NAME = Constantes.NOMBRE_BD;
 
@@ -161,11 +162,16 @@ public class GestorBD extends SQLiteOpenHelper {
 
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
-        db.execSQL("DROP TABLE TB_DATOS_SENSOR");
+        /*
         db.execSQL("DROP TABLE TB_TEMBLORES");
         db.execSQL("DROP TABLE TB_POSICIONES");
         db.execSQL("DROP TABLE TB_MEDICAMENTOS");
-        db.execSQL("DROP TABLE TB_ACTIVIDADES");
+        db.execSQL("DROP TABLE TB_ACTIVIDADES");*/
+
+        Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name like 'TB_%'", null);
+
+        while (c.moveToNext())
+            db.execSQL("DROP TABLE " + c.getString(0));
 
         this.onCreate(db);
     }
