@@ -59,6 +59,7 @@ public class ActividadesActivity extends AppCompatActivity {
         final Spinner nombreActividad = (Spinner) dialogView.findViewById(R.id.seleccionarActividad);
         final EditText duracion = (EditText) dialogView.findViewById(R.id.duracionActividad);
         final TimePicker horaInicio = (TimePicker) dialogView.findViewById(R.id.horaInicioActividad);
+        final EditText observaciones = (EditText) dialogView.findViewById(R.id.observacionesActividad);
 
         duracion.setRawInputType(Configuration.KEYBOARD_12KEY);
         horaInicio.setIs24HourView(true);
@@ -69,7 +70,8 @@ public class ActividadesActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     Actividad actividad = new Actividad(nombreActividad.getSelectedItem().toString(),
-                            Integer.parseInt(duracion.getText().toString()), horaInicio.getHour() + ":" + horaInicio.getMinute());
+                            Integer.parseInt(duracion.getText().toString()), horaInicio.getHour() + ":" + horaInicio.getMinute(),
+                            observaciones.getText().toString());
                     GestorBD gestorBD = new GestorBD(getApplicationContext());
                     gestorBD.insertActividad(actividad);
                     Toast.makeText(getApplicationContext(), R.string.exito_registro_actividad, Toast.LENGTH_SHORT).show();

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.R;
 import tfg.ucm.com.tfgparkinson.Clases.BLE.Characteristic;
 import tfg.ucm.com.tfgparkinson.Clases.services.BluetoothLeService;
@@ -20,6 +21,8 @@ import tfg.ucm.com.tfgparkinson.Clases.services.HexiwearService;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+
+import static tfg.ucm.com.tfgparkinson.Clases.utils.Constantes.TEXAS_INSTRUMENTS;
 
 public class HexiwearHomeActivity extends AppCompatActivity {
 

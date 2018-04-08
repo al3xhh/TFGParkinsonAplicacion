@@ -32,6 +32,12 @@ import android.util.Log;
 
 import java.util.List;
 
+import tfg.ucm.com.tfgparkinson.Activities.MainActivityActividad;
+import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
+
+import static tfg.ucm.com.tfgparkinson.Clases.utils.Constantes.HEXIWEAR;
+import static tfg.ucm.com.tfgparkinson.Clases.utils.Constantes.TEXAS_INSTRUMENTS;
+
 
 /**
  * Service for managing connection and data communication with a GATT server hosted on a
@@ -161,6 +167,14 @@ public class BluetoothLeService extends Service {
         float zfloatVal = (float) acceZintVal / 100;
 
         String a = String.format("%.2f %s;%.2f %s;%.2f %s", xfloatVal, "g", yfloatVal, "g", zfloatVal, "g");
+
+        float[] accelerometer = new float[3];
+        accelerometer[0] = xfloatVal;
+        accelerometer[1] = yfloatVal;
+        accelerometer[2] = zfloatVal;
+
+        GestorBD bd = new GestorBD(MainActivityActividad.appContext);
+        bd.insertDatosSensor(accelerometer, -1, mBluetoothDeviceAddress, HEXIWEAR);
 
         String uuid = characteristic.getUuid().toString();
         intent.putExtra(EXTRA_DATA, a);

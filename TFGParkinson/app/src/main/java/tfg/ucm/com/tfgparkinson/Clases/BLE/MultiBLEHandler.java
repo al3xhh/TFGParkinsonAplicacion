@@ -12,6 +12,8 @@ import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.Clases.utils.Constantes;
 import tfg.ucm.com.tfgparkinson.Clases.utils.OpcionesVO;
 
+import static tfg.ucm.com.tfgparkinson.Clases.utils.Constantes.TEXAS_INSTRUMENTS;
+
 /**
  * Custom Handler implementation to process Message and Runnable
  * of the BLE Callbacks on multiple devices.
@@ -99,7 +101,7 @@ public class MultiBLEHandler extends Handler {
         if (mDelegate != null) {
             float[] accelerometer = getAccelData16(characteristic);
             GestorBD bd = new GestorBD(MainActivityLibre.appContext);
-            bd.insertDatosSensor(accelerometer, this.posicionesSensores, gatt.getDevice().toString());
+            bd.insertDatosSensor(accelerometer, this.posicionesSensores, gatt.getDevice().toString(), TEXAS_INSTRUMENTS);
             mDelegate.updateAccelerometer(gatt, accelerometer[0], accelerometer[1],
                     accelerometer[2], accelerometer[3], accelerometer[4], accelerometer[5]);
         }

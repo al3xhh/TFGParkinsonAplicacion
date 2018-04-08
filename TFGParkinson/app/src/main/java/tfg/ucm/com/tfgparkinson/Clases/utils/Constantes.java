@@ -38,5 +38,6 @@ public class Constantes {
     public static final String TB_POSICINES = "TB_POSICIONES";
     public static final String TB_DATOS_SENSOR = "TB_DATOS_SENSOR";
 
-
+    public static final String TEXAS_INSTRUMENTS = "1";
+    public static final String HEXIWEAR = "2";
 }
