@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/actividades"
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            android:layout_weight="1"
+            android:background="@color/colorIndigo"
+            android:drawableTop="@drawable/actividad"
+            android:paddingTop="90dp"/>
+
+        <Button
+            android:id="@+id/medicamentos"
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            android:layout_weight="1"
+            android:background="@color/colorBlue"
+            android:drawableTop="@drawable/medicamentos"
+            android:paddingTop="90dp" />
+    </LinearLayout>
+</RelativeLayout>

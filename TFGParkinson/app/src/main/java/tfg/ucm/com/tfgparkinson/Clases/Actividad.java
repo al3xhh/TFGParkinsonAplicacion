@@ -11,6 +11,7 @@ public class Actividad {
     private String nombre;
     private int intervalo;
     private Timestamp hora;
+    private String observaciones;
 
     public Actividad(String nombre, int intervalo, String hora) {
         Calendar calendar = Calendar.getInstance();
@@ -21,6 +22,7 @@ public class Actividad {
         this.nombre = nombre;
         this.intervalo = intervalo;
         this.hora = ts;
+        this.observaciones = "TBD";
     }
 
     public String getNombre() {
@@ -34,4 +36,6 @@ public class Actividad {
     public Timestamp getHora() {
         return hora;
     }
+
+    public String getObservaciones() { return observaciones; }
 }

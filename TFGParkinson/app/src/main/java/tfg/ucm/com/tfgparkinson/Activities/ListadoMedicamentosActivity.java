@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,13 +20,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.Clases.Medicamento;
-import tfg.ucm.com.tfgparkinson.Clases.Temblor;
 import tfg.ucm.com.tfgparkinson.R;
 
 /**
@@ -66,7 +62,7 @@ public class ListadoMedicamentosActivity extends AppCompatActivity {
             textoActual.setText("Hora: " + medicamento.getHora());
             textoActual = (TextView) vistaActual.findViewById(R.id.tiempoMedicamento);
             textoActual.setText("Intervalo: " + medicamento.getIntervalo() + " minutos");
-            ImageView opcionesTemblor = (ImageView) vistaActual.findViewById(R.id.opcionesMedicamento);
+            ImageView opcionesTemblor = (ImageView) vistaActual.findViewById(R.id.opcionesActividad);
             opcionesTemblor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

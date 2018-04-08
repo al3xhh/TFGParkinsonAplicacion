@@ -158,8 +158,24 @@ public class GestorBD extends SQLiteOpenHelper {
         return medicamentos;
     }
 
+    public ArrayList<Actividad> getActividades(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Actividad> actividades = new ArrayList<Actividad>();
 
+        Cursor cursor = db.rawQuery("SELECT * FROM TB_ACTIVIDADES ORDER BY NOMBRE ASC", null);
 
+        try{
+            while (cursor.moveToNext()) {
+                actividades.add(new Actividad(cursor.getString(0), Integer.parseInt(cursor.getString(1)),
+                        cursor.getString(2).split(" ")[1]));
+            }
+        } finally {
+            cursor.close();
+            db.close();
+        }
+
+        return actividades;
+    }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
         /*

@@ -54,19 +54,29 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_actividad);
+        setContentView(R.layout.activity_main);
 
         appContext = getApplicationContext();
 
-        Button anyadirActividad = (Button) findViewById(R.id.botonAnyadirActividad);
-        anyadirActividad.setOnClickListener(new View.OnClickListener() {
+        Button actividades = (Button) findViewById(R.id.actividades);
+        actividades.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                anyadirActividad();
+                Intent intent = new Intent(MainActivityActividad.this, ActividadesActivity.class);
+                startActivity(intent);
             }
         });
 
-        Button anyadirMedicamento = (Button) findViewById(R.id.botonAnyadirMedicamento);
+        Button medicamentos = (Button) findViewById(R.id.medicamentos);
+        medicamentos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivityActividad.this, MedicamentosActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        /*Button anyadirMedicamento = (Button) findViewById(R.id.botonAnyadirMedicamento);
         anyadirMedicamento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,7 +89,7 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
             @Override
             public void onClick(View v) {
                 /*Intent i = new Intent(MainActivityActividad.this, GraficosActivity.class);
-                startActivity(i);*/
+                startActivity(i);
                 notificacion();
             }
         });
@@ -91,7 +101,7 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
                 Intent i = new Intent(MainActivityActividad.this, ListadoMedicamentosActivity.class);
                 startActivity(i);
             }
-        });
+        });*/
     }
 
     @Override
@@ -138,118 +148,6 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
             menu.getItem(0).setVisible(false);
 
         return true;
-    }
-
-    /**
-     * Función que añade un temblor concreto.
-     */
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private void anyadirActividad() {
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.anyadir_actividad, null);
-
-        final Spinner nombreActividad = (Spinner) dialogView.findViewById(R.id.seleccionarActividad);
-        final EditText duracion = (EditText) dialogView.findViewById(R.id.duracionActividad);
-        final TimePicker horaInicio = (TimePicker) dialogView.findViewById(R.id.horaInicioActividad);
-
-        horaInicio.setIs24HourView(true);
-        dialogBuilder.setTitle("Añadir actividad");
-        dialogBuilder.setPositiveButton(getString(R.string.guardar), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                try {
-                    Actividad actividad = new Actividad(nombreActividad.getSelectedItem().toString(),
-                            Integer.parseInt(duracion.getText().toString()), horaInicio.getHour() + ":" + horaInicio.getMinute());
-                    GestorBD gestorBD = new GestorBD(getApplicationContext());
-                    gestorBD.insertActividad(actividad);
-                    Toast.makeText(getApplicationContext(), R.string.exito_registro_actividad, Toast.LENGTH_SHORT).show();
-                } catch (NumberFormatException e) {
-                    Toast.makeText(getApplicationContext(), R.string.duracion_no_valida, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        dialogBuilder.setNegativeButton(getString(R.string.cancelar), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-
-        dialogBuilder.setView(dialogView);
-        AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.show();
-    }
-
-    /**
-     * Función que añade una medicación para el usuario.
-     */
-    private void anyadirMedicacion(){
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.anyadir_medicacion, null);
-
-        final EditText nombreMedicacion = (EditText) dialogView.findViewById(R.id.nombreMedicacion);
-        final EditText intervaloMedicacion = (EditText) dialogView.findViewById(R.id.intervaloMedicacion);
-        final TimePicker horaMedicacion = (TimePicker) dialogView.findViewById(R.id.horaMedicacion);
-        final CheckBox lunes = (CheckBox) dialogView.findViewById(R.id.lunes);
-        final CheckBox martes = (CheckBox) dialogView.findViewById(R.id.martes);
-        final CheckBox miercoles = (CheckBox) dialogView.findViewById(R.id.miercoles);
-        final CheckBox jueves = (CheckBox) dialogView.findViewById(R.id.jueves);
-        final CheckBox viernes = (CheckBox) dialogView.findViewById(R.id.viernes);
-        final CheckBox sabado = (CheckBox) dialogView.findViewById(R.id.sabado);
-        final CheckBox domingo = (CheckBox) dialogView.findViewById(R.id.domingo);
-
-        horaMedicacion.setIs24HourView(true);
-        dialogBuilder.setTitle("Añadir medicamento");
-        dialogBuilder.setPositiveButton(getString(R.string.guardar), new DialogInterface.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ArrayList<String> dias = new ArrayList<>();
-
-                if(lunes.isChecked())
-                    dias.add("L");
-                if(martes.isChecked())
-                    dias.add("M");
-                if(miercoles.isChecked())
-                    dias.add("X");
-                if(jueves.isChecked())
-                    dias.add("J");
-                if(viernes.isChecked())
-                    dias.add("V");
-                if(sabado.isChecked())
-                    dias.add("S");
-                if(domingo.isChecked())
-                    dias.add("D");
-
-                try {
-                    Medicamento medicamento = new Medicamento(nombreMedicacion.getText().toString(),
-                            Integer.parseInt(intervaloMedicacion.getText().toString()), horaMedicacion.getHour() + ":" +
-                            horaMedicacion.getMinute(), dias);
-
-                    GestorBD bd = new GestorBD(getApplicationContext());
-                    bd.insertMedicamento(medicamento);
-                    Toast.makeText(getApplicationContext(), R.string.exito_registro_medicamento, Toast.LENGTH_SHORT).show();
-                } catch (NumberFormatException e) {
-                    Toast.makeText(getApplicationContext(), R.string.intervalo_no_valido, Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
-
-        dialogBuilder.setNegativeButton(getString(R.string.cancelar), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-
-
-        dialogBuilder.setView(dialogView);
-        AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.show();
     }
 
     @Override
