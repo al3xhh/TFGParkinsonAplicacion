@@ -59,6 +59,7 @@ public class GestorBD extends SQLiteOpenHelper {
                             "DB_TIMESTAMP DATETIME NOT NULL DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime')), " +
                             "APP_TIMESTAMP DATETIME NOT NULL," +
                             "DATOS VARCHAR NOT NULL," +
+                            "TIPO_SENSOR VARCHAR NOT NULL CHECK (TIPO_SENSOR = '1' OR TIPO_SENSOR='2'), " +
                             "FOREIGN KEY (POSICIONES) REFERENCES TB_POSICIONES(ID));");
 
         db.execSQL("CREATE TABLE TB_TEMBLORES ( " +
@@ -78,6 +79,7 @@ public class GestorBD extends SQLiteOpenHelper {
                             "NOMBRE VARCHAR, " +
                             "INTERVALO NUMBER NOT NULL, " +
                             "HORA DATETIME NOT NULL," +
+                            "OBSERVACIONES VARCHAR," +
                             "PRIMARY KEY (NOMBRE,HORA));");
 
     }
@@ -89,8 +91,30 @@ public class GestorBD extends SQLiteOpenHelper {
         cv.put("NOMBRE", actividad.getNombre());
         cv.put("INTERVALO", actividad.getIntervalo());
         cv.put("HORA", actividad.getHora().toString());
-
+        cv.put("OBSERVACIONES", actividad.getObservaciones());
         db.insert("TB_ACTIVIDADES", null, cv);
+
+        db.close();
+    }
+
+    public void deleteActividad(Actividad actividad) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String[] whereArgs = new String[]{actividad.getNombre(), actividad.getHora().toString()};
+
+        db.delete("TB_ACTIVIDADES", "NOMBRE = ? AND HORA = ?", whereArgs);
+
+        db.close();
+    }
+
+    public void updateActividad(Actividad actividad) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        String[] whereArgs = new String[]{actividad.getNombre(), actividad.getHora().toString()};
+
+        cv.put("OBSERVACIONES", actividad.getObservaciones());
+        cv.put("INTERVALO", actividad.getIntervalo());
+
+        db.update("TB_ACTIVIDADES", cv, "NOMBRE = ? AND HORA = ?", whereArgs);
 
         db.close();
     }
@@ -167,7 +191,7 @@ public class GestorBD extends SQLiteOpenHelper {
         try{
             while (cursor.moveToNext()) {
                 actividades.add(new Actividad(cursor.getString(0), Integer.parseInt(cursor.getString(1)),
-                        cursor.getString(2).split(" ")[1]));
+                        cursor.getString(2).split(" ")[1], cursor.getString(3)));
             }
         } finally {
             cursor.close();
@@ -299,7 +323,7 @@ public class GestorBD extends SQLiteOpenHelper {
 
     }
 
-    public void insertDatosSensor(float[] data, int posicionesID, String sensor){
+    public void insertDatosSensor(float[] data, int posicionesID, String sensor, String tipo){
         Calendar calendar = Calendar.getInstance();
         Timestamp ts = new Timestamp(calendar.getTimeInMillis());
         SQLiteDatabase db = this.getWritableDatabase();
@@ -309,6 +333,7 @@ public class GestorBD extends SQLiteOpenHelper {
         cv.put("APP_TIMESTAMP", ts.toString());
         cv.put("DATOS", floatArrayToString(data));
         cv.put("SENSOR", sensor);
+        cv.put("TIPO_SENSOR", tipo);
 
         db.insert("TB_DATOS_SENSOR", null, cv);
 
@@ -364,6 +389,7 @@ public class GestorBD extends SQLiteOpenHelper {
                 tupla.put("app_timestamp", Timestamp.valueOf(cursor.getString(4)).getTime());
                 tupla.put("datos", cursor.getString(5));
                 tupla.put("device_id", Secure.getString(context.getContentResolver(), Secure.ANDROID_ID));
+                tupla.put("tipo_sensor", cursor.getString(6));
                 tabla.put(tupla);
             }
         }

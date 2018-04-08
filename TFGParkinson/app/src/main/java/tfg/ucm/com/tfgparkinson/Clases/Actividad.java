@@ -13,7 +13,7 @@ public class Actividad {
     private Timestamp hora;
     private String observaciones;
 
-    public Actividad(String nombre, int intervalo, String hora) {
+    public Actividad(String nombre, int intervalo, String hora, String observaciones) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR, Integer.parseInt(hora.split(":")[0]));
         calendar.set(Calendar.MINUTE, Integer.parseInt(hora.split(":")[1]));
@@ -22,7 +22,7 @@ public class Actividad {
         this.nombre = nombre;
         this.intervalo = intervalo;
         this.hora = ts;
-        this.observaciones = "TBD";
+        this.observaciones = (observaciones == null ? "" : observaciones);
     }
 
     public String getNombre() {
