@@ -28,7 +28,18 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import tfg.ucm.com.tfgparkinson.Clases.Actividad;
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
@@ -49,6 +60,7 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
     public Context getApplicationContext() {
         return super.getApplicationContext();
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -76,32 +88,33 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
             }
         });
 
-        /*Button anyadirMedicamento = (Button) findViewById(R.id.botonAnyadirMedicamento);
-        anyadirMedicamento.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                anyadirMedicacion();
-            }
-        });
+        GestorBD bd = new GestorBD(this);
+        ArrayList<Medicamento> listaMedicamentos = bd.getMedicamentos();
 
-        Button verGraficos = (Button) findViewById(R.id.botonVerGraficos);
-        verGraficos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*Intent i = new Intent(MainActivityActividad.this, GraficosActivity.class);
-                startActivity(i);
-                notificacion();
-            }
-        });
+        for (final Medicamento m : listaMedicamentos) {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(m.getHora().split(":")[0]));
+            cal.set(Calendar.MINUTE, Integer.parseInt(m.getHora().split(":")[1]));
+            cal.set(Calendar.SECOND, 0);
 
-        Button verMedicamentos = (Button) findViewById(R.id.botonVerMedicamentos);
-        verMedicamentos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivityActividad.this, ListadoMedicamentosActivity.class);
-                startActivity(i);
+            Date d = cal.getTime();
+            Date now = new Date();
+            long delay = d.getTime() - now.getTime();
+
+            if (delay > 0) {
+                ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
+                ses.schedule(new Runnable() {
+                    @Override
+                    public void run() {
+                        SimpleDateFormat formatLetterDay = new SimpleDateFormat("EEEEE", Locale.getDefault());
+                        String letter = formatLetterDay.format(new Date());
+
+                        if (m.getDias().contains(letter))
+                            notificacion(m.getNombre());
+                    }
+                }, delay, TimeUnit.MILLISECONDS); // run in "delay" millis
             }
-        });*/
+        }
     }
 
     @Override
@@ -176,7 +189,7 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
     }
 
 
-    private void notificacion() {
+    public void notificacion(String nombre) {
         Intent intent = new Intent(this, NotificationReceiverActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
 
@@ -195,7 +208,7 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
         // Build notification
         // Actions are just fake
         Notification noti = new Notification.Builder(this)
-                .setContentTitle("¿Se ha tomado la pastilla?")
+                .setContentTitle("¿Se ha tomado la pastilla " + nombre + "?")
                 .setSmallIcon(R.drawable.ic_access_time_black_24dp)
                 .setContentIntent(pIntent)
                 .addAction(R.drawable.ic_done_black_24dp, "Si", pendingIntentConfirm)
