@@ -14,13 +14,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import tfg.ucm.com.tfgparkinson.Clases.Actividad;
-import tfg.ucm.com.tfgparkinson.Clases.Medicamento;
 import tfg.ucm.com.tfgparkinson.R;
 
 /**
  * Created by al3x_hh on 08/04/2018.
  */
-
 public class ArrayAdapterActividades extends ArrayAdapter<Actividad> {
 
     private final Context context;

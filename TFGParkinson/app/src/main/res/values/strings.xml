@@ -7,6 +7,8 @@
     <!-- Toasts messages -->
     <string name="duracion_no_valida">Duración no válida.</string>
     <string name="exito_registro_temblor">Temblor registrado con éxito.</string>
+    <string name="exito_editar_medicamento">Medicamento editado con éxito.</string>
+    <string name="exito_borrar_medicamento">Medicamento eliminado con éxito.</string>
     <string name="intervalo_no_valido">Intervalo no válido.</string>
     <string name="exito_registro_medicamento">Medicamento registrado con éxito.</string>
     <string name="exito_registro_actividad">Actividad registrada con éxito.</string>
