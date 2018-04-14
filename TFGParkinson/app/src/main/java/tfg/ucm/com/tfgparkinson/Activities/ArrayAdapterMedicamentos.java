@@ -2,6 +2,7 @@ package tfg.ucm.com.tfgparkinson.Activities;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
@@ -79,6 +80,7 @@ public class ArrayAdapterMedicamentos extends ArrayAdapter<Medicamento> {
                         switch (item.getItemId()) {
                             case R.id.borrar_temblor:
                                 borrar(position);
+                                context.startActivity(((Activity)context).getIntent());
                                 break;
                             case R.id.editar_temblor:
                                 editar(position);

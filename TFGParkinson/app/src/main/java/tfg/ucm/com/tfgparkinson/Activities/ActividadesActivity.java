@@ -1,7 +1,6 @@
 package tfg.ucm.com.tfgparkinson.Activities;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -21,7 +21,6 @@ import java.util.ArrayList;
 
 import tfg.ucm.com.tfgparkinson.Clases.Actividad;
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
-import tfg.ucm.com.tfgparkinson.Clases.Medicamento;
 import tfg.ucm.com.tfgparkinson.R;
 
 /**
@@ -34,6 +33,7 @@ public class ActividadesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actividades);
+        setTitle("Actividades");
 
         reiniciarActivity();
 
@@ -97,8 +97,16 @@ public class ActividadesActivity extends AppCompatActivity {
     private void reiniciarActivity() {
         GestorBD bd = new GestorBD(this);
         ArrayList<Actividad> actividades = bd.getActividades();
-
         ListView actividadesLV = (ListView) findViewById(R.id.actividadesLV);
-        actividadesLV.setAdapter(new ArrayAdapterActividades(this, actividades));
+        TextView noActividadesTV = (TextView) findViewById(R.id.noActivities);
+
+        if(actividades.size() == 0) {
+            noActividadesTV.setVisibility(View.VISIBLE);
+            actividadesLV.setVisibility(View.GONE);
+        } else {
+            noActividadesTV.setVisibility(View.GONE);
+            actividadesLV.setVisibility(View.VISIBLE);
+            actividadesLV.setAdapter(new ArrayAdapterActividades(this, actividades));
+        }
     }
 }

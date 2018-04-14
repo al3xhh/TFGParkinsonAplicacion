@@ -18,7 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.MainActivityLibre" />
-        <activity android:name=".Activities.GraficosActivity" />
         <activity android:name=".Activities.MainActivityActividad">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,7 +30,6 @@
         <activity android:name=".Activities.ConfigurarSensores" />
         <activity android:name=".Activities.ListadoMedicamentosActivity" />
         <activity android:name=".Activities.HexiwearHomeActivity" />
-        <activity android:name=".Activities.LoginActivity" />
         <activity android:name=".Activities.ActividadesActivity" />
         <activity android:name=".Activities.MedicamentosActivity" />
 

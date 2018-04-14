@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ public class MedicamentosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicamentos);
+        setTitle("Medicamentos");
 
         reiniciarActivity();
 
@@ -121,8 +123,16 @@ public class MedicamentosActivity extends AppCompatActivity {
     private void reiniciarActivity() {
         GestorBD bd = new GestorBD(this);
         ArrayList<Medicamento> medicamentos = bd.getMedicamentos();
-
         ListView medicamentosLV = (ListView) findViewById(R.id.medicamentosLV);
-        medicamentosLV.setAdapter(new ArrayAdapterMedicamentos(this, medicamentos));
+        TextView noMedicamentosTV = (TextView) findViewById(R.id.noMedicines);
+
+        if(medicamentos.size() == 0) {
+            noMedicamentosTV.setVisibility(View.VISIBLE);
+            medicamentosLV.setVisibility(View.GONE);
+        } else {
+            noMedicamentosTV.setVisibility(View.GONE);
+            medicamentosLV.setVisibility(View.VISIBLE);
+            medicamentosLV.setAdapter(new ArrayAdapterMedicamentos(this, medicamentos));
+        }
     }
 }

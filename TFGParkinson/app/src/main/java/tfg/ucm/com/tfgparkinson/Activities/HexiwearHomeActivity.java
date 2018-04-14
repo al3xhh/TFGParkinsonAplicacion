@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
+import tfg.ucm.com.tfgparkinson.Clases.services.NotificationService;
 import tfg.ucm.com.tfgparkinson.R;
 import tfg.ucm.com.tfgparkinson.Clases.BLE.Characteristic;
 import tfg.ucm.com.tfgparkinson.Clases.services.BluetoothLeService;
@@ -43,6 +44,16 @@ public class HexiwearHomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_activty);
+
+        Button stop = (Button) findViewById(R.id.stop);
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopService(new Intent(HexiwearHomeActivity.this, NotificationService.class));
+                Intent i = new Intent(HexiwearHomeActivity.this, MainActivityActividad.class);
+                startActivity(i);
+            }
+        });
 
         uuidArray.add(HexiwearService.UUID_CHAR_ACCEL);
 

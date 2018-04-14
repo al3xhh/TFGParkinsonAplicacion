@@ -37,13 +37,12 @@
         android:layout_width="293dp"
         android:layout_height="132dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
         android:layout_weight="1"
         android:timePickerMode="spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.576"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/observacionesActividad" />
+        app:layout_constraintTop_toBottomOf="@+id/duracionActividad" />
 
     <EditText
         android:id="@+id/observacionesActividad"

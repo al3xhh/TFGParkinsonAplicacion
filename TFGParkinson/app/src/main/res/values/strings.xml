@@ -12,6 +12,8 @@
     <string name="intervalo_no_valido">Intervalo no válido.</string>
     <string name="exito_registro_medicamento">Medicamento registrado con éxito.</string>
     <string name="exito_registro_actividad">Actividad registrada con éxito.</string>
+    <string name="exito_borrar_actividad">Actividad borrada con éxito.</string>
+    <string name="exito_editar_actividad">Actividad editada con éxito.</string>
 
     <!-- Information/labels -->
     <string name="no_connected_devices">No hay dispositivos conectados</string>
