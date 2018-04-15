@@ -10,18 +10,13 @@ import java.util.Calendar;
 public class Actividad {
     private String nombre;
     private int intervalo;
-    private Timestamp hora;
+    private String hora;
     private String observaciones;
 
     public Actividad(String nombre, int intervalo, String hora, String observaciones) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR, Integer.parseInt(hora.split(":")[0]));
-        calendar.set(Calendar.MINUTE, Integer.parseInt(hora.split(":")[1]));
-        Timestamp ts = new Timestamp(calendar.getTimeInMillis());
-
         this.nombre = nombre;
         this.intervalo = intervalo;
-        this.hora = ts;
+        this.hora = hora;
         this.observaciones = (observaciones == null ? "" : observaciones);
     }
 
@@ -33,7 +28,7 @@ public class Actividad {
         return intervalo;
     }
 
-    public Timestamp getHora() {
+    public String getHora() {
         return hora;
     }
 

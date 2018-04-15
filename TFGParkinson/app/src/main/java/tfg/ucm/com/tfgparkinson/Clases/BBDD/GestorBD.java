@@ -35,7 +35,7 @@ import android.widget.Toast;
 
 public class GestorBD extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 20;
+    private static final int DATABASE_VERSION = 24;
 
     private static final String DATABASE_NAME = Constantes.NOMBRE_BD;
 
@@ -78,7 +78,7 @@ public class GestorBD extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE TB_ACTIVIDADES ( " +
                             "NOMBRE VARCHAR, " +
                             "INTERVALO NUMBER NOT NULL, " +
-                            "HORA DATETIME NOT NULL," +
+                            "HORA VARCHAR NOT NULL," +
                             "OBSERVACIONES VARCHAR," +
                             "PRIMARY KEY (NOMBRE,HORA));");
 
@@ -191,7 +191,7 @@ public class GestorBD extends SQLiteOpenHelper {
         try{
             while (cursor.moveToNext()) {
                 actividades.add(new Actividad(cursor.getString(0), Integer.parseInt(cursor.getString(1)),
-                        cursor.getString(2).split(" ")[1], cursor.getString(3)));
+                        cursor.getString(2), cursor.getString(3)));
             }
         } finally {
             cursor.close();

@@ -78,7 +78,6 @@ public class ArrayAdapterActividades extends ArrayAdapter<Actividad> {
                         switch (item.getItemId()) {
                             case R.id.borrar_temblor:
                                 borrar(position);
-                                context.startActivity(((Activity)context).getIntent());
                                 break;
                             case R.id.editar_temblor:
                                 editar(position);
@@ -111,8 +110,8 @@ public class ArrayAdapterActividades extends ArrayAdapter<Actividad> {
         nombreActividad.setSelection(findIndex(actividad.getNombre()));
         nombreActividad.setEnabled(false);
         duracion.setText(String.valueOf(actividad.getIntervalo()));
-        horaInicio.setHour(actividad.getHora().getHours());
-        horaInicio.setMinute(actividad.getHora().getMinutes());
+        horaInicio.setHour(Integer.parseInt((actividad.getHora().split(":")[0])));
+        horaInicio.setMinute(Integer.parseInt((actividad.getHora().split(":")[1])));
         observaciones.setText(actividad.getObservaciones());
 
         dialogBuilder.setTitle("Editar actividad");
@@ -159,6 +158,7 @@ public class ArrayAdapterActividades extends ArrayAdapter<Actividad> {
                 values.remove(position);
                 notifyDataSetChanged();
                 Toast.makeText(context, R.string.exito_borrar_actividad, Toast.LENGTH_SHORT).show();
+                //context.startActivity(((Activity)context).getIntent());
             }
         });
 
