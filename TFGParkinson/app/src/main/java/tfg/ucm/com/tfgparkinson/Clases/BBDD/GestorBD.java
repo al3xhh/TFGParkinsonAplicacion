@@ -472,6 +472,7 @@ public class GestorBD extends SQLiteOpenHelper {
                 tupla.put("nombre", cursor.getString(0));
                 tupla.put("intervalo", cursor.getInt(1));
                 tupla.put("hora", cursor.getString(2));
+                tupla.put("observaciones", cursor.getString(3));
                 tupla.put("device_id", Secure.getString(context.getContentResolver(), Secure.ANDROID_ID));
                 tabla.put(tupla);
             }
