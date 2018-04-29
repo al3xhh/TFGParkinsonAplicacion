@@ -17,21 +17,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.MainActivityLibre" />
-        <activity android:name=".Activities.MainActivityActividad">
+        <activity android:name=".Activities.Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.HistorialActivity" />
-        <activity android:name=".Activities.EmparejarSensoresActivity" />
+        <activity android:name=".Activities.EmparejarSensores" />
         <activity android:name=".Activities.ConfigurarSensores" />
-        <activity android:name=".Activities.ListadoMedicamentosActivity" />
-        <activity android:name=".Activities.HexiwearHomeActivity" />
-        <activity android:name=".Activities.ActividadesActivity" />
-        <activity android:name=".Activities.MedicamentosActivity" />
+        <activity android:name=".Activities.ListadoMedicamentos" />
+        <activity android:name=".Activities.InicioHexiWear" />
+        <activity android:name=".Activities.Actividades" />
+        <activity android:name=".Activities.Medicamentos" />
 
         <service
             android:name=".Clases.services.NotificationService"
@@ -51,9 +49,9 @@
             android:enabled="true"
             android:exported="true" />
 
-        <receiver android:name=".Activities.NotificationReceiverActivity" />
+        <receiver android:name=".Activities.RecibidorNotificaciones" />
 
-        <activity android:name=".Activities.DeviceScanActivityHexiwear"></activity>
+        <activity android:name=".Activities.EscaneoHexiWear"></activity>
     </application>
 
 </manifest>

@@ -32,11 +32,10 @@ import android.util.Log;
 
 import java.util.List;
 
-import tfg.ucm.com.tfgparkinson.Activities.MainActivityActividad;
+import tfg.ucm.com.tfgparkinson.Activities.Main;
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 
 import static tfg.ucm.com.tfgparkinson.Clases.utils.Constantes.HEXIWEAR;
-import static tfg.ucm.com.tfgparkinson.Clases.utils.Constantes.TEXAS_INSTRUMENTS;
 
 
 /**
@@ -173,7 +172,7 @@ public class BluetoothLeService extends Service {
         accelerometer[1] = yfloatVal;
         accelerometer[2] = zfloatVal;
 
-        GestorBD bd = new GestorBD(MainActivityActividad.appContext);
+        GestorBD bd = new GestorBD(Main.appContext);
         bd.insertDatosSensor(accelerometer, -1, mBluetoothDeviceAddress, HEXIWEAR);
 
         String uuid = characteristic.getUuid().toString();

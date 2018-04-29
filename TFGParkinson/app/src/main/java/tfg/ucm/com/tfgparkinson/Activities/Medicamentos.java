@@ -1,7 +1,6 @@
 package tfg.ucm.com.tfgparkinson.Activities;
 
 import android.content.DialogInterface;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -13,14 +12,13 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import tfg.ucm.com.tfgparkinson.Clases.Actividad;
+import tfg.ucm.com.tfgparkinson.Adaptadores.AdaptadorMedicamentos;
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.Clases.Medicamento;
 import tfg.ucm.com.tfgparkinson.R;
@@ -29,7 +27,7 @@ import tfg.ucm.com.tfgparkinson.R;
  * Created by al3x_hh on 08/04/2018.
  */
 
-public class MedicamentosActivity extends AppCompatActivity {
+public class Medicamentos extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +130,7 @@ public class MedicamentosActivity extends AppCompatActivity {
         } else {
             noMedicamentosTV.setVisibility(View.GONE);
             medicamentosLV.setVisibility(View.VISIBLE);
-            medicamentosLV.setAdapter(new ArrayAdapterMedicamentos(this, medicamentos));
+            medicamentosLV.setAdapter(new AdaptadorMedicamentos(this, medicamentos));
         }
     }
 }

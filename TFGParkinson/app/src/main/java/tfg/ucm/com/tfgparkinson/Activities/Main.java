@@ -4,47 +4,31 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import tfg.ucm.com.tfgparkinson.Clases.Actividad;
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.Clases.Medicamento;
-import tfg.ucm.com.tfgparkinson.Clases.Temblor;
 import tfg.ucm.com.tfgparkinson.Clases.utils.Constantes;
 import tfg.ucm.com.tfgparkinson.Clases.utils.RespuestaServidor;
 import tfg.ucm.com.tfgparkinson.Clases.utils.Servidor;
@@ -52,7 +36,7 @@ import tfg.ucm.com.tfgparkinson.R;
 
 import static com.android.volley.Request.Method.POST;
 
-public class MainActivityActividad extends AppCompatActivity implements RespuestaServidor {
+public class Main extends AppCompatActivity implements RespuestaServidor {
 
     public static Context appContext;
 
@@ -74,7 +58,7 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
         actividades.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivityActividad.this, ActividadesActivity.class);
+                Intent intent = new Intent(Main.this, Actividades.class);
                 startActivity(intent);
             }
         });
@@ -83,7 +67,7 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
         medicamentos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivityActividad.this, MedicamentosActivity.class);
+                Intent intent = new Intent(Main.this, Medicamentos.class);
                 startActivity(intent);
             }
         });
@@ -131,17 +115,17 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
             JSONArray actividades = bd.getTb_actividades();
 
             if (posiciones.length() > 0)
-                enviarDatosServidor("http://10.153.44.52:5050/posiciones", posiciones);
+                enviarDatosServidor("http://192.168.1.35:5050/posiciones", posiciones);
             if (sensores.length() > 0)
-                enviarDatosServidor("http://10.153.44.52:5050/datos_sensor", sensores);
+                enviarDatosServidor("http://192.168.1.35:5050/datos_sensor", sensores);
             if (medicamentos.length() > 0)
-                enviarDatosServidor("http://10.153.44.52:5050/medicamentos", medicamentos);
+                enviarDatosServidor("http://192.168.1.35:5050/medicamentos", medicamentos);
             if (actividades.length() > 0)
-                enviarDatosServidor("http://10.153.44.52:5050/actividades", actividades);
+                enviarDatosServidor("http://192.168.1.35:5050/actividades", actividades);
             if (temblores.length() > 0)
-                enviarDatosServidor("http://10.153.44.52:5050/temblores", temblores);
+                enviarDatosServidor("http://192.168.1.35:5050/temblores", temblores);
         } else {
-            i = new Intent(MainActivityActividad.this, ConfigurarSensores.class);
+            i = new Intent(Main.this, ConfigurarSensores.class);
             startActivity(i);
         }
 
@@ -177,8 +161,8 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
 
     private void enviarDatosServidor(String url, JSONArray params) {
         Log.d("DATOSSSSS", params.toString());
-        Servidor servidor = new Servidor(MainActivityActividad.this, url);
-        servidor.setDelegate(MainActivityActividad.this);
+        Servidor servidor = new Servidor(Main.this, url);
+        servidor.setDelegate(Main.this);
         servidor.sendData(params, POST);
     }
 
@@ -190,15 +174,15 @@ public class MainActivityActividad extends AppCompatActivity implements Respuest
 
 
     public void notificacion(String nombre) {
-        Intent intent = new Intent(this, NotificationReceiverActivity.class);
+        Intent intent = new Intent(this, RecibidorNotificaciones.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
 
-        Intent intentConfirm = new Intent(this, NotificationReceiverActivity.class);
+        Intent intentConfirm = new Intent(this, RecibidorNotificaciones.class);
         intentConfirm.setAction("CONFIRM");
         intentConfirm.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
 
-        Intent intentCancel = new Intent(this, NotificationReceiverActivity.class);
+        Intent intentCancel = new Intent(this, RecibidorNotificaciones.class);
         intentCancel.setAction("CANCEL");
         intentCancel.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 

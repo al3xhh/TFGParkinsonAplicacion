@@ -1,20 +1,25 @@
 package tfg.ucm.com.tfgparkinson.Activities;
 
 import android.Manifest;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+
 import android.os.Bundle;
 import android.os.Handler;
+
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -34,9 +39,9 @@ import tfg.ucm.com.tfgparkinson.Clases.BLE.MultiBLEService;
 import tfg.ucm.com.tfgparkinson.Clases.utils.OpcionesVO;
 import tfg.ucm.com.tfgparkinson.R;
 
-public class EmparejarSensoresActivity extends AppCompatActivity implements IMultiBLEAccelServiceDelegate {
+public class EmparejarSensores extends AppCompatActivity implements IMultiBLEAccelServiceDelegate {
 
-    private static final String TAG = MainActivityLibre.class.getSimpleName();
+    private static final String TAG = Main.class.getSimpleName();
     private static final int PERMISSION_LOCATION_REQUEST_CODE = 1001;
 
     private Context mContext;
@@ -87,7 +92,7 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
     }
 
     private void initVariables(OpcionesVO options) {
-        mContext = EmparejarSensoresActivity.this;
+        mContext = EmparejarSensores.this;
         mMultiBleService = new MultiBLEService(mContext, options); //crear hashMap y pasarlo como el segundo parametro
         mTextStatus = (TextView) findViewById(R.id.main_text_status);
         mButtonScan = (Button) findViewById(R.id.main_button_scan);
@@ -145,7 +150,7 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
 
     private void showAvailableBleDevices() {
         String title = getResources().getString(R.string.dialog_title_select_devices);
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(EmparejarSensoresActivity.this);
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(EmparejarSensores.this);
         dialogBuilder.setTitle(title);
 
         // ArrayList to keep the selected devices
@@ -187,7 +192,6 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
                             selectedDevices.add(mMultiBleService.getBluetoothDevices()
                                     .valueAt(selectedItems.get(i)));
                         }
-                        Log.i(TAG, String.format("Selected devices: %s", selectedDevices.toString()));
 
                         if(noHexiwear && !hexiwear) {
                             // Connect with the devices
@@ -196,11 +200,11 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
                             mButtonDisconnect.setEnabled(true);
                             dialog.dismiss();
                         } else if (hexiwear && !noHexiwear) {
-                            Intent i = new Intent(EmparejarSensoresActivity.this, DeviceScanActivityHexiwear.class);
+                            Intent i = new Intent(EmparejarSensores.this, EscaneoHexiWear.class);
                             i.putExtra("devices", selectedDevices);
                             startActivity(i);
                         } else {
-                            Toast.makeText(EmparejarSensoresActivity.this, "Los sensores deben ser del mismo tipo", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EmparejarSensores.this, "Los sensores deben ser del mismo tipo", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -221,7 +225,7 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
             String title = mContext.getResources().getString(R.string.dialog_title_inr_scan);
             String message = mContext.getResources().getString(R.string.action_scanning_devices);
             final ProgressDialog progressDialog =
-                    ProgressDialog.show(EmparejarSensoresActivity.this,
+                    ProgressDialog.show(EmparejarSensores.this,
                             title,
                             message,
                             true);
@@ -262,11 +266,6 @@ public class EmparejarSensoresActivity extends AppCompatActivity implements IMul
     @Override
     public void updateAccelerometerValues(BluetoothGatt gatt, float accelX, float accelY, float accelZ,
                                           float gyroX, float gyroY, float gyroZ) {
-        Log.d(TAG, String.format("DEVICE: %s ACCELEROMETER: X: %f Y: %f Z: %f",
-                gatt.getDevice(), accelX, accelY, accelZ));
-
-        Log.d(TAG, String.format("DEVICE: %s GYROSCOPE: X: %f Y: %f Z: %f",
-                gatt.getDevice(), gyroX, gyroY, gyroZ));
 
         if (mMultiBleService.getSelectedDevices() != null) {
             // Get the position of the device in the connected devices' list

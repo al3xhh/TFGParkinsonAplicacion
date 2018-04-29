@@ -1,25 +1,21 @@
 package tfg.ucm.com.tfgparkinson.Activities;
 
-
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.NonNull;
+import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
-import android.text.Html;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -28,77 +24,76 @@ import java.util.ArrayList;
 
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.Clases.Medicamento;
-import tfg.ucm.com.tfgparkinson.Clases.Medicamento;
 import tfg.ucm.com.tfgparkinson.R;
 
 /**
- * Created by al3x_hh on 08/04/2018.
+ * Created by al3x_hh on 11/12/2017.
  */
 
-public class ArrayAdapterMedicamentos extends ArrayAdapter<Medicamento> {
+public class ListadoMedicamentos extends AppCompatActivity {
 
-    private final Context context;
-    private final ArrayList<Medicamento> values;
-
-    public ArrayAdapterMedicamentos(@NonNull Context context, ArrayList<Medicamento> values) {
-        super(context, R.layout.representacion_medicamento, values);
-
-        this.context = context;
-        this.values = values;
-    }
-
-    @SuppressLint("SetTextI18n")
     @Override
-    public View getView(final int position, final View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_historial);
 
-        @SuppressLint("ViewHolder") View rowView = inflater.inflate(R.layout.representacion_medicamento, parent, false);
-        rowView.setClickable(false);
+        GestorBD bd = new GestorBD(this);
+        ArrayList<Medicamento> medicamentos = bd.getMedicamentos();
 
-        TextView nombreMedicamento = (TextView) rowView.findViewById(R.id.nombreMedicamento);
-        TextView diasMedicamento = (TextView) rowView.findViewById(R.id.diasMedicamento);
-        TextView horaMedicamento = (TextView) rowView.findViewById(R.id.horaMedicamento);
-        TextView tiempoMedicamento = (TextView) rowView.findViewById(R.id.tiempoMedicamento);
-        ImageView opcionesMedicamento = (ImageView) rowView.findViewById(R.id.opcionesMedicamento);
+        LinearLayout historial = (LinearLayout) findViewById(R.id.historial);
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
+        View vistaActual;
+        TextView textoActual;
 
-        nombreMedicamento.setText(Html.fromHtml("<b>Nombre: </b>" + values.get(position).getNombre()));
-        tiempoMedicamento.setText(Html.fromHtml("<b>Intervalo: </b>" + String.valueOf(values.get(position).getIntervalo()) + " mins"));
-        horaMedicamento.setText(Html.fromHtml("<b>Hora toma: </b>" + values.get(position).getHora()));
-        diasMedicamento.setText(Html.fromHtml("<b>Días: </b>" + values.get(position).getDiasFormateados()));
+        if(medicamentos.size() == 0) {
+            ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView);
+            scrollView.setVisibility(View.GONE);
+        }
 
-        opcionesMedicamento.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("ViewHolder")
-            @Override
-            public void onClick(View v) {
-                final PopupMenu popup = new PopupMenu(context, v);
-                popup.getMenuInflater().inflate(R.menu.opciones_temblor, popup.getMenu());
-                popup.show();
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.M)
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.borrar_temblor:
-                                borrar(position);
-                                context.startActivity(((Activity)context).getIntent());
-                                break;
-                            case R.id.editar_temblor:
-                                editar(position);
-                                break;
+        for(int i = 0; i < medicamentos.size(); i ++) {
+            final Medicamento medicamento = medicamentos.get(i);
+
+            vistaActual = layoutInflater.inflate(R.layout.representacion_medicamento, null, false);
+            textoActual = (TextView) vistaActual.findViewById(R.id.nombreMedicamento);
+            textoActual.setText("Nombre: " + medicamento.getNombre());
+            textoActual = (TextView) vistaActual.findViewById(R.id.diasMedicamento);
+            textoActual.setText("Dias: " + medicamento.getDiasFormateados());
+            textoActual = (TextView) vistaActual.findViewById(R.id.horaMedicamento);
+            textoActual.setText("Hora: " + medicamento.getHora());
+            textoActual = (TextView) vistaActual.findViewById(R.id.tiempoMedicamento);
+            textoActual.setText("Intervalo: " + medicamento.getIntervalo() + " minutos");
+            ImageView opcionesTemblor = (ImageView) vistaActual.findViewById(R.id.opcionesActividad);
+            opcionesTemblor.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PopupMenu popup = new PopupMenu(getBaseContext(), v);
+                    popup.getMenuInflater().inflate(R.menu.opciones_temblor, popup.getMenu());
+                    popup.show();
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.M)
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.borrar_temblor:
+                                    borrar(medicamento);
+                                    break;
+                                case R.id.editar_temblor:
+                                    editar(medicamento);
+                                    break;
+                            }
+                            return true;
                         }
-                        return true;
-                    }
-                });
-            }
-        });
-
-        return rowView;
+                    });
+                }
+            });
+            historial.addView(vistaActual);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private void editar(final int position) {
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    private void editar(final Medicamento medicamento) {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.anyadir_medicacion, null);
         dialogBuilder.setView(dialogView);
 
@@ -113,7 +108,6 @@ public class ArrayAdapterMedicamentos extends ArrayAdapter<Medicamento> {
         final CheckBox sabado = (CheckBox) dialogView.findViewById(R.id.sabado);
         final CheckBox domingo = (CheckBox) dialogView.findViewById(R.id.domingo);
 
-        Medicamento medicamento = values.get(position);
         nombre.setText(medicamento.getNombre());
         nombre.setEnabled(false);
         nombre.setEnabled(false);
@@ -170,20 +164,17 @@ public class ArrayAdapterMedicamentos extends ArrayAdapter<Medicamento> {
                             Integer.parseInt(intervalo.getText().toString()), horaMedicacion.getHour() + ":" +
                             horaMedicacion.getMinute(), dias);
 
-                    GestorBD bd = new GestorBD(context);
+                    GestorBD bd = new GestorBD(getApplicationContext());
                     bd.updateMedicamento(medicamento);
-                    values.remove(position);
-                    values.add(medicamento);
-                    notifyDataSetChanged();
-                    Toast.makeText(context, R.string.exito_editar_medicamento, Toast.LENGTH_SHORT).show();
+                    reiniciarActivity();
                 } catch (NumberFormatException e) {
-                    Toast.makeText(context, R.string.intervalo_no_valido, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.intervalo_no_valido, Toast.LENGTH_SHORT).show();
                 }
 
             }
         });
 
-        dialogBuilder.setNegativeButton(context.getString(R.string.cancelar), new DialogInterface.OnClickListener() {
+        dialogBuilder.setNegativeButton(getString(R.string.cancelar), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -194,22 +185,20 @@ public class ArrayAdapterMedicamentos extends ArrayAdapter<Medicamento> {
         alertDialog.show();
     }
 
-    private void borrar(final int position) {
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+    private void borrar(final Medicamento medicamento) {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle("Borrar mendicamento");
         dialogBuilder.setMessage("¿Realmente desea borrar el medicamento?");
         dialogBuilder.setPositiveButton("Borrar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                GestorBD bd = new GestorBD(context);
-                bd.deleteMedicamento(values.get(position));
-                values.remove(position);
-                notifyDataSetChanged();
-                Toast.makeText(context, R.string.exito_borrar_medicamento, Toast.LENGTH_SHORT).show();
+                GestorBD bd = new GestorBD(getApplicationContext());
+                bd.deleteMedicamento(medicamento);
+                reiniciarActivity();
             }
         });
 
-        dialogBuilder.setNegativeButton(context.getString(R.string.cancelar), new DialogInterface.OnClickListener() {
+        dialogBuilder.setNegativeButton(getString(R.string.cancelar), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -218,5 +207,11 @@ public class ArrayAdapterMedicamentos extends ArrayAdapter<Medicamento> {
 
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
+    }
+
+    private void reiniciarActivity() {
+        Intent i = getIntent();
+        finish();
+        startActivity(i);
     }
 }

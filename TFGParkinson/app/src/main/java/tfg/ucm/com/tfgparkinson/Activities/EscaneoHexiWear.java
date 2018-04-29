@@ -16,10 +16,8 @@ import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 import android.os.Handler;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +29,7 @@ import tfg.ucm.com.tfgparkinson.Clases.services.NotificationService;
 import tfg.ucm.com.tfgparkinson.Clases.utils.ApplicationSession;
 import tfg.ucm.com.tfgparkinson.R;
 
-public class DeviceScanActivityHexiwear extends AppCompatActivity {
+public class EscaneoHexiWear extends AppCompatActivity {
 
     //private static final String TAG = "DeviceScanActivity";
     private BluetoothAdapter mBluetoothAdapter;
@@ -75,10 +73,10 @@ public class DeviceScanActivityHexiwear extends AppCompatActivity {
 
         checkNotificationEnabled();
         LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, new IntentFilter("Msg"));
-        ComponentName name = startService(new Intent(DeviceScanActivityHexiwear.this, NotificationService.class));
+        ComponentName name = startService(new Intent(EscaneoHexiWear.this, NotificationService.class));
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         scanLeDevice(true);
-        Intent gattServiceIntent = new Intent(DeviceScanActivityHexiwear.this, BluetoothLeService.class);
+        Intent gattServiceIntent = new Intent(EscaneoHexiWear.this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
     }
 
@@ -126,7 +124,7 @@ public class DeviceScanActivityHexiwear extends AppCompatActivity {
                 if(device!=null) {
                     ApplicationSession.getInstance().setBluetoothDevice(device);
                 }
-                Intent intent = new Intent(DeviceScanActivityHexiwear.this, HexiwearHomeActivity.class);
+                Intent intent = new Intent(EscaneoHexiWear.this, InicioHexiWear.class);
                 startActivity(intent);
             }
         }, 1500);
@@ -228,7 +226,7 @@ public class DeviceScanActivityHexiwear extends AppCompatActivity {
             try {
                 if (device.getAddress().equals(mDeviceAddress)) {
                     mBluetoothLeService.connect(mDeviceAddress);
-                    DeviceScanActivityHexiwear.this.device = device;
+                    EscaneoHexiWear.this.device = device;
                     scanLeDevice(false);
                 }
                 //Log.e("BLE", KWARP_ADDRESS + " " + device.getAddress() + " " + device.getName());
@@ -252,7 +250,7 @@ public class DeviceScanActivityHexiwear extends AppCompatActivity {
         super.onDestroy();
         unregisterReceiver(mGattUpdateReceiver);
         mBluetoothLeService = null;
-        stopService(new Intent(DeviceScanActivityHexiwear.this, NotificationService.class));
+        stopService(new Intent(EscaneoHexiWear.this, NotificationService.class));
         mGattCharacteristics.clear();
         unbindService(mServiceConnection);
     }

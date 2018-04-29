@@ -1,4 +1,4 @@
-package tfg.ucm.com.tfgparkinson.Activities;
+package tfg.ucm.com.tfgparkinson.Adaptadores;
 
 import android.content.Context;
 

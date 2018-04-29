@@ -1,15 +1,20 @@
 package tfg.ucm.com.tfgparkinson.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
+
 import android.os.Build;
 import android.os.Bundle;
+
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+
 import android.view.LayoutInflater;
 import android.view.View;
+
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -19,15 +24,17 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import tfg.ucm.com.tfgparkinson.Adaptadores.AdaptadorActividades;
 import tfg.ucm.com.tfgparkinson.Clases.Actividad;
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.R;
 
 /**
- * Created by al3x_hh on 08/04/2018.
+ * Actividad que muestra lo relacionado con las actividades:
+ *  - Lista de actividades.
+ *  - Añadir nueva actividad.
  */
-
-public class ActividadesActivity extends AppCompatActivity {
+public class Actividades extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +44,8 @@ public class ActividadesActivity extends AppCompatActivity {
 
         reiniciarActivity();
 
-        FloatingActionButton addActivity = (FloatingActionButton) findViewById(R.id.addActivityB);
-        addActivity.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton anyadir = (FloatingActionButton) findViewById(R.id.addActivityB);
+        anyadir.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
@@ -54,7 +61,7 @@ public class ActividadesActivity extends AppCompatActivity {
     private void anyadirActividad() {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.anyadir_actividad, null);
+        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.anyadir_actividad,null);
 
         final Spinner nombreActividad = (Spinner) dialogView.findViewById(R.id.seleccionarActividad);
         final EditText duracion = (EditText) dialogView.findViewById(R.id.duracionActividad);
@@ -94,19 +101,23 @@ public class ActividadesActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    /**
+     * Función que permite reiniciar la actividad para que los cambios
+     * se hagan visibles en la lista.
+     */
     private void reiniciarActivity() {
-        GestorBD bd = new GestorBD(this);
-        ArrayList<Actividad> actividades = bd.getActividades();
-        ListView actividadesLV = (ListView) findViewById(R.id.actividadesLV);
-        TextView noActividadesTV = (TextView) findViewById(R.id.noActivities);
+        GestorBD gestorBD = new GestorBD(this);
+        ArrayList<Actividad> listaActividades = gestorBD.getActividades();
+        ListView actividades = (ListView) findViewById(R.id.actividadesLV);
+        TextView noActividades = (TextView) findViewById(R.id.noActivities);
 
-        if(actividades.size() == 0) {
-            noActividadesTV.setVisibility(View.VISIBLE);
-            actividadesLV.setVisibility(View.GONE);
+        if(listaActividades.size() == 0) {
+            noActividades.setVisibility(View.VISIBLE);
+            actividades.setVisibility(View.GONE);
         } else {
-            noActividadesTV.setVisibility(View.GONE);
-            actividadesLV.setVisibility(View.VISIBLE);
-            actividadesLV.setAdapter(new ArrayAdapterActividades(this, actividades));
+            noActividades.setVisibility(View.GONE);
+            actividades.setVisibility(View.VISIBLE);
+            actividades.setAdapter(new AdaptadorActividades(this, listaActividades));
         }
     }
 }

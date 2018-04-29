@@ -1,4 +1,4 @@
-package tfg.ucm.com.tfgparkinson.Activities;
+package tfg.ucm.com.tfgparkinson.Adaptadores;
 
 
 import android.annotation.SuppressLint;
@@ -33,12 +33,12 @@ import tfg.ucm.com.tfgparkinson.R;
 /**
  * Created by al3x_hh on 08/04/2018.
  */
-public class ArrayAdapterActividades extends ArrayAdapter<Actividad> {
+public class AdaptadorActividades extends ArrayAdapter<Actividad> {
 
     private final Context context;
     private final ArrayList<Actividad> values;
 
-    public ArrayAdapterActividades(@NonNull Context context, ArrayList<Actividad> values) {
+    public AdaptadorActividades(@NonNull Context context, ArrayList<Actividad> values) {
         super(context, R.layout.representacion_actividad, values);
 
         this.context = context;

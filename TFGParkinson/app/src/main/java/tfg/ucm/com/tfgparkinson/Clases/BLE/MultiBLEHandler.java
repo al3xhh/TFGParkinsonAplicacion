@@ -7,7 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import tfg.ucm.com.tfgparkinson.Activities.MainActivityLibre;
+import tfg.ucm.com.tfgparkinson.Activities.Main;
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
 import tfg.ucm.com.tfgparkinson.Clases.utils.Constantes;
 import tfg.ucm.com.tfgparkinson.Clases.utils.OpcionesVO;
@@ -100,7 +100,7 @@ public class MultiBLEHandler extends Handler {
                                             BluetoothGattCharacteristic characteristic) {
         if (mDelegate != null) {
             float[] accelerometer = getAccelData16(characteristic);
-            GestorBD bd = new GestorBD(MainActivityLibre.appContext);
+            GestorBD bd = new GestorBD(Main.appContext);
             bd.insertDatosSensor(accelerometer, this.posicionesSensores, gatt.getDevice().toString(), TEXAS_INSTRUMENTS);
             mDelegate.updateAccelerometer(gatt, accelerometer[0], accelerometer[1],
                     accelerometer[2], accelerometer[3], accelerometer[4], accelerometer[5]);

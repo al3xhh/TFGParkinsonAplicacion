@@ -6,7 +6,7 @@ package tfg.ucm.com.tfgparkinson.Clases.services;;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.util.Log;
 
-import tfg.ucm.com.tfgparkinson.Activities.DeviceScanActivityHexiwear;
+import tfg.ucm.com.tfgparkinson.Activities.EscaneoHexiWear;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -42,8 +42,8 @@ public class HexiwearService {
 
     public HexiwearService(ArrayList<String> uuidArray) {
         String uuidGat = null;
-        mGattCharacteristics = DeviceScanActivityHexiwear.getGattCharacteristics();
-        mBluetoothLeService  = DeviceScanActivityHexiwear.getBluetoothLeService();
+        mGattCharacteristics = EscaneoHexiWear.getGattCharacteristics();
+        mBluetoothLeService  = EscaneoHexiWear.getBluetoothLeService();
 
         for(int cnt = 0; cnt < mGattCharacteristics.size(); cnt++) {
             for(int cnt1 = 0; cnt1 < mGattCharacteristics.get(cnt).size(); cnt1++) {
