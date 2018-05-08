@@ -4,12 +4,17 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -72,6 +77,14 @@ public class Main extends AppCompatActivity implements RespuestaServidor {
             }
         });
 
+        FloatingActionButton ayuda = (FloatingActionButton) findViewById(R.id.ayuda);
+        ayuda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarAyuda();
+            }
+        });
+
         GestorBD bd = new GestorBD(this);
         ArrayList<Medicamento> listaMedicamentos = bd.getMedicamentos();
 
@@ -115,17 +128,17 @@ public class Main extends AppCompatActivity implements RespuestaServidor {
             JSONArray actividades = bd.getTb_actividades();
 
             if (posiciones.length() > 0)
-                enviarDatosServidor("http://192.168.1.35:5050/posiciones", posiciones);
+                enviarDatosServidor("http://192.168.1.33:5050/posiciones", posiciones);
             if (sensores.length() > 0)
-                enviarDatosServidor("http://192.168.1.35:5050/datos_sensor", sensores);
+                enviarDatosServidor("http://192.168.1.33:5050/datos_sensor", sensores);
             if (medicamentos.length() > 0)
-                enviarDatosServidor("http://192.168.1.35:5050/medicamentos", medicamentos);
+                enviarDatosServidor("http://192.168.1.33:5050/medicamentos", medicamentos);
             if (actividades.length() > 0)
-                enviarDatosServidor("http://192.168.1.35:5050/actividades", actividades);
+                enviarDatosServidor("http://192.168.1.33:5050/actividades", actividades);
             if (temblores.length() > 0)
-                enviarDatosServidor("http://192.168.1.35:5050/temblores", temblores);
+                enviarDatosServidor("http://192.168.1.33:5050/temblores", temblores);
         } else {
-            i = new Intent(Main.this, ConfigurarSensores.class);
+            i = new Intent(Main.this, EmparejarSensores.class);
             startActivity(i);
         }
 
@@ -160,7 +173,6 @@ public class Main extends AppCompatActivity implements RespuestaServidor {
     }
 
     private void enviarDatosServidor(String url, JSONArray params) {
-        Log.d("DATOSSSSS", params.toString());
         Servidor servidor = new Servidor(Main.this, url);
         servidor.setDelegate(Main.this);
         servidor.sendData(params, POST);
@@ -203,5 +215,24 @@ public class Main extends AppCompatActivity implements RespuestaServidor {
         noti.flags |= Notification.FLAG_AUTO_CANCEL;
 
         notificationManager.notify(0, noti);
+    }
+
+    private void mostrarAyuda() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.dialogo));
+        dialogBuilder.setTitle("Ayuda menú inicio");
+        dialogBuilder.setMessage(Html.fromHtml("<p align=\"justify\">" +
+                "- Para ver las actividades pulse en <strong>Actividades</strong>. <br><br>" +
+                "- Para ver los medicamentos pulse en <strong>Medicamentos</strong>. <br><br>" +
+                "- Para enviar los datos al servidor pulse en el botón <strong>enviar</strong>, arriba en el menú.<br><br>" +
+                "- Para emparejar los sensores pulse en el botón <strong>emparejar</strong>, arriba en el menú.</p>"));
+
+        dialogBuilder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 }

@@ -12,7 +12,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
+import android.text.Html;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import android.widget.EditText;
@@ -42,7 +45,17 @@ public class Actividades extends AppCompatActivity {
         setContentView(R.layout.activity_actividades);
         setTitle("Actividades");
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         reiniciarActivity();
+
+        FloatingActionButton ayuda = (FloatingActionButton) findViewById(R.id.ayuda);
+        ayuda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarAyuda();
+            }
+        });
 
         FloatingActionButton anyadir = (FloatingActionButton) findViewById(R.id.addActivityB);
         anyadir.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +76,7 @@ public class Actividades extends AppCompatActivity {
         LayoutInflater inflater = this.getLayoutInflater();
         @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.anyadir_actividad,null);
 
-        final Spinner nombreActividad = (Spinner) dialogView.findViewById(R.id.seleccionarActividad);
+        final EditText nombreActividad = (EditText) dialogView.findViewById(R.id.seleccionarActividad);
         final EditText duracion = (EditText) dialogView.findViewById(R.id.duracionActividad);
         final TimePicker horaInicio = (TimePicker) dialogView.findViewById(R.id.horaInicioActividad);
         final EditText observaciones = (EditText) dialogView.findViewById(R.id.observacionesActividad);
@@ -76,7 +89,7 @@ public class Actividades extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    Actividad actividad = new Actividad(nombreActividad.getSelectedItem().toString(),
+                    Actividad actividad = new Actividad(nombreActividad.getText().toString(),
                             Integer.parseInt(duracion.getText().toString()), horaInicio.getHour() + ":" + horaInicio.getMinute(),
                             observaciones.getText().toString());
                     GestorBD gestorBD = new GestorBD(getApplicationContext());
@@ -119,5 +132,33 @@ public class Actividades extends AppCompatActivity {
             actividades.setVisibility(View.VISIBLE);
             actividades.setAdapter(new AdaptadorActividades(this, listaActividades));
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void mostrarAyuda() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.dialogo));
+        dialogBuilder.setTitle("Ayuda actividades");
+        dialogBuilder.setMessage(Html.fromHtml("<p align=\"justify\">" +
+                "- Para añadir una actividad pulse en <strong>el botón de abajo a la derecha</strong> y rellene los campos. <br><br>" +
+                "- Para editar una actividad pulse <strong>dentro de los tres puntitos de la actividad en editar</strong>. <br><br>" +
+                "- Para borrar una actividad pulse <strong>dentro de los tres puntitos de la actividad en borrar</strong>.</p>"));
+
+        dialogBuilder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 }

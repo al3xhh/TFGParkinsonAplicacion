@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -80,7 +81,6 @@ public class AdaptadorMedicamentos extends ArrayAdapter<Medicamento> {
                         switch (item.getItemId()) {
                             case R.id.borrar_temblor:
                                 borrar(position);
-                                context.startActivity(((Activity)context).getIntent());
                                 break;
                             case R.id.editar_temblor:
                                 editar(position);
@@ -119,6 +119,7 @@ public class AdaptadorMedicamentos extends ArrayAdapter<Medicamento> {
         nombre.setEnabled(false);
         intervalo.setText(String.valueOf(medicamento.getIntervalo()));
         horaMedicacion.setIs24HourView(true);
+        intervalo.setRawInputType(Configuration.KEYBOARD_12KEY);
         horaMedicacion.setHour(Integer.parseInt(medicamento.getHora().split(":")[0]));
         horaMedicacion.setMinute(Integer.parseInt(medicamento.getHora().split(":")[1]));
 

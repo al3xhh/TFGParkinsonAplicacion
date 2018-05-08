@@ -39,7 +39,7 @@ public class MultiBLECallback extends BluetoothGattCallback {
 
     // Multi BLE Callback public constructor.
     public MultiBLECallback(Handler handler, OpcionesVO options) {
-        mOptions = options.getSensorsOptions();
+        //mOptions = options.getSensorsOptions();
         mHandler = handler;
         mCurrentSensors = new SparseArray<>();
 

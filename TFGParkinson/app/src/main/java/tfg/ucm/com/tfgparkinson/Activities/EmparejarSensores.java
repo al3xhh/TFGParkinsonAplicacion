@@ -17,9 +17,13 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
+import android.text.Html;
+import android.view.ContextThemeWrapper;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -62,6 +66,16 @@ public class EmparejarSensores extends AppCompatActivity implements IMultiBLEAcc
         setContentView(R.layout.activity_emparejar_sensores);
 
         Intent intent = getIntent();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        FloatingActionButton ayuda = (FloatingActionButton) findViewById(R.id.ayuda);
+        ayuda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarAyuda();
+            }
+        });
 
         initVariables((OpcionesVO) intent.getSerializableExtra("options"));
         checkForPermissions();
@@ -295,5 +309,33 @@ public class EmparejarSensores extends AppCompatActivity implements IMultiBLEAcc
 
         // Add the devices to the listView
         addItemsToList(gatts);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void mostrarAyuda() {
+        android.support.v7.app.AlertDialog.Builder dialogBuilder = new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(this, R.style.dialogo));
+        dialogBuilder.setTitle("Ayuda emparejar");
+        dialogBuilder.setMessage(Html.fromHtml("<p align=\"justify\">" +
+                "- Para emparejar con los sensores pulse en <strong>escanear</strong>. <br><br>" +
+                "- Una vez localizado su sensor <strong>marque el cuadrado correspondiente y pulse en conectar</strong>.<br><br>" +
+                "- <strong>Importante: deberán estar activados el bluetooth y la localización.</strong></p>"));
+
+        dialogBuilder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        android.support.v7.app.AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 }

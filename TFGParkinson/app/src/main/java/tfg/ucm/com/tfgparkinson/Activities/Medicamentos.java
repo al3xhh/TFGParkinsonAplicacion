@@ -1,13 +1,17 @@
 package tfg.ucm.com.tfgparkinson.Activities;
 
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -35,7 +39,17 @@ public class Medicamentos extends AppCompatActivity {
         setContentView(R.layout.activity_medicamentos);
         setTitle("Medicamentos");
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         reiniciarActivity();
+
+        FloatingActionButton ayuda = (FloatingActionButton) findViewById(R.id.ayuda);
+        ayuda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarAyuda();
+            }
+        });
 
         FloatingActionButton addMedicine = (FloatingActionButton) findViewById(R.id.addMedicineB);
         addMedicine.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +81,7 @@ public class Medicamentos extends AppCompatActivity {
         final CheckBox domingo = (CheckBox) dialogView.findViewById(R.id.domingo);
 
         horaMedicacion.setIs24HourView(true);
+        intervaloMedicacion.setRawInputType(Configuration.KEYBOARD_12KEY);
         dialogBuilder.setTitle("Añadir medicamento");
         dialogBuilder.setPositiveButton(getString(R.string.guardar), new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -132,5 +147,33 @@ public class Medicamentos extends AppCompatActivity {
             medicamentosLV.setVisibility(View.VISIBLE);
             medicamentosLV.setAdapter(new AdaptadorMedicamentos(this, medicamentos));
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void mostrarAyuda() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.dialogo));
+        dialogBuilder.setTitle("Ayuda medicamentos");
+        dialogBuilder.setMessage(Html.fromHtml("<p align=\"justify\">" +
+                "- Para añadir un medicamento pulse en <strong>el botón de abajo a la derecha</strong> y rellene los campos. <br><br>" +
+                "- Para editar un medicamento pulse <strong>dentro de los tres puntitos del medicamento en editar</strong>. <br><br>" +
+                "- Para borrar un medicamento pulse <strong>dentro de los tres puntitos del medicamento en borrar</strong>.</p>"));
+
+        dialogBuilder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 }

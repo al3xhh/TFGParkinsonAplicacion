@@ -16,6 +16,7 @@ import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.TextView;
 import android.os.Handler;
 
@@ -54,6 +55,8 @@ public class EscaneoHexiWear extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_scan_hexiwear);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent i = getIntent();
 
@@ -258,5 +261,15 @@ public class EscaneoHexiWear extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

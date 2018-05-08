@@ -41,8 +41,8 @@ public class MultiBLEHandler extends Handler {
     public MultiBLEHandler(ProgressDialog dialog, IMultiBLEAccelDataReceiverDelegate delegate, OpcionesVO opciones) {
         // Delegate of the IMultiBLEAccelDataReceiverDelegate class to update the view.
         this.mDelegate = delegate;
-        this.posicionesSensores = opciones.getSensorPositions();
-        this.accRange = opciones.getSensorsOptions().get(Constantes.ACCL_RANGE);
+        //this.posicionesSensores = opciones.getSensorPositions();
+        //this.accRange = opciones.getSensorsOptions().get(Constantes.ACCL_RANGE);
         this.mProgressDialog = dialog;
         this.mStopCapture = false;
     }

@@ -98,7 +98,7 @@ public class AdaptadorActividades extends ArrayAdapter<Actividad> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.anyadir_actividad, null);
 
-        final Spinner nombreActividad = (Spinner) dialogView.findViewById(R.id.seleccionarActividad);
+        final EditText nombreActividad = (EditText) dialogView.findViewById(R.id.seleccionarActividad);
         final EditText duracion = (EditText) dialogView.findViewById(R.id.duracionActividad);
         final TimePicker horaInicio = (TimePicker) dialogView.findViewById(R.id.horaInicioActividad);
         final EditText observaciones = (EditText) dialogView.findViewById(R.id.observacionesActividad);
@@ -107,7 +107,7 @@ public class AdaptadorActividades extends ArrayAdapter<Actividad> {
         horaInicio.setIs24HourView(true);
 
         Actividad actividad = values.get(position);
-        nombreActividad.setSelection(findIndex(actividad.getNombre()));
+        nombreActividad.setText(actividad.getNombre());
         nombreActividad.setEnabled(false);
         duracion.setText(String.valueOf(actividad.getIntervalo()));
         horaInicio.setHour(Integer.parseInt((actividad.getHora().split(":")[0])));
@@ -119,7 +119,7 @@ public class AdaptadorActividades extends ArrayAdapter<Actividad> {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    Actividad actividad = new Actividad(nombreActividad.getSelectedItem().toString(),
+                    Actividad actividad = new Actividad(nombreActividad.getText().toString(),
                             Integer.parseInt(duracion.getText().toString()), horaInicio.getHour() + ":" + horaInicio.getMinute(),
                             observaciones.getText().toString());
                     GestorBD gestorBD = new GestorBD(context);
@@ -171,16 +171,5 @@ public class AdaptadorActividades extends ArrayAdapter<Actividad> {
 
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
-    }
-
-    private int findIndex(String name) {
-        String[] activities = context.getResources().getStringArray(R.array.actividades);
-        int ret = -1;
-
-        for(int i = 0; i < activities.length; i++)
-            if(activities[i].equals(name))
-                ret = i;
-
-        return ret;
     }
 }
