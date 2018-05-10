@@ -35,7 +35,7 @@ import android.widget.Toast;
 
 public class GestorBD extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 24;
+    private static final int DATABASE_VERSION = 25;
 
     private static final String DATABASE_NAME = Constantes.NOMBRE_BD;
 
@@ -73,6 +73,7 @@ public class GestorBD extends SQLiteOpenHelper {
                             "NOMBRE VARCHAR PRIMARY KEY, " +
                             "DIAS VARCHAR NOT NULL, " +
                             "HORA DATETIME NOT NULL, " +
+                            "ENVIADO VARCHAR(1) DEFAULT ('N')," +
                             "MINUTOS_DESCARTAR NUMBER NOT NULL);");
 
         db.execSQL("CREATE TABLE TB_ACTIVIDADES ( " +
@@ -80,6 +81,7 @@ public class GestorBD extends SQLiteOpenHelper {
                             "INTERVALO NUMBER NOT NULL, " +
                             "HORA VARCHAR NOT NULL," +
                             "OBSERVACIONES VARCHAR," +
+                            "ENVIADO VARCHAR(1) DEFAULT ('N')," +
                             "PRIMARY KEY (NOMBRE,HORA));");
 
     }
@@ -435,7 +437,7 @@ public class GestorBD extends SQLiteOpenHelper {
     public JSONArray getTb_medicamentos(){
         SQLiteDatabase db = this.getReadableDatabase();
         JSONArray tabla = new JSONArray();
-        Cursor cursor = db.rawQuery("SELECT * FROM TB_MEDICAMENTOS", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM TB_MEDICAMENTOS WHERE ENVIADO = 'N'", null);
 
         try{
             while (cursor.moveToNext()){
@@ -463,7 +465,7 @@ public class GestorBD extends SQLiteOpenHelper {
     public JSONArray getTb_actividades(){
         SQLiteDatabase db = this.getReadableDatabase();
         JSONArray tabla = new JSONArray();
-        Cursor cursor = db.rawQuery("SELECT * FROM TB_ACTIVIDADES", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM TB_ACTIVIDADES WHERE ENVIADO = 'N'", null);
 
         try{
             while (cursor.moveToNext()){
@@ -504,7 +506,7 @@ public class GestorBD extends SQLiteOpenHelper {
         return count;
     }
 
-    public void updateEnviado(String estado, String tabla){
+    public void updateEnviado(String estado, String tabla) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         String[] whereArgs = new String[]{estado};
