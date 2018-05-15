@@ -128,15 +128,15 @@ public class Main extends AppCompatActivity implements RespuestaServidor {
             JSONArray actividades = bd.getTb_actividades();
 
             if (posiciones.length() > 0)
-                enviarDatosServidor("http://147.96.80.41/tfg1718/posiciones", posiciones);
+                enviarDatosServidor("http://147.96.80.41:5050/posiciones", posiciones);
             if (sensores.length() > 0)
-                enviarDatosServidor("http://147.96.80.41/tfg1718/datos_sensor", sensores);
+                enviarDatosServidor("http://147.96.80.41:5050/datos_sensor", sensores);
             if (medicamentos.length() > 0)
-                enviarDatosServidor("http://147.96.80.41/tfg1718/medicamentos", medicamentos);
+                enviarDatosServidor("http://147.96.80.41:5050/medicamentos", medicamentos);
             if (actividades.length() > 0)
-                enviarDatosServidor("http://147.96.80.41/tfg1718/actividades", actividades);
+                enviarDatosServidor("http://147.96.80.41:5050/actividades", actividades);
             if (temblores.length() > 0)
-                enviarDatosServidor("http://147.96.80.41/tfg1718/temblores", temblores);
+                enviarDatosServidor("http://147.96.80.41:5050/temblores", temblores);
         } else {
             i = new Intent(Main.this, EmparejarSensores.class);
             startActivity(i);
@@ -162,15 +162,12 @@ public class Main extends AppCompatActivity implements RespuestaServidor {
 
     @Override
     public void processFinish(String response) {
-        if(response.equals("datos_sensor")) {
-            GestorBD bd = new GestorBD(getApplicationContext());
-            bd.vaciarTabla("TB_DATOS_SENSOR");
-            bd.updateEnviado("S", Constantes.TB_POSICINES);
-            bd.updateEnviado("S", Constantes.TB_TEMBLORES);
-            bd.updateEnviado("S", Constantes.TB_ACTIVIDADES);
-            bd.updateEnviado("S", Constantes.TB_MEDICAMEMTOS);
-        }
-
+        GestorBD bd = new GestorBD(getApplicationContext());
+        bd.vaciarTabla("TB_DATOS_SENSOR");
+        bd.updateEnviado("S", Constantes.TB_POSICINES);
+        bd.updateEnviado("S", Constantes.TB_TEMBLORES);
+        bd.updateEnviado("S", Constantes.TB_ACTIVIDADES);
+        bd.updateEnviado("S", Constantes.TB_MEDICAMENTOS);
         Toast.makeText(getApplicationContext(), "Datos enviados correctamente", Toast.LENGTH_SHORT).show();
     }
 

@@ -73,8 +73,8 @@ public class GestorBD extends SQLiteOpenHelper {
                             "NOMBRE VARCHAR PRIMARY KEY, " +
                             "DIAS VARCHAR NOT NULL, " +
                             "HORA DATETIME NOT NULL, " +
-                            "ENVIADO VARCHAR(1) DEFAULT ('N')," +
-                            "MINUTOS_DESCARTAR NUMBER NOT NULL);");
+                            "MINUTOS_DESCARTAR NUMBER NOT NULL, " +
+                            "ENVIADO VARCHAR(1) DEFAULT ('N'));");
 
         db.execSQL("CREATE TABLE TB_ACTIVIDADES ( " +
                             "NOMBRE VARCHAR, " +
