@@ -15,6 +15,7 @@
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage[]{hyperref}
 \usepackage{wrapfig}
+\usepackage{float}
 
 \definecolor{gris}{RGB}{220,220,220}
 
@@ -44,23 +45,27 @@
 	\vskip 1cm
     \centering \large {Facultad de Informática \\ Universidad Complutense de Madrid \\ Curso 2017-2018}
     \vskip 0.5cm
-    \centering \large {28 Mayo de 2018}
+    \centering \large {21 Mayo de 2018}
 
 \end{titlepage}
 \clearpage
 \vphantom{a}
 \newpage
-\tableofcontents
-\newpage
+
+\addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
+
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
-El objetivo del proyecto es realizar una aplicación Android que ayude a las personas con Parkinson en su día a día. En concreto, está orientada al recordatorio de la toma de cada pastilla, así cómo también permite tener un diario de las actividades que el paciente realiza como parte de su rutina de ejercicios. Todas estas acciones son recogidas por los sensores bluetooth que se le pueden conectar a la aplicación. La aplicación se apoya en un servidor en el cual son almacenados y procesados todos los datos.
+El objetivo del proyecto es implementar una aplicación Android y toda la infraestructura necesaria para dar soporte a las funcionalidades de esta. La aplicación facilita tanto el día a día del paciente como el diagnostico de la enfermedad por parte del medico. En concreto, la aplicación permite al paciente (o al encargado del cuidado del mismo) añadir recordatorios con los días y horarios en los que debe tomar cada pastilla y tener un diario de las actividades que el paciente realiza como parte de su rutina de ejercicios, ya sea esta propia o recomendada por un medico. Todas estas acciones son monitorizadas por sensores BLE (Bluetooth de baja energía) conectados a la aplicación para después ser procesados y representados de forma amigable para el medico que deba interpretarlos. 
 \newline
 
-Por otro lado, para complementar el proyecto y proporcionar datos al médico o responsable del paciente, se ha realizado una aplicación web, sencilla e intuitiva. En ella, se pueden visualizar mediante gráficos la evolución de los datos recogidos por los sensores de cada paciente.
+La aplicación Android se complementa con una aplicación web sencilla e intuitiva que permite proporcionar datos al médico. En ella, se pueden visualizar mediante gráficos la evolución de los datos recogidos por los sensores de cada paciente.
 \newline
 
-Cómo se ha dicho anteriormente, la aplicación se conecta con sensores bluetooth. Dichos sensores, son de dos tipos, por un lado tenemos un sensor más “rudimentario” y por otro lado un sensor con forma de pulsera y con una pantalla incorporada. Ambos sensores cuentan a su vez con varios servicios, de los cuales los utilizados para este proyecto han sido los acelerómetros y los giroscopios, ambos de tres ejes. Otro dato a destacar de ambos sensores, es que se tratan de bluetooth de baja energía (BLE) lo que complica en cierta manera la conexión de los mismos con la aplicación, ya que, pierden la conexión con bastante facilidad.
+Tanto la aplicación Android como la aplicación web hacen uso de un API REST para enviar o recibir datos del back-end.
+\newline
+
+Como se ha dicho anteriormente, la aplicación permite monitorizar al paciente mediante sensores BLE. La aplicación soporta dos tipos de sensores, por un lado tenemos un sensor más “rudimentario” y por otro lado un sensor mas amigable con el usuario que lo lleve, con forma de pulsera y con una pantalla incorporada. Ambos sensores cuentan a su vez con varios servicios, de los cuales los utilizados para este proyecto han sido los acelerómetros y los giroscopios, ambos de tres ejes. La integración de la aplicación Android con los sensores BLE ha sido una de las mayores dificultades que nos hemos encontrado a la hora de llevar a cabo el proyecto debido a la compleja interfaz que ofrece Android para trabajar con este tipo de sensores.
 \newline
 
 Resumiendo, las tecnologías utilizadas han sido las siguientes:
@@ -68,10 +73,12 @@ Resumiendo, las tecnologías utilizadas han sido las siguientes:
 \begin{itemize}
     \item Android para el desarrollo de la aplicación. 
 	\item SQLite para almacenar los datos dentro del teléfono. 
-	\item Bluetooth para la comunicación con los sensores. 
-	\item Python para programar el servidor que se encarga de almacenar y procesar los datos (concretamente se ha utilizado el framework Eve)
+	\item Bluetooth Low Energy para la comunicación con los sensores. 
+	\item Python para procesar los datos y para implementar el API REST
     \item PHP, HTML5 y Bootstrap para el desarrollo de la web que permite visualizar los datos.
-	\item Mongodb para almacenar en el servidor todos los datos recogidos.
+	\item MongoDB para almacenar en el back-end todos los datos recogidos.
+    \item Apache como servidor web para hostear la aplicación web.
+    \item Docker para desplegar la infraestructura necesaria de forma automática (API REST, servidor web y MongoDB).  
     \newline
 \end{itemize}
 
@@ -102,12 +109,19 @@ Summarizing, we have used the following technologies:
 \end{itemize}
 \newpage
 
-\section*{Estado del arte}
-\addcontentsline{toc}{section}{Estado del arte}
-“La enfermedad de Parkinson (EP), también denominada mal de Parkinson, parkinsonismo idiopático, parálisis agitante o simplemente párkinson, es una enfermedad neurodegenerativa crónica caracterizada por bradicinesia (movimiento lento), rigidez (aumento del tono muscular) y temblor.​”
+\addtocontents{toc}{\protect\setcounter{tocdepth}{3}}
+
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+
+\section{Estado del arte}
+“La enfermedad de Parkinson (EP), también denominada mal de Parkinson, parkinsonismo idiopático, parálisis agitante o simplemente párkinson, es una enfermedad neurodegenerativa crónica caracterizada por bradicinesia (movimiento lento), rigidez (aumento del tono muscular) y temblor.” - Wikipedia
 \newline
 
-Gran parte de los síntomas de la enfermedad son motores, por eso decidimos hacer una aplicación basada en la utilización de sensores. Se han hecho numerosos estudios los cuales utilizan esta tecnología y a su vez utilizan los datos recogidos para aplicar machine learning sobre ellos.
+Gran parte de los síntomas de la enfermedad son motores, por eso decidimos hacer una aplicación basada en la utilización de sensores. Se han hecho numerosos estudios los cuales utilizan esta tecnología y a su vez utilizan los datos recogidos para aplicar técnicas de análisis de datos como machine learning sobre ellos.
 \newline
 
 Para introducirnos en el estado del arte, leímos numerosos artículos científicos, en concreto los más útiles e interesantes, son los que se listan a continuación:
@@ -125,11 +139,13 @@ Para introducirnos en el estado del arte, leímos numerosos artículos científi
     \newline
 \end{itemize}
 
-Todos ellos tienen como nexo común la utilización de sistemas basados en sensores para analizar las actividades que realizan los pacientes. Algunos de ellos utilizan cuadros de actividades fijados previamente y otros dejan al paciente hacer ejercicios de forma libre. En nuestro caso, la aplicación está pensada para que el paciente haga los ejercicios que suela hacer habitualmente. También está pensada para que el paciente haga algunos ejercicios justo después de tomarse la medicación, de esta forma se podría ver el efecto que tienen los medicamentos sobre cada paciente.
+Todos ellos tienen como nexo común, la utilización de sistemas basados en sensores para analizar las actividades que realizan los pacientes. La mayoría de ellos utilizan cuadros de actividades fijados previamente. 
+\newline
+
+Nuestra aplicación está diseñada para poder usarla para monitorizar al paciente en un entorno libre, en su día a día, o mientras realiza una tabla de ejercicios previamente definida, en este caso nuestra aplicación permite cruzar los datos de monitorización obtenidos con los horarios de la toma de la medicación, de esta forma se podría ver el efecto que tienen los medicamentos sobre cada paciente.
 \newpage
 
-\section*{Aplicación Android}
-\addcontentsline{toc}{section}{Aplicación Android}
+\section{Aplicación Android}
 \subsection{Descripción}
 La aplicación ha sido desarrollada para dispositivos Android, con una versión igual o superior a Android 4.4 (KitKat) Cuenta con un diseño sencillo e intuitivo, ya que está pensada para personas que pueden tener temblores mientras la usen o pueden encontrarse en una avanzada edad. Toda la recogida de datos de los sensores está automatizada, el paciente sólo tiene que conectar la aplicación con cada sensor y puede olvidarse del teléfono en ese momento. Se ha intentado que la aplicación sea lo menos invasiva posible, para ello tan sólo cuenta con notificaciones cuando se tiene que tomar las pastillas. Cada notificación indica la pastilla que debe tomarse y cuenta con dos opciones, de esta forma se puede llevar un control de las pastillas que se ha tomado (esto quedaría pendiente como trabajo futuro)
 \newline
@@ -144,7 +160,7 @@ La aplicación ha sido desarrollada para dispositivos Android, con una versión 
 Esta es la pantalla que aparece cuando se inicia la aplicación. Podemos ver dos grandes botones, el primero de ellos permite acceder a todo lo relacionado con las actividades y el segundo a todo lo relacionado con los medicamentos.
 \newline
 
-Puede ver como en el menú superior hay dos botones. El botón de enviar, permite enviar todos los datos al servidor. El botón emparejar permite acceder al menú dónde se configuran y se emparejan los sensores con la aplicación.
+Puede verse como en el menú superior hay dos botones. El botón de enviar, permite enviar todos los datos al servidor. El botón emparejar permite acceder al menú dónde se configuran y se emparejan los sensores con la aplicación.
 \newpage
 
 \subsubsection{Actividades}
@@ -171,7 +187,7 @@ La información que se guarda de cada actividad es:
 \begin{itemize}
 	\item {\bf Nombre} de la actividad.
 	\item {\bf Duración} de la actividad.
-	\item {\bf Hora} a la que se comenzó a realizar la actividad.
+	\item {\bf Hora} a la que se empezó a realizar la actividad.
 	\item Cualquier {\bf observación} que pueda hacer que los datos recogidos por los sensores en esa actividad no sean válidos.
 \end{itemize}
 
@@ -211,13 +227,13 @@ La información que se guarda de cada medicamento es:
 	\item {\bf Hora} a la que se tiene que tomar la medicación.
 \end{itemize}
 
-Una vez es añadido el medicamento, la próxima vez que se inicie la aplicación se programarán notificaciones que avisarán al paciente de cuando se tiene que tomar cada medicamento ese día.
+Una vez es añadido el medicamento, la próxima vez que se inicie la aplicación se programarán notificaciones que avisarán al paciente de cuándo se tiene que tomar cada medicamento ese día.
 \newline
 
 Al pulsar en el botón de añadir medicamento (botón flotante de abajo a la derecha) se nos abre un cuadro de diálogo en el que podemos rellenar cada uno de los campos.
 \newline
 
-Por último, cada medicamento cuenta con tres puntitos, los cuales despliegan el menú de opciones. Las opciones disponibles son editar y borrar. Editar abrirá un cuadro de diálogo como el de añadir, pero con todos los campos rellenos con la información de dicho medicamento (aparecerán bloqueados aquellos que no se puedan editar) Borrar abrirá un cuadro de diálogo preguntando si de verdad se desea borrar el medicamento, en caso afirmativo el medicamento será borrada de la lista que contiene todos los medicamentos.
+Por último, cada medicamento cuenta con tres puntitos, los cuales despliegan el menú de opciones. Las opciones disponibles son editar y borrar. Editar abrirá un cuadro de diálogo como el de añadir, pero con todos los campos rellenos con la información de dicho medicamento (aparecerán bloqueados aquellos que no se puedan editar) Borrar abrirá un cuadro de diálogo preguntando si de verdad se desea borrar el medicamento, en caso afirmativo el medicamento será borrado de la lista que contiene todos los medicamentos.
 
 \subsubsection{Servidor}
 \begin{figure}[!htb]
@@ -241,11 +257,11 @@ Una vez pulsamos el botón, se abre el cuadro de progreso que puede verse en la 
 
 Cuando pulsamos en el botón emparejar que puede verse en la parte superior derecha (anterior imagen) nos aparece esta pantalla.
 
-En ella se pueden configurar los sensores. Se permite indicar el rango del acelerómetro (“es el rango de amplitud máxima que puede medir el acelerómetro antes que la señal de salida resulte distorsionada o recortada. Normalmente se especifica en "g".”)
+En ella se pueden configurar los sensores. Permite indicar el rango del acelerómetro (“es el rango de amplitud máxima que puede medir el acelerómetro antes que la señal de salida resulte distorsionada o recortada. Normalmente se especifica en "g".”)
 \newline
 
 El periodo con el que se desean recoger los datos.
-Que sensores se desean activar.
+Qué sensores se desean activar.
 Y en qué parte del cuerpo se va a poner cada uno de los sensores.
 \newline
 
@@ -262,7 +278,7 @@ Una vez le demos a comenzar, podremos emparejar el sensor con la aplicación y c
 En todas las pantallas de la aplicación puede verse un botón flotante abajo a la izquierda, es el botón de ayuda. Puesto que la aplicación está dirigida a pacientes de Parkinson, en su gran mayoría tienen avanzada edad, consideramos que era buena idea incluir un botón que muestre información acerca de cómo se realiza cada acción.
 \newline
 
-El botón de ayuda, muestra en cada pantalla como realizar todas las acciones permitidas en dicha pantalla. Como podemos ver en este caso muestra como acceder a cada apartado, así como enviar datos y conectar los sensores. Resalta en negrita las partes más importantes, para que puedan ser vistas de forma sencilla y rápida.
+El botón de ayuda, muestra en cada pantalla cómo realizar todas las acciones permitidas en dicha pantalla. Como podemos ver en este caso muestra cómo acceder a cada apartado, así como enviar datos y conectar los sensores. Resalta en negrita las partes más importantes, para que puedan ser vistas de forma sencilla y rápida.
 \newpage
 
 \subsection{Diagramas UML (Casos de uso)}
@@ -287,6 +303,103 @@ El botón de ayuda, muestra en cada pantalla como realizar todas las acciones pe
   \caption{Sensores}
 \endminipage
 \end{figure}
+\newpage
+
+\section{Infraestructura}
+\subsection{Sensores}
+\subsubsection{Texas Instrument: CC2650 - Ultra-low power wireless MCU}
+{\bf Descripción}
+\newline
+
+El dispositivo es un sensor BLE (Bluetooth Low Energy) es decir, es bluetooth de bajo consumo. Cuenta con varios sensores dentro del propio dispositivo. Se puede conectar con cualquier dispositivo que disponga de bluetooth, en nuestro caso se ha utilizado conectándolo con un teléfono móvil. 
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.5\textwidth]{SensorTexas.jpg}
+  \caption{Sensor CC2650.}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.5\textwidth]{FundaTexas.png}
+  \caption{Aspecto del sensor con la funda.}
+\end{figure}
+
+{\bf Hardware}
+\newline
+
+El dispositivo contiene un procesador ARM de 32 bits que funciona a 48 MHz, el cual se encarga de controlar el funcionamiento de todos los sensores que lo forman. Los servicios disponibles son los siguientes:
+
+\begin{itemize}
+  \item Sensor de temperatura.
+  \item Sensor de movimiento (acelerómetro y giroscopio)
+  \item Sensor de humedad.
+  \item Sensor de presión.
+  \item Sensor óptico.
+\end{itemize}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{ArquitecturaTexas.jpg}
+  \caption{Arquitectura interna sensor texas.}
+\end{figure}
+
+{\bf Software}
+\newline
+
+Para interactuar con el sensor se puede utilizar cualquier dispositivo que tenga bluetooth, desde un dispositivo móvil hasta un ordenador. Existen librerías en Python que facilitan la interacción con el mismo. Para acceder a los sensores se utilizan direcciones físicas, conocidas como UUID (Universally Unique Identifier) También hay UUID que permiten configurar el sensor para cambiar parámetros como la frecuencia de funcionamiento, que sensores deben activarse, etc...
+\newline
+
+{\bf Uso}
+\newline
+
+El sensor lo hemos utilizado con Android. Para ello hemos creado una aplicación móvil que se conecta al sensor y obtiene los datos de él. Para la conexión con el sensor se utiliza la dirección MAC que tiene asociada. Antes de realizar la conexión, se indican que servicios se desean activar y con que frecuencia se quieren recoger datos. Después, se realiza un escaneo y al seleccionar el sensor se empareja con él y comienza a leer datos. Los datos son almacenados en el teléfono y posteriormente son enviados a la nube para su posterior tratamiento.
+
+\subsubsection{Hexiwear}
+{\bf Descripción}
+\newline
+
+Es un dispositivo pensado para IoT (Internet de las cosas) bastante pequeño y con un diseño amigable que permite usarlo como reloj inteligente. Hexiwear es un sensor bastante versátil completamente software libre.
+\newline
+
+\begin{figure}
+  \centering
+  \includegraphics[width=6cm]{sensorHexiwearCorrea.png}
+  \caption{Sensor Hexiwar con correa.}
+\end{figure}
+
+{\bf Harwdare}
+\newline
+
+El dispositivo cuenta con un MCU Kinetis K64x de NXP (ARM Cortex-M4, 120 MHz, 1M Flash, 256K SRAM), BLE NXP Kinetis KW4x (ARM® Cortex-M0+, Bluetooth Low Energy \& 802.15.4 Wireless MCU), batería de litio, pantalla OLED
+de 1.1'', interfaz táctil y un led RGB. Ademas cuenta con los siguientes sensores:
+
+\begin{itemize}
+  \item Acelerómetro tridimensional.
+  \item Magnetómetro tridimensional.
+  \item Giroscopio triaxial.
+  \item Sensor de presión.
+  \item Sensor de pulsaciones.
+  \item Sensor de humedad
+  \item Sensor óptico
+\end{itemize}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=15cm]{Hexiwear-hardware-diagram.png}
+  \caption{Diagrama del Hardware (Hexiwear).}
+\end{figure}
+
+{\bf Software}
+\newline
+
+Hexiwear ofrece aplicaciones tanto en iOS como en Android para interactuar con sus sensores, además ofrece una nube a traves de la cual recuperar los datos del sensor haciendo uso de un API REST. Dado que nuestra aplicación esta diseñada para ser capaz de monitorizar a un paciente en cualquier momento no podíamos hacer uso de la nube ya que necesita conexión a Internet. Nuestra aplicación integra la comunicación con el sensor haciendo uso de BLE.
+\newline
+
+{\bf Uso}
+\newline
+
+Como se menciona en el apartado anterior la interacción con el sensor se hace a través de nuestra propia aplicación Android. Mientras el dispositivo esta conectado con la aplicación se recogen los datos de acelerómetro y giroscopio y se almacenan en la base de datos local de la aplicación para posteriormente enviarlos y procesarlos en el servidor remoto.
 
 \newpage
 \begin{thebibliography}{10}
@@ -299,6 +412,9 @@ El botón de ayuda, muestra en cada pantalla como realizar todas las acciones pe
     BAUKJE DIJKSTRA, WIEBREN ZIJLSTRA, ERIK SCHERDER, YVO KAMSMA. "Detection of walking periods and 	     number of steps in older adults and patients with Parkinson’s disease: accuracy of a pedometer and       an accelerometry-based method"
     \bibitem{resumen4}
     Shyamal Patel, Konrad Lorincz, Richard Hughes, Nancy Huggins, John Growdon, David Standaert, Metin       Akay, Fellow, IEEE, Jennifer Dy, Matt Welsh, Member, IEEE, and Paolo Bonato, Senior Member, IEEE.       "Monitoring Motor Fluctuations in Patients With Parkinson’s Disease Using Wearable Sensors"
+    \bibitem{Texas Instruments} http://www.ti.com/product/CC2650/description
+    \bibitem{Wiki TI} http://processors.wiki.ti.com/index.php/CC2650\_SensorTag\_User's\_Guide
+    \bibitem{App TI} https://play.google.com/store/apps/details?id=com.ti.ble.sensortag\&hl=es
 \end{thebibliography}
 
 \end{document}
