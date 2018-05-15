@@ -1,0 +1,304 @@
+\documentclass[11pt,spanish]{article}
+
+%% Language and font encodings
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,activeacute]{babel}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+\usepackage{indentfirst}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[]{hyperref}
+\usepackage{wrapfig}
+
+\definecolor{gris}{RGB}{220,220,220}
+
+\author{
+\Large Christian González García-Muñoz \\ 
+\Large Alejandro Huertas Herrero 
+}
+\date{}
+\begin{document}
+\begin{titlepage}
+	\centering
+    \includegraphics[width=8cm]{ucm-logo.png}
+    \vskip 1cm
+    
+    \centering
+    {\huge Reconocimiento de actividades domésticas en personas con enfermedades neurodegenerativas mediante una pulsera de sensores 
+    }
+    \newline
+    \newline
+    \newline
+    \newline
+    
+	\centering \large { Christian González García-Muñoz \\  Alejandro Huertas Herrero \\ 
+    					\bigskip Dirigido por: Javier Arroyo \\ Codirigido por: Marlon Cárdenas \\ \bigskip}
+    \vskip 1cm
+    \centering \Large { Trabajo de fin de grado del Grado en Ingeniería Informática }
+	\vskip 1cm
+    \centering \large {Facultad de Informática \\ Universidad Complutense de Madrid \\ Curso 2017-2018}
+    \vskip 0.5cm
+    \centering \large {28 Mayo de 2018}
+
+\end{titlepage}
+\clearpage
+\vphantom{a}
+\newpage
+\tableofcontents
+\newpage
+\section*{Resumen}
+\addcontentsline{toc}{section}{Resumen}
+El objetivo del proyecto es realizar una aplicación Android que ayude a las personas con Parkinson en su día a día. En concreto, está orientada al recordatorio de la toma de cada pastilla, así cómo también permite tener un diario de las actividades que el paciente realiza como parte de su rutina de ejercicios. Todas estas acciones son recogidas por los sensores bluetooth que se le pueden conectar a la aplicación. La aplicación se apoya en un servidor en el cual son almacenados y procesados todos los datos.
+\newline
+
+Por otro lado, para complementar el proyecto y proporcionar datos al médico o responsable del paciente, se ha realizado una aplicación web, sencilla e intuitiva. En ella, se pueden visualizar mediante gráficos la evolución de los datos recogidos por los sensores de cada paciente.
+\newline
+
+Cómo se ha dicho anteriormente, la aplicación se conecta con sensores bluetooth. Dichos sensores, son de dos tipos, por un lado tenemos un sensor más “rudimentario” y por otro lado un sensor con forma de pulsera y con una pantalla incorporada. Ambos sensores cuentan a su vez con varios servicios, de los cuales los utilizados para este proyecto han sido los acelerómetros y los giroscopios, ambos de tres ejes. Otro dato a destacar de ambos sensores, es que se tratan de bluetooth de baja energía (BLE) lo que complica en cierta manera la conexión de los mismos con la aplicación, ya que, pierden la conexión con bastante facilidad.
+\newline
+
+Resumiendo, las tecnologías utilizadas han sido las siguientes:
+
+\begin{itemize}
+    \item Android para el desarrollo de la aplicación. 
+	\item SQLite para almacenar los datos dentro del teléfono. 
+	\item Bluetooth para la comunicación con los sensores. 
+	\item Python para programar el servidor que se encarga de almacenar y procesar los datos (concretamente se ha utilizado el framework Eve)
+    \item PHP, HTML5 y Bootstrap para el desarrollo de la web que permite visualizar los datos.
+	\item Mongodb para almacenar en el servidor todos los datos recogidos.
+    \newline
+\end{itemize}
+
+{\bf Palabras clave:} aplicación Android, teléfono inteligente, Parkinson, bluetooth, Internet de las cosas, sensores, movimiento, actividades, medicamentos y visualización.
+\newpage
+
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+The aim of this work is to develop an Android application that helps people with Parkinson's disease. Mainly, it is focused in pills reminders and it allows have a history of all the activities that patient makes in its routine. All these actions are recorded by the bluetooth sensors which can be connected to the application. The application uses a server to store and process all the data.
+\newline
+
+In order to complement the work and provide data to the doctor or the patient supervisor, it has been developed an easy and intuitive web application. Data collected by the sensors can be visualized by some graphics.
+\newline
+
+As it has been said, the application conects with bluetooth sensors. There are two sensor types. On the one hand, we have a rudimentary one. On the other hand, we have a sensor with a bracelet and screen included. Both of them have some services, we have used three axis accelerometer and three axis gyroscope. One more thing to highlight is that both sensores are low energy bluetooth (BLE) which make the connection with the application more complex, because they easily lose the connectivity.
+\newline
+
+Summarizing, we have used the following technologies:
+
+\begin{itemize}
+    \item Android to develop the application. 
+	\item SQLite to store data inside the smartphone. 
+	\item Bluetooth for the communication with the sensors. 
+	\item Python to develop the server which stores and proccess the data (Eve framework)
+    \item PHP, HTML5 y Bootstrap to develop the web application.
+	\item Mongodb to store the data in the server.
+    \newline
+\end{itemize}
+\newpage
+
+\section*{Estado del arte}
+\addcontentsline{toc}{section}{Estado del arte}
+“La enfermedad de Parkinson (EP), también denominada mal de Parkinson, parkinsonismo idiopático, parálisis agitante o simplemente párkinson, es una enfermedad neurodegenerativa crónica caracterizada por bradicinesia (movimiento lento), rigidez (aumento del tono muscular) y temblor.​”
+\newline
+
+Gran parte de los síntomas de la enfermedad son motores, por eso decidimos hacer una aplicación basada en la utilización de sensores. Se han hecho numerosos estudios los cuales utilizan esta tecnología y a su vez utilizan los datos recogidos para aplicar machine learning sobre ellos.
+\newline
+
+Para introducirnos en el estado del arte, leímos numerosos artículos científicos, en concreto los más útiles e interesantes, son los que se listan a continuación:
+\newline
+
+\begin{itemize}
+	\item Quantitative wearable sensors for objective assessment of Parkinson’s diseases.
+	\item Analysis of feature space for monitoring persons with Parkinson’s disease with application to a wireless wearable sensor system. 
+	\item Detection of walking periods and number of steps in older adults and patients with Parkinson’s disease: accuracy of a pedometer and an accelerometry-based method. 
+	\item Monitoring Motor Fluctuations in Patients With Parkinson’s Disease Using Wearable Sensors . 
+	\item Feasibility and effects of home-based smartphone-delivered automated feedback training for gait in people with Parkinson’s disease: A pilot randomized controlled trial.
+	\item An accelerometry-based study of lower and upper limb tremor in Parkinson’s disease. 
+	\item Detecting and monitoring the symptoms of Parkinson’s disease using smartphones: A pilot study.
+	\item A smartphone-base architecture to detect and quantify freezing of gait in parkinson’s disease.
+    \newline
+\end{itemize}
+
+Todos ellos tienen como nexo común la utilización de sistemas basados en sensores para analizar las actividades que realizan los pacientes. Algunos de ellos utilizan cuadros de actividades fijados previamente y otros dejan al paciente hacer ejercicios de forma libre. En nuestro caso, la aplicación está pensada para que el paciente haga los ejercicios que suela hacer habitualmente. También está pensada para que el paciente haga algunos ejercicios justo después de tomarse la medicación, de esta forma se podría ver el efecto que tienen los medicamentos sobre cada paciente.
+\newpage
+
+\section*{Aplicación Android}
+\addcontentsline{toc}{section}{Aplicación Android}
+\subsection{Descripción}
+La aplicación ha sido desarrollada para dispositivos Android, con una versión igual o superior a Android 4.4 (KitKat) Cuenta con un diseño sencillo e intuitivo, ya que está pensada para personas que pueden tener temblores mientras la usen o pueden encontrarse en una avanzada edad. Toda la recogida de datos de los sensores está automatizada, el paciente sólo tiene que conectar la aplicación con cada sensor y puede olvidarse del teléfono en ese momento. Se ha intentado que la aplicación sea lo menos invasiva posible, para ello tan sólo cuenta con notificaciones cuando se tiene que tomar las pastillas. Cada notificación indica la pastilla que debe tomarse y cuenta con dos opciones, de esta forma se puede llevar un control de las pastillas que se ha tomado (esto quedaría pendiente como trabajo futuro)
+\newline
+
+\subsection{Capturas}
+\subsubsection{Menú inicio}
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.25\textwidth]{Inicio.jpg}
+\caption{Pantalla principal de la aplicación.}
+\end{figure}
+Esta es la pantalla que aparece cuando se inicia la aplicación. Podemos ver dos grandes botones, el primero de ellos permite acceder a todo lo relacionado con las actividades y el segundo a todo lo relacionado con los medicamentos.
+\newline
+
+Puede ver como en el menú superior hay dos botones. El botón de enviar, permite enviar todos los datos al servidor. El botón emparejar permite acceder al menú dónde se configuran y se emparejan los sensores con la aplicación.
+\newpage
+
+\subsubsection{Actividades}
+\begin{figure}[!htb]
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth]{Actividades.jpg}
+  \caption{Actividades}
+\endminipage\hfill
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth]{AnyadirActividad.jpg}
+  \caption{Añadir actividad}
+\endminipage\hfill
+\minipage{0.32\textwidth}%
+  \includegraphics[width=\linewidth]{MenuActividades.jpg}
+  \caption{Menú actividad}
+\endminipage
+\end{figure}
+
+Las tres pantallas de arriba muestran cómo se trabaja con las actividades. La pantalla principal cuenta con una lista de todas las actividades que se realizan, a modo de histórico y con un botón que permite añadir una nueva actividad al sistema.
+\newline
+
+La información que se guarda de cada actividad es:
+
+\begin{itemize}
+	\item {\bf Nombre} de la actividad.
+	\item {\bf Duración} de la actividad.
+	\item {\bf Hora} a la que se comenzó a realizar la actividad.
+	\item Cualquier {\bf observación} que pueda hacer que los datos recogidos por los sensores en esa actividad no sean válidos.
+\end{itemize}
+
+La actividad puede ser añadida antes o después de realizarla, lo importante es que mientras se realice los sensores están conectados y recogiendo datos.
+\newline
+
+Al pulsar en el botón de añadir actividad (botón flotante de abajo a la derecha) se nos abre un cuadro de diálogo en el que podemos rellenar cada uno de los campos. Las actividades están prefijadas de antemano, sólo se incorporan aquellas que son más importantes para posteriores estudios.
+\newline
+
+Por último, cada actividad cuenta con tres puntitos, los cuales despliegan el menú de opciones. Las opciones disponibles son editar y borrar. Editar abrirá un cuadro de diálogo como el de añadir, pero con todos los campos rellenos con la información de dicha actividad (aparecerán bloqueados aquellos que no se puedan editar) Borrar abrirá un cuadro de diálogo preguntando si de verdad se desea borrar la actividad, en caso afirmativo la actividad será borrada de la lista que contiene todas las actividades.
+
+\subsubsection{Medicamentos}
+\begin{figure}[!htb]
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth]{Medicamentos.jpg}
+  \caption{Medicamentos}
+\endminipage\hfill
+\minipage{0.32\textwidth}
+  \includegraphics[width=\linewidth]{AnyadirMedicamento.jpg}
+  \caption{Añadir medicamento}
+\endminipage\hfill
+\minipage{0.32\textwidth}%
+  \includegraphics[width=\linewidth]{MenuMedicamentos.jpg}
+  \caption{Menú medicamento}
+\endminipage
+\end{figure}
+
+Las tres pantallas de arriba muestran cómo se trabaja con los medicamentos. La pantalla principal cuenta con una lista de todos los medicamentos que tiene que tomar el paciente y con un botón que permite añadir un nuevo medicamento al sistema.
+\newline
+
+La información que se guarda de cada medicamento es:
+
+\begin{itemize}
+	\item {\bf Nombre} del medicamento.
+	\item {\bf Intervalo} para la recogida de datos. Este parámetro indica los minutos después de la toma del medicamento, en los que los datos recogidos por los sensores podrían verse alterados debido al efecto de la medicación.
+	\item {\bf Días de la semana} en los que se tiene que tomar la medicación.
+	\item {\bf Hora} a la que se tiene que tomar la medicación.
+\end{itemize}
+
+Una vez es añadido el medicamento, la próxima vez que se inicie la aplicación se programarán notificaciones que avisarán al paciente de cuando se tiene que tomar cada medicamento ese día.
+\newline
+
+Al pulsar en el botón de añadir medicamento (botón flotante de abajo a la derecha) se nos abre un cuadro de diálogo en el que podemos rellenar cada uno de los campos.
+\newline
+
+Por último, cada medicamento cuenta con tres puntitos, los cuales despliegan el menú de opciones. Las opciones disponibles son editar y borrar. Editar abrirá un cuadro de diálogo como el de añadir, pero con todos los campos rellenos con la información de dicho medicamento (aparecerán bloqueados aquellos que no se puedan editar) Borrar abrirá un cuadro de diálogo preguntando si de verdad se desea borrar el medicamento, en caso afirmativo el medicamento será borrada de la lista que contiene todos los medicamentos.
+
+\subsubsection{Servidor}
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.25\textwidth]{EnviarDatos.jpg}
+\caption{Enviar datos al servidor.}
+\end{figure}
+
+El botón de enviar que se encuentra situado arriba a la derecha, permite enviar todos los datos al servidor. Se enviarán los datos recogidos por los sensores, las actividades realizadas por el paciente y los medicamentos que se tiene que tomar.
+\newline
+
+Una vez pulsamos el botón, se abre el cuadro de progreso que puede verse en la imagen. Desaparece una vez todos los datos han sido enviados. Después se informa al usuario de si ha ido todo bien o ha fallado algo.
+\newline
+
+\subsubsection{Configuración}
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.25\textwidth]{Emparejar_1_.jpg}
+\caption{Pantalla de configuración.}
+\end{figure}
+
+Cuando pulsamos en el botón emparejar que puede verse en la parte superior derecha (anterior imagen) nos aparece esta pantalla.
+
+En ella se pueden configurar los sensores. Se permite indicar el rango del acelerómetro (“es el rango de amplitud máxima que puede medir el acelerómetro antes que la señal de salida resulte distorsionada o recortada. Normalmente se especifica en "g".”)
+\newline
+
+El periodo con el que se desean recoger los datos.
+Que sensores se desean activar.
+Y en qué parte del cuerpo se va a poner cada uno de los sensores.
+\newline
+
+Una vez le demos a comenzar, podremos emparejar el sensor con la aplicación y comenzar a recoger datos.
+\newline
+
+\subsubsection{Ayuda}
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.25\textwidth]{Ayuda.jpg}
+\caption{Ayuda menú inicio.}
+\end{figure}
+
+En todas las pantallas de la aplicación puede verse un botón flotante abajo a la izquierda, es el botón de ayuda. Puesto que la aplicación está dirigida a pacientes de Parkinson, en su gran mayoría tienen avanzada edad, consideramos que era buena idea incluir un botón que muestre información acerca de cómo se realiza cada acción.
+\newline
+
+El botón de ayuda, muestra en cada pantalla como realizar todas las acciones permitidas en dicha pantalla. Como podemos ver en este caso muestra como acceder a cada apartado, así como enviar datos y conectar los sensores. Resalta en negrita las partes más importantes, para que puedan ser vistas de forma sencilla y rápida.
+\newpage
+
+\subsection{Diagramas UML (Casos de uso)}
+\begin{figure}[!htb]
+\minipage{0.5\textwidth}
+  \includegraphics[width=\linewidth]{AplicacionUML.png}
+  \caption{Aplicación}
+\endminipage\hfill
+\minipage{0.5\textwidth}
+  \includegraphics[width=\linewidth]{ActividadesUML.png}
+  \caption{Actividades}
+\endminipage\hfill
+\end{figure}
+
+\begin{figure}[!htb]
+\minipage{0.5\textwidth}%
+  \includegraphics[width=\linewidth]{MedicamentosUML.png}
+  \caption{Medicamentos}
+\endminipage
+\minipage{0.5\textwidth}%
+  \includegraphics[width=\linewidth]{SensoresUML.png}
+  \caption{Sensores}
+\endminipage
+\end{figure}
+
+\newpage
+\begin{thebibliography}{10}
+	\bibitem{resumen1}
+    Shyamal Patel, Konrad Lorincz, Richard Hughes, Nancy Huggins, John H. Growdon, Matt Welsh, Paolo 		Bonato, Senior Member, IEEE. "Analysis of Feature Space for Monitoring Persons with Parkinson’s
+	Disease With Application to a Wireless Wearable Sensor System"
+    \bibitem{resumen2}
+    Walter Maetzler, Josefa Domingos, Karin Srulijes, Joaquim J. Ferreira, Bastiaan R. Bloem.       	     "Quantitative Wearable Sensors for Objective Assessment of Parkinson’s Disease"
+    \bibitem{resumen3}
+    BAUKJE DIJKSTRA, WIEBREN ZIJLSTRA, ERIK SCHERDER, YVO KAMSMA. "Detection of walking periods and 	     number of steps in older adults and patients with Parkinson’s disease: accuracy of a pedometer and       an accelerometry-based method"
+    \bibitem{resumen4}
+    Shyamal Patel, Konrad Lorincz, Richard Hughes, Nancy Huggins, John Growdon, David Standaert, Metin       Akay, Fellow, IEEE, Jennifer Dy, Matt Welsh, Member, IEEE, and Paolo Bonato, Senior Member, IEEE.       "Monitoring Motor Fluctuations in Patients With Parkinson’s Disease Using Wearable Sensors"
+\end{thebibliography}
+
+\end{document}
