@@ -16,8 +16,8 @@
 \usepackage[]{hyperref}
 \usepackage{wrapfig}
 \usepackage{float}
-
-\definecolor{gris}{RGB}{220,220,220}
+\usepackage{listings}
+\usepackage{xcolor}
 
 \author{
 \Large Christian González García-Muñoz \\ 
@@ -334,9 +334,8 @@ El código de la aplicación se está organizado en tres grandes grupos:
     \item {\bf Clases: } aquí podemos encontrar gran variedad. Por un lado están las clases que representan cada objeto dentro de la aplicación. Por otro lado están los servicios que gestionan las conexión bluetooth con los sensores. Por último, se encuentra la clase que conecta la aplicación con la API rest.
 \end{itemize}
 
-\section{Infraestructura}
-\subsection{Sensores}
-\subsubsection{Texas Instrument: CC2650 - Ultra-low power wireless MCU}
+\section{Sensores}
+\subsection{Texas Instrument: CC2650 - Ultra-low power wireless MCU}
 {\bf Descripción}
 \newline
 
@@ -384,7 +383,7 @@ Para interactuar con el sensor se puede utilizar cualquier dispositivo que tenga
 
 El sensor lo hemos utilizado con Android. Para ello hemos creado una aplicación móvil que se conecta al sensor y obtiene los datos de él. Para la conexión con el sensor se utiliza la dirección MAC que tiene asociada. Antes de realizar la conexión, se indican que servicios se desean activar y con que frecuencia se quieren recoger datos. Después, se realiza un escaneo y al seleccionar el sensor se empareja con él y comienza a leer datos. Los datos son almacenados en el teléfono y posteriormente son enviados a la nube para su posterior tratamiento.
 
-\subsubsection{Hexiwear}
+\subsection{Hexiwear}
 {\bf Descripción}
 \newline
 
@@ -429,6 +428,47 @@ Hexiwear ofrece aplicaciones tanto en iOS como en Android para interactuar con s
 \newline
 
 Como se menciona en el apartado anterior la interacción con el sensor se hace a través de nuestra propia aplicación Android. Mientras el dispositivo esta conectado con la aplicación se recogen los datos de acelerómetro y giroscopio y se almacenan en la base de datos local de la aplicación para posteriormente enviarlos y procesarlos en el servidor remoto.
+
+\newpage
+\section{Infraestructura}
+En esta sección se describe toda la infraestructura desplegada para dar soporte a las funcionalidades tanto de la aplicación Android como de la aplicación web. El siguiente esquema muestra como se relacionan los distintos componentes con las aplicaciones:
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=10cm]{components-interaction.png}
+  \caption{Diagrama de interacción de los componentes de la infraestructura.}
+\end{figure}
+
+
+\subsection{API REST}
+Para interactuar con la base de datos remota decidimos usar un API REST. Esto nos aporta una capa de separación entre el cliente y el servidor lo que aumenta la escalabilidad del proyecto y nos permite usar el mismo interfaz tanto para la aplicación Android como para la aplicación web.
+
+\subsubsection{Detalles técnicos}
+El API REST esta implementada usando Eve, un framework opensource basado en Python. Eve nos permite implementar y desplegar el API de una forma rapida y sencilla.
+
+\subsubsection{Esquema de datos}
+
+El esquema JSON definido para establecer la estructura de las llamadas al API, se corresponde con las tablas de la base de datos local de la aplicación Android añadiendo a cada tabla un campo identificador para cada cliente, este campo se coge automáticamente del dispositivo Android en el que se este usando la aplicación. Ademas el esquema cuenta con una tabla para usuarios de la aplicación web y otra con información del paciente asociada a su identificador."
+
+\subsection{Servidor HTTP}
+Hemos desplegado nuestro propio servidor web para servir la aplicación. El papel principal del servidor web es gestionar las diferentes sesiones ya que todos los datos que se muestran en la web se recogen median JavaScript haciendo uso del API REST. 
+
+\subsubsection{Detalles técnicos}
+Como servidor HTTP para servir la aplicación web hemos usado Apache Server sobre Ubuntu16.04 junto con PHP 7.0.
+
+\subsection{Despliegue de la infraestructura}
+
+Para facilitar el despliegue de la infraestructura se ha automatizado el proceso de despliegue usando Docker y un script en shell.
+
+\subsubsection{Infraestructura sobre Docker}
+Para desplegar la infraestructura sobre Docker hemos creado dos imágenes propias, partiendo de la imagen oficial de Ubuntu 16.04. En una de ellas se instala y despliega todo lo necesario para el API REST y en la otra se instala y se despliega todo lo necesario para el servidor web. Además hacemos uso de la imagen oficial de MongoDB para levantar la base de datos, lo que da lugar a tres contenedores de Docker enlazados como muestra el siguiente diagrama:
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=10cm]{containers-interaction.png}
+  \caption{Diagrama de interacción de los contenedores de Docker.}
+\end{figure}
+
 
 \newpage
 \begin{thebibliography}{10}
