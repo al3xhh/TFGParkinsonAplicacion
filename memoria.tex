@@ -305,6 +305,35 @@ El botón de ayuda, muestra en cada pantalla cómo realizar todas las acciones p
 \end{figure}
 \newpage
 
+\section{Arquitectura de la aplicación Android}
+\subsection{Descripción}
+La aplicación no sigue ninguna arquitectura concreta. El patrón que más se le aproxima es Modelo Vista Controlador (MVC) De los tres elementos tendríamos bien diferenciados dos de ellos. Por un lado tenemos la vista, que la forman todos los layouts y por otro los modelos que serían las actividades de Android.
+\newline
+
+Entrando más en detalle en los elementos que forman la aplicación. El almacenamiento de datos dentro del teléfono se realiza gracias a SQLite ("SQLite es una librería escrita en lenguaje C que implementa un manejador de base de datos SQL embebido.") En ella se guardan todos los datos del sensor que aún no han sido enviados al servidor (una vez se envían se borran de la base de datos local) los medicamentos y actividades (estos disponen de un campo que indica si se han enviado al servidor o no, porque a diferencia de los datos de los sensores, éstos no se borran nunca del teléfono) El diagrama entidad relación es el siguiente:
+\newline
+
+Otro de los elementos importantes es la gestión de la conexión con los sensores. La conexión con cada tipo de sensor se hace de forma diferente, ambas se realizan con librerías que se hemos encontrado en GitHub y hemos adaptado a nuestras necesidades. La aplicación permite conectar varios sensores de Texas Instruments a la vez, mientras que sólo permite conectar un sensor del tipo Hexiwear.
+\newline
+
+El último elemento a destacar son las llamadas a la API Rest. Se hacen mediante una librería de Android (Volley) Se utilizan mensajes JSON para transmitir toda la información, tanto de la aplicación a la API como viceversa.
+
+\subsection{Diagrama}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.9\textwidth]{ArquitecturaAndroid.png}
+  \caption{Arquitectura aplicación Android.}
+\end{figure}
+
+\subsection{Estructura de clases}
+El código de la aplicación se está organizado en tres grandes grupos:
+
+\begin{itemize}
+	\item {\bf Actividades: } en este paquete se encuentran todas las actividades que forman la aplicación de Android. Esto se corresponde con cada una de las funcionalidades de la aplicación, es decir, actividades, medicamentos y recogida de los datos recogidos por los sensores.
+    \item {\bf Adaptadores: } son principalmente dos, uno para las actividades y otro para los medicamentos. Permiten la creación de listas personalizadas en Android. De esta forma podemos mostrar de una forma sencilla e intuitiva toda la información relacionada con cada elemento, así como editar y borrar cada uno de ellos.
+    \item {\bf Clases: } aquí podemos encontrar gran variedad. Por un lado están las clases que representan cada objeto dentro de la aplicación. Por otro lado están los servicios que gestionan las conexión bluetooth con los sensores. Por último, se encuentra la clase que conecta la aplicación con la API rest.
+\end{itemize}
+
 \section{Infraestructura}
 \subsection{Sensores}
 \subsubsection{Texas Instrument: CC2650 - Ultra-low power wireless MCU}
