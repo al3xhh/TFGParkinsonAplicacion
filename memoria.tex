@@ -85,15 +85,14 @@ Resumiendo, las tecnologías utilizadas han sido las siguientes:
 {\bf Palabras clave:} aplicación Android, teléfono inteligente, Parkinson, bluetooth, Internet de las cosas, sensores, movimiento, actividades, medicamentos y visualización.
 \newpage
 
-\section*{Abstract}
-\addcontentsline{toc}{section}{Abstract}
-The aim of this work is to develop an Android application that helps people with Parkinson's disease. Mainly, it is focused in pills reminders and it allows have a history of all the activities that patient makes in its routine. All these actions are recorded by the bluetooth sensors which can be connected to the application. The application uses a server to store and process all the data.
+\section{Abstract}
+The aim of this project is to develop an Android application and all the infrastructure necessary to support its functionalities. The aplication helps the patient into his everyday life and the diagnosis of the ilness by the doctor. More specific the aplication allows the patient (or the one in charge) to add pills reminders and have a history of all the activities that patient makes in its routine either the routine is set by a doctor or not. All the activitys are recorded by BLE sensors conected with the application in order to the data can be processed  and ploted later for the doctor who needs to interpret it.
 \newline
 
-In order to complement the work and provide data to the doctor or the patient supervisor, it has been developed an easy and intuitive web application. Data collected by the sensors can be visualized by some graphics.
+The android application is complemented by a web application which allow the doctor see the plotted data.
 \newline
 
-As it has been said, the application conects with bluetooth sensors. There are two sensor types. On the one hand, we have a rudimentary one. On the other hand, we have a sensor with a bracelet and screen included. Both of them have some services, we have used three axis accelerometer and three axis gyroscope. One more thing to highlight is that both sensores are low energy bluetooth (BLE) which make the connection with the application more complex, because they easily lose the connectivity.
+As said before, the application allows to record the patient through BLE sensors. The application allows two different types of sensors, a rudimentary one which makes his job but is more uncomfortable to wear it and other one more comfortable with a watch band. Both sensors count with multiple services, we have made use of the acellerometer and gyroscope. The integration of the BLE sensors with the application have been one of our bigest challenge because of the complex interface that Android provide.
 \newline
 
 Summarizing, we have used the following technologies:
@@ -101,10 +100,12 @@ Summarizing, we have used the following technologies:
 \begin{itemize}
     \item Android to develop the application. 
 	\item SQLite to store data inside the smartphone. 
-	\item Bluetooth for the communication with the sensors. 
+	\item Bluetooth Low Energy for the communication with the sensors. 
 	\item Python to develop the server which stores and proccess the data (Eve framework)
     \item PHP, HTML5 y Bootstrap to develop the web application.
 	\item Mongodb to store the data in the server.
+    \item Apache as a web server for hosting the web application.
+    \item Docker for deploy the infrastructure automatically (REST API, web server and MongoDB). 
     \newline
 \end{itemize}
 \newpage
@@ -468,6 +469,41 @@ Para desplegar la infraestructura sobre Docker hemos creado dos imágenes propia
   \includegraphics[width=10cm]{containers-interaction.png}
   \caption{Diagrama de interacción de los contenedores de Docker.}
 \end{figure}
+\newpage
+
+\subsubsection{Procesamiento de datos en el servidor}
+
+Pese a que por dificultades ajenas al proyecto no hemos podido realizar una fase de interacción con usuarios reales para recopilar datos con los que poder trabajar y aplicar las técnicas de datos necesarias para poder extraer información de utilidad, hemos implementado un programa en Python que se encarga de procesar los datos almacenados, por el API REST, en la base de datos remota para producir datos que pudiesen ser usados para entrenar algoritmos de machine learning de una forma sencilla. 
+
+\section{Aportaciones}
+\subsection{Christian González}
+
+Este proyecto esta caracterizado por que siempre que ha sido posible tanto mi compañero como yo hemos intentado trabar en grupo e intentar que ambos aportásemos nuestro granito de arena a cada una de las partes de este proyecto. Bien es cierto que para agilizar el desarrollo y ser capaces de cumplir con los plazos marcados por nosotros mismos y nuestros directores de proyecto hemos tenido que paralelizar tareas repartiendo el trabajo entre ambos.
+
+Teniendo en cuenta lo anterior creo que mis aportaciones a las diferentes partes del proyecto se podrían enumera de la siguiente forma:
+
+\subsubsection{Estado del arte}
+Antes de comenzar a realizar este proyecto los directores del proyecto nos recomendaron la lectura de varios artículos científicos que hablaban sobre experimentos similares al nuestro en los que de una forma u otra se monitorizaba a pacientes con distintos síntomas de la enfermedad del Parkinson ya fuese para intentar identificar, usando técnicas de análisis de datos, las actividades que se estaban realizando entre un conjunto de actividades dadas o tan solo intentar identificar si un paciente sufría síntomas de la enfermedad o el grado de estos síntomas. La lectura en profundidad de estos artículos nos permitió tanto ser conscientes del contexto en el que se encuadraba nuestro proyecto como realizar el apartado de Estado del Arte de esta memoria. 
+
+\subsubsection{Aplicación Android}
+
+Dentro de la aplicación Android creo que mis aportaciones individuales destacan mas en el diseño e implementación de la base de datos local, así como en la integración con los sensores BLE mientras que en la parte de diseño e implementación de la interfaz de usuario mis aportaciones han sido menores.
+
+\subsubsection{Aplicación web}
+La aplicación web es una de las partes que esta realizada casi en su totalidad trabajando en grupo por lo que creo que tanto mi compañero como yo hemos aportado en prácticamente la totalidad del trabajo implementando las partes del back-end necesarias en PHP y todas las llamadas al API REST para recuperar y mostrar los datos en el cliente, dado que la parte de diseño esta inspirada en plantillas online.
+
+\subsubsection{API REST}
+Como el apartado anterior el API REST ha sido diseñado he implementado trabajando en grupo por lo que mis aportaciones cubren prácticamente el total del trabajo en este apartado, desde el diseño del esquema de datos a la implementación de esta usando el framework Eve.
+
+\subsubsection{Despliegue de la infraestructura}
+Esta sección es probablemente la sección en la que mis aportes personales destacan mas. Entre estas aportaciones se encuentran la de la creación de las imágenes de Docker usadas para desplegar los contenedores con el servidor web y el API REST y la implementación del script de despliegue, que permite la automatización del despliegue de la infraestructura.
+
+\subsubsection{Procesamiento de datos}
+El programa que se encarga de procesar los datos almacenados, por el API REST, en la base de datos remota es otra aportación grupal cuya lógica desarrollamos y pensamos mi compañero y yo trabajando en grupo.
+
+\subsubsection{Otra aportaciones}
+A parte de las contribuciones a los apartados principales del proyecto creo que es necesario mencionar el trabajo de pruebas realizadas para asegurar el correcto funcionamiento de cada parte del proyecto por separado y de la integración de todas ellas así como las aportaciones a la realización de la propia memoria del proyecto
+
 
 
 \newpage
