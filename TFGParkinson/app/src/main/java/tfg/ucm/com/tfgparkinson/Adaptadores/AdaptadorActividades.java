@@ -57,12 +57,14 @@ public class AdaptadorActividades extends ArrayAdapter<Actividad> {
         TextView nombreActividad = (TextView) rowView.findViewById(R.id.nombreActividad);
         TextView duracionActividad = (TextView) rowView.findViewById(R.id.duracionActividad);
         TextView horaActividad = (TextView) rowView.findViewById(R.id.horaActividad);
+        TextView fechaActividad = (TextView) rowView.findViewById(R.id.fechaActividad);
         TextView observacionesActividad = (TextView) rowView.findViewById(R.id.observacionesActividad);
         ImageView opcionesActividad = (ImageView) rowView.findViewById(R.id.opcionesActividad);
 
         nombreActividad.setText(Html.fromHtml("<b>Nombre: </b>" + values.get(position).getNombre()));
         duracionActividad.setText(Html.fromHtml("<b>Duración: </b>" + String.valueOf(values.get(position).getIntervalo()) + " mins"));
-        horaActividad.setText(Html.fromHtml("<b>Hora inicio: </b>" + values.get(position).getHora().toString()));
+        fechaActividad.setText(Html.fromHtml("<b>Fecha: </b>" + values.get(position).getFecha()));
+        horaActividad.setText(Html.fromHtml("<b>Hora inicio: </b>" + values.get(position).getHora()));
         observacionesActividad.setText(Html.fromHtml("<b>Observaciones: </b>" + values.get(position).getObservaciones()));
 
         opcionesActividad.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +109,7 @@ public class AdaptadorActividades extends ArrayAdapter<Actividad> {
 
         duracion.setRawInputType(Configuration.KEYBOARD_12KEY);
         horaInicio.setIs24HourView(true);
+        horaInicio.setEnabled(false);
 
         Actividad actividad = values.get(position);
         nombreActividad.setText(actividad.getNombre());
@@ -114,10 +117,9 @@ public class AdaptadorActividades extends ArrayAdapter<Actividad> {
         duracion.setText(String.valueOf(actividad.getIntervalo()));
         horaInicio.setHour(Integer.parseInt((actividad.getHora().split(":")[0])));
         horaInicio.setMinute(Integer.parseInt((actividad.getHora().split(":")[1])));
-        fechaAcitivdad.updateDate(Integer.parseInt(actividad.getFeha().split("/")[2]),
-                Integer.parseInt(actividad.getFeha().split("/")[1]),
-                Integer.parseInt(actividad.getFeha().split("/")[0]));
-        fechaAcitivdad.setFirstDayOfWeek(Integer.parseInt(actividad.getFeha().split("/")[2]));
+        fechaAcitivdad.updateDate(Integer.parseInt(actividad.getFecha().split("/")[2]),
+                Integer.parseInt(actividad.getFecha().split("/")[1]),
+                Integer.parseInt(actividad.getFecha().split("/")[0]));
         observaciones.setText(actividad.getObservaciones());
 
         dialogBuilder.setTitle("Editar actividad");

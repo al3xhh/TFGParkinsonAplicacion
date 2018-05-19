@@ -54,7 +54,6 @@
         app:layout_constraintTop_toBottomOf="@+id/duracionActividad" />
 
     <TextView
-        android:textColor="@color/colorBlack"
         android:id="@+id/observacionesActividad"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -62,7 +61,22 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
+        android:textColor="@color/colorBlack"
         app:layout_constraintEnd_toEndOf="@+id/nombreActividad"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fechaActividad" />
+
+    <TextView
+        android:id="@+id/fechaActividad"
+        android:layout_width="0dp"
+        android:textColor="@color/colorBlack"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toStartOf="@+id/opcionesActividad"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/horaActividad" />
 

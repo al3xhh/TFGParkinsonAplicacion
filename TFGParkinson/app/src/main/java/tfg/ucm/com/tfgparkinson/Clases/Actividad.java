@@ -34,7 +34,7 @@ public class Actividad {
         return hora;
     }
 
-    public String getFeha() { return fecha; }
+    public String getFecha() { return fecha; }
 
     public String getObservaciones() { return observaciones; }
 }
