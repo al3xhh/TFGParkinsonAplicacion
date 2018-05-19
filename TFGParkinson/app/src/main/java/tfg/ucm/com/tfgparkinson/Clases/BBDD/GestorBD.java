@@ -35,7 +35,7 @@ import android.widget.Toast;
 
 public class GestorBD extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 25;
+    private static final int DATABASE_VERSION = 26;
 
     private static final String DATABASE_NAME = Constantes.NOMBRE_BD;
 
@@ -82,6 +82,7 @@ public class GestorBD extends SQLiteOpenHelper {
                             "HORA VARCHAR NOT NULL," +
                             "OBSERVACIONES VARCHAR," +
                             "ENVIADO VARCHAR(1) DEFAULT ('N')," +
+                            "FECHA VARCHAR," +
                             "PRIMARY KEY (NOMBRE,HORA));");
 
     }
@@ -115,6 +116,7 @@ public class GestorBD extends SQLiteOpenHelper {
 
         cv.put("OBSERVACIONES", actividad.getObservaciones());
         cv.put("INTERVALO", actividad.getIntervalo());
+        cv.put("FECHA", actividad.getFecha());
 
         db.update("TB_ACTIVIDADES", cv, "NOMBRE = ? AND HORA = ?", whereArgs);
 
@@ -193,7 +195,7 @@ public class GestorBD extends SQLiteOpenHelper {
         try{
             while (cursor.moveToNext()) {
                 actividades.add(new Actividad(cursor.getString(0), Integer.parseInt(cursor.getString(1)),
-                        cursor.getString(2), cursor.getString(3)));
+                        cursor.getString(2), cursor.getString(4), cursor.getString(3)));
             }
         } finally {
             cursor.close();
@@ -476,6 +478,7 @@ public class GestorBD extends SQLiteOpenHelper {
                 tupla.put("hora", cursor.getString(2));
                 tupla.put("observaciones", cursor.getString(3));
                 tupla.put("device_id", Secure.getString(context.getContentResolver(), Secure.ANDROID_ID));
+                tupla.put("fecha", cursor.getString(4));
                 tabla.put(tupla);
             }
         }
