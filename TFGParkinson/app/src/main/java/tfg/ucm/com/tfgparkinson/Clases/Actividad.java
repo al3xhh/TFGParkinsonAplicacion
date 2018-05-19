@@ -11,12 +11,14 @@ public class Actividad {
     private String nombre;
     private int intervalo;
     private String hora;
+    private String fecha;
     private String observaciones;
 
-    public Actividad(String nombre, int intervalo, String hora, String observaciones) {
+    public Actividad(String nombre, int intervalo, String hora, String fecha, String observaciones) {
         this.nombre = nombre;
         this.intervalo = intervalo;
         this.hora = hora;
+        this.fecha = fecha;
         this.observaciones = (observaciones == null ? "" : observaciones);
     }
 
@@ -31,6 +33,8 @@ public class Actividad {
     public String getHora() {
         return hora;
     }
+
+    public String getFeha() { return fecha; }
 
     public String getObservaciones() { return observaciones; }
 }

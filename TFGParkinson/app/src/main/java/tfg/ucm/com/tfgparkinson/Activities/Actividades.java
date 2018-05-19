@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -79,6 +80,7 @@ public class Actividades extends AppCompatActivity {
         final EditText nombreActividad = (EditText) dialogView.findViewById(R.id.seleccionarActividad);
         final EditText duracion = (EditText) dialogView.findViewById(R.id.duracionActividad);
         final TimePicker horaInicio = (TimePicker) dialogView.findViewById(R.id.horaInicioActividad);
+        final DatePicker fechaAcitivdad = (DatePicker) dialogView.findViewById(R.id.fechaActividad);
         final EditText observaciones = (EditText) dialogView.findViewById(R.id.observacionesActividad);
 
         duracion.setRawInputType(Configuration.KEYBOARD_12KEY);
@@ -90,7 +92,9 @@ public class Actividades extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     Actividad actividad = new Actividad(nombreActividad.getText().toString(),
-                            Integer.parseInt(duracion.getText().toString()), horaInicio.getHour() + ":" + horaInicio.getMinute(),
+                            Integer.parseInt(duracion.getText().toString()),
+                            horaInicio.getHour() + ":" + horaInicio.getMinute(),
+                            fechaAcitivdad.getDayOfMonth() + "/" + fechaAcitivdad.getMonth() + "/" + fechaAcitivdad.getYear(),
                             observaciones.getText().toString());
                     GestorBD gestorBD = new GestorBD(getApplicationContext());
                     gestorBD.insertActividad(actividad);

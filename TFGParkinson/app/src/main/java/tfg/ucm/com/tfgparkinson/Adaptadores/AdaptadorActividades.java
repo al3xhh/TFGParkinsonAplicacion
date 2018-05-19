@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -101,6 +102,7 @@ public class AdaptadorActividades extends ArrayAdapter<Actividad> {
         final EditText nombreActividad = (EditText) dialogView.findViewById(R.id.seleccionarActividad);
         final EditText duracion = (EditText) dialogView.findViewById(R.id.duracionActividad);
         final TimePicker horaInicio = (TimePicker) dialogView.findViewById(R.id.horaInicioActividad);
+        final DatePicker fechaAcitivdad = (DatePicker) dialogView.findViewById(R.id.fechaActividad);
         final EditText observaciones = (EditText) dialogView.findViewById(R.id.observacionesActividad);
 
         duracion.setRawInputType(Configuration.KEYBOARD_12KEY);
@@ -112,6 +114,10 @@ public class AdaptadorActividades extends ArrayAdapter<Actividad> {
         duracion.setText(String.valueOf(actividad.getIntervalo()));
         horaInicio.setHour(Integer.parseInt((actividad.getHora().split(":")[0])));
         horaInicio.setMinute(Integer.parseInt((actividad.getHora().split(":")[1])));
+        fechaAcitivdad.updateDate(Integer.parseInt(actividad.getFeha().split("/")[2]),
+                Integer.parseInt(actividad.getFeha().split("/")[1]),
+                Integer.parseInt(actividad.getFeha().split("/")[0]));
+        fechaAcitivdad.setFirstDayOfWeek(Integer.parseInt(actividad.getFeha().split("/")[2]));
         observaciones.setText(actividad.getObservaciones());
 
         dialogBuilder.setTitle("Editar actividad");
@@ -120,7 +126,9 @@ public class AdaptadorActividades extends ArrayAdapter<Actividad> {
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     Actividad actividad = new Actividad(nombreActividad.getText().toString(),
-                            Integer.parseInt(duracion.getText().toString()), horaInicio.getHour() + ":" + horaInicio.getMinute(),
+                            Integer.parseInt(duracion.getText().toString()),
+                            horaInicio.getHour() + ":" + horaInicio.getMinute(),
+                            fechaAcitivdad.getDayOfMonth() + "/" + fechaAcitivdad.getMonth() + "/" + fechaAcitivdad.getYear(),
                             observaciones.getText().toString());
                     GestorBD gestorBD = new GestorBD(context);
                     gestorBD.updateActividad(actividad);
