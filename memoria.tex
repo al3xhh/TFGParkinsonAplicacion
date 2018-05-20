@@ -188,7 +188,7 @@ La información que se guarda de cada actividad es:
 \begin{itemize}
 	\item {\bf Nombre} de la actividad.
 	\item {\bf Duración} de la actividad.
-	\item {\bf Hora} a la que se empezó a realizar la actividad.
+	\item {\bf Hora y fecha} en las que se realizó la actividad.
 	\item Cualquier {\bf observación} que pueda hacer que los datos recogidos por los sensores en esa actividad no sean válidos.
 \end{itemize}
 
@@ -473,7 +473,51 @@ Para desplegar la infraestructura sobre Docker hemos creado dos imágenes propia
 
 \subsubsection{Procesamiento de datos en el servidor}
 
-Pese a que por dificultades ajenas al proyecto no hemos podido realizar una fase de interacción con usuarios reales para recopilar datos con los que poder trabajar y aplicar las técnicas de datos necesarias para poder extraer información de utilidad, hemos implementado un programa en Python que se encarga de procesar los datos almacenados, por el API REST, en la base de datos remota para producir datos que pudiesen ser usados para entrenar algoritmos de machine learning de una forma sencilla. 
+Pese a que por dificultades ajenas al proyecto no hemos podido realizar una fase de interacción con usuarios reales para recopilar datos con los que poder trabajar y aplicar las técnicas de datos necesarias para poder extraer información de utilidad, hemos implementado un programa en Python que se encarga de procesar los datos almacenados, por el API REST, en la base de datos remota para producir datos que pudiesen ser usados para entrenar algoritmos de machine learning de una forma sencilla.
+\newpage
+
+\section{Conclusiones}
+El trabajo lo comenzamos en julio del año pasado, la idea inicial era crear un sistema capaz de diferenciar temblores de cualquier otra actividad. Finalmente el trabajo ha ido en otra línea, pero todo lo que hemos hecho puede ser utilizado para el propósito inicial.
+\newline
+
+A pesar de todas las dificultades que hemos tenido debido a que no hemos encontrado pacientes con los que probar la aplicación, ni médicos dispuestos a darnos feedback, hemos hecho un trabajo bastante completo. Hemos creado un sistema capaz de recoger todos los datos de las actividades que realiza el paciente y que permite al médico visualizarlos en una aplicación web.
+\newline
+
+El trabajo que hemos hecho se parece bastante a muchos sistemas que vimos cuando estudiamos el estado del arte. Aunque, nuestro sistema está más orientado al paciente, ya que incluye todo el apartado de los medicamentos. Con ello también queremos que se pueda estudiar el efecto que tienen los medicamentos sobre el paciente. Por otro lado, los estudios que vimos en los artículos del estado del arte se centraban en la recogida y el análisis de datos, nosotros hemos querido centrarnos también en el médico, de forma que pueda visualizar los datos y poder ayudar al paciente en cierta forma.
+\newline
+
+Como conclusión final, a pesar de la falta de personas que prueben nuestra aplicación, se ha desarrollado un trabajo muy completo y cerrado. Es completamente funcional y se podría poner en funcionamiento en cualquier momento y a partir de esto ampliar y seguir con la idea inicial del proyecto.
+\newpage
+
+\section{Trabajo futuro}
+El trabajo futuro se puede realizar en tres de los apartados de los que consta el proyecto. Mientras que en aspectos como la API o el despliegue de la arquitectura no tienen mucho trabajo, pues han quedado cerrados en esta iteración.
+
+\subsection{Aplicación Android}
+La aplicación podría ser completada añadiendo los siguientes elementos:
+
+\begin{itemize}
+	\item Gráficas en tiempo real con los datos que son recogidos por los sensores.
+    \item Gestión de los temblores, que en un primer momento se planteó, pero que con el cambio del rumbo del TFG se descartó.
+    \item Recordatorios personalizables para las pastillas. Ahora mismo la aplicación sólo manda una notificación a la hora en el día que se tiene que tomar la pastilla.
+    \item Varias vistas de tal forma que el paciente vea una parte de la aplicación y su cuidador pueda acceder a otros datos.
+    \item Que la comunicación con la pulsera sea bidireccional, de forma que se puedan enviar notificaciones a la pulsera.
+    \item Utilizar vibración o sonidos dentro de las notificaciones o a la hora de alcanzar valores extraños por parte de los sensores, como por ejemplo que el sensor se ha desconectado o que el sensor está devolviendo valores erróneos.
+    \item Por último, el diseño de la aplicación es bastante mejorable, aunque ahora es muy sencilla e intuitiva, quizás vendría bien tener diferentes diseños según el dominio del paciente.
+\end{itemize}
+
+\subsection{Aplicación Web}
+La web podría ser completada añadiendo los siguientes elementos:
+
+\begin{itemize}
+	\item Permitir el registro de usuarios, tanto de médicos cómo de pacientes.
+    \item Ahora mismo la web está orientada a la visualización de datos por parte del médico, pero quizás en un futuro sería interesante que el paciente la pudiera usar para ver sus datos, así cómo recomendaciones dadas por su médico.
+    \item Actualmente sólo se muestran datos de actividades y medicamentos por paciente, en el futuro podrían mostrarse datos cruzados de pacientes e intentar así mejorar los diagnósticos.
+    \item Permitir al usuario elegir el formato de cada uno de los gráficos que se muestran, así como seleccionar los datos que aparecen en ellos.
+\end{itemize}
+
+\subsection{Estudio de los datos}
+Todos los datos recogidos en un primer momento iban a ser utilizados para aplicarles machine learning y así poder obtener predicciones acerca de la evolución del paciente. Todo el sistema está orientado para obtener los datos de forma sencilla y poder analizarlos en cualquier momento.
+\newpage
 
 \section{Aportaciones}
 \subsection{Christian González}
