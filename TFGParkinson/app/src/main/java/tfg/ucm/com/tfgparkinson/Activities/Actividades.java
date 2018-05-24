@@ -1,6 +1,7 @@
 package tfg.ucm.com.tfgparkinson.Activities;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -27,11 +28,16 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import tfg.ucm.com.tfgparkinson.Adaptadores.AdaptadorActividades;
 import tfg.ucm.com.tfgparkinson.Clases.Actividad;
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
+import tfg.ucm.com.tfgparkinson.Clases.Medicamento;
 import tfg.ucm.com.tfgparkinson.R;
 
 /**
@@ -47,9 +53,14 @@ public class Actividades extends AppCompatActivity {
         setContentView(R.layout.activity_actividades);
         setTitle("Actividades");
 
+        Intent intent = getIntent();
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         reiniciarActivity();
+
+        if(intent.getStringExtra("GRABAR") != null)
+            grabar(this, (Medicamento) intent.getSerializableExtra("MEDICAMENTO"));
 
         FloatingActionButton ayuda = (FloatingActionButton) findViewById(R.id.ayuda);
         ayuda.setOnClickListener(new View.OnClickListener() {
@@ -149,6 +160,40 @@ public class Actividades extends AppCompatActivity {
                 onBackPressed();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void grabar(final Context context, final Medicamento medicamento) {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        dialogBuilder.setTitle("Grabar actividad");
+        dialogBuilder.setMessage("¿Quiere grabar la actividad con los sensores?");
+        dialogBuilder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Calendar calendar = Calendar.getInstance();
+                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                DateFormat hourFormat = new SimpleDateFormat("HH:mm");
+
+                Actividad actividad = new Actividad("Toma medicamento " + medicamento.getNombre() + " " + medicamento.getHora(),
+                        15,
+                        calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE),
+                        calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR),
+                        "Toma medicación");
+                GestorBD gestorBD = new GestorBD(context);
+                gestorBD.insertActividad(actividad);
+                Intent i = new Intent(context, EmparejarSensores.class);
+                context.startActivity(i);
+            }
+        });
+
+        dialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 
     private void mostrarAyuda() {

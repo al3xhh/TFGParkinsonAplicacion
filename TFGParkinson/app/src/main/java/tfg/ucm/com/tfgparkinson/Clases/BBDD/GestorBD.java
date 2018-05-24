@@ -155,7 +155,7 @@ public class GestorBD extends SQLiteOpenHelper {
 
         cv.put("NOMBRE", medicamento.getNombre());
         cv.put("DIAS", medicamento.getDiasFormateados());
-        cv.put("HORA", medicamento.getTimestamp().toString());
+        cv.put("HORA", medicamento.getHora());
         cv.put("MINUTOS_DESCARTAR", medicamento.getIntervalo());
 
         db.insert("TB_MEDICAMENTOS", null, cv);

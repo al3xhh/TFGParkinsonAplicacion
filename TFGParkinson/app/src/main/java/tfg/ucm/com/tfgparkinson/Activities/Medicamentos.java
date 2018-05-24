@@ -142,7 +142,7 @@ public class Medicamentos extends AppCompatActivity {
                                 String letter = formatLetterDay.format(new Date());
 
                                 if (medicamento.getDias().contains(letter))
-                                    notificacion(medicamento.getNombre());
+                                    notificacion(medicamento);
                             }
                         }, delay, TimeUnit.MILLISECONDS); // run in "delay" millis
                     }
@@ -166,17 +166,19 @@ public class Medicamentos extends AppCompatActivity {
         alertDialog.show();
     }
 
-    public void notificacion(String nombre) {
+    public void notificacion(Medicamento medicamento) {
         Intent intent = new Intent(this, RecibidorNotificaciones.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
 
         Intent intentConfirm = new Intent(this, RecibidorNotificaciones.class);
         intentConfirm.setAction("CONFIRM");
+        intentConfirm.putExtra("MEDICAMENTO", medicamento);
         intentConfirm.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
 
         Intent intentCancel = new Intent(this, RecibidorNotificaciones.class);
         intentCancel.setAction("CANCEL");
+        intentCancel.putExtra("MEDICAMENTO", medicamento);
         intentCancel.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pendingIntentConfirm = PendingIntent.getBroadcast(this, 0, intentConfirm, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -185,7 +187,7 @@ public class Medicamentos extends AppCompatActivity {
         // Build notification
         // Actions are just fake
         Notification noti = new Notification.Builder(this)
-                .setContentTitle("¿Se ha tomado la pastilla " + nombre + "?")
+                .setContentTitle("¿Se ha tomado la pastilla " + medicamento.getNombre() + "?")
                 .setSmallIcon(R.drawable.ic_access_time_black_24dp)
                 .setContentIntent(pIntent)
                 .addAction(R.drawable.ic_done_black_24dp, "Si", pendingIntentConfirm)

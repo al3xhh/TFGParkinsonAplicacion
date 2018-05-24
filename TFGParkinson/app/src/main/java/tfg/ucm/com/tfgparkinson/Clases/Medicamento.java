@@ -1,5 +1,6 @@
 package tfg.ucm.com.tfgparkinson.Clases;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -8,7 +9,7 @@ import java.util.Calendar;
  * Created by al3x_hh on 11/12/2017.
  */
 
-public class Medicamento {
+public class Medicamento implements Serializable {
 
     private String nombre;
     private int intervalo;
