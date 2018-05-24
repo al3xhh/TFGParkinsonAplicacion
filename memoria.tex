@@ -19,6 +19,12 @@
 \usepackage{listings}
 \usepackage{xcolor}
 
+\newcommand\blankpage{%
+    \null
+    \thispagestyle{empty}%
+    \addtocounter{page}{-1}%
+    \newpage}
+
 \author{
 \Large Christian González García-Muñoz \\ 
 \Large Alejandro Huertas Herrero 
@@ -83,9 +89,12 @@ Resumiendo, las tecnologías utilizadas han sido las siguientes:
 \end{itemize}
 
 {\bf Palabras clave:} aplicación Android, teléfono inteligente, Parkinson, bluetooth, Internet de las cosas, sensores, movimiento, actividades, medicamentos y visualización.
+
 \newpage
 
-\section{Abstract}
+\blankpage
+
+\section*{Abstract}
 The aim of this project is to develop an Android application and all the infrastructure necessary to support its functionalities. The aplication helps the patient into his everyday life and the diagnosis of the ilness by the doctor. More specific the aplication allows the patient (or the one in charge) to add pills reminders and have a history of all the activities that patient makes in its routine either the routine is set by a doctor or not. All the activitys are recorded by BLE sensors conected with the application in order to the data can be processed  and ploted later for the doctor who needs to interpret it.
 \newline
 
@@ -108,7 +117,11 @@ Summarizing, we have used the following technologies:
     \item Docker for deploy the infrastructure automatically (REST API, web server and MongoDB). 
     \newline
 \end{itemize}
+
+{\bf Keywords:} Android app, smartphone, Parkinson, bluetooth, Internet of things, sensors, movement, activities, medicines y ploting.
+
 \newpage
+\blankpage
 
 \addtocontents{toc}{\protect\setcounter{tocdepth}{3}}
 
@@ -116,6 +129,50 @@ Summarizing, we have used the following technologies:
 \tableofcontents
 \newpage
 \listoffigures
+\newpage
+\section{Introducción}
+
+La enfermedad del Parkinson es una enfermedad neurodegenerativa crónica que afecta al sistema nervioso central, y que progresa lentamente. Los síntomas del parkinson afectan mayoritariamente a las habilidades motrices, y son síntomas bastante variados. Los principales síntomas son temblores, rigidez muscular o resistencia al movimiento, bradicinesia que afecta a la velocidad de los movimientos y que provoca que los movimientos simples del día a día se conviertan en algo difícil de realizar e inestabilidad postural que hace que las personas afectadas pierdan el equilibro fácilmente, lo que puede provocar caídas.
+\newline
+
+Como se puede observar los principales síntomas del Parkinson se pueden medir de alguna forma fijándonos en como se realizan algunos movimientos o en caso del temblor fijándonos en la presencia o no de este movimiento. Esto hace que la enfermedad del Parkinson se una enfermedad que se pueda ver ayudada por el gran avance de la tecnología IoT (Internet of things) que esta haciendo que cada vez sea mas sencillo contar con sensores con suficiente calidad como para caracterizar los movimientos de estas personas con precisión y permitir su estudio.
+\newline
+
+El estudio de estos síntomas puede tener grandes ventajas en el diagnostico previo y efectivo de la enfermedad ya que estados primarios los síntomas son puntuales y es difícil que se manifiesten justo cuando el paciente esta pasando consulta en el medico. Ademas en caso de ya estar diagnosticado el estudio del movimiento permitiría a un médico contar con datos sobre como avanza la enfermedad lo que ayudaría a la hora de seleccionar que y cuanta medicación debe tomar el paciente.
+
+\subsection{Antecedentes}
+
+Este Trabajo de fin de grado está precedido por otro realizado en el curso anterior llamado "Reconocimiento de actividad mediante pulsera con sensores" en el cual nuestros compañeros implementaron un sistema capaz de reconocer la ejecución de actividades cotidianas usando una aplicación Android y sensores BLE similares a los usados en este proyecto. Este otro Trabajo de fin de grado estaba dirigido por los mismos profesores que han dirigido este.
+\newline
+
+Además del trabajo de fin de grado citado en el párrafo anterior este trabajo viene precedido por numerosos artículos científicos en los que se intenta identificar los síntomas del parkinson mediante la monitorización de pacientes a través de sensores que este lleva sujetos a alguna parte de su cuerpo. Se comentara en profundidad el alcance de estos artículos en la sección 2 de este documento.
+
+\subsection{Objetivos}
+
+El objetivo de este trabajo de fin de grado es la implementación en su totalidad de un sistema que permita la monitorización de una paciente de Parkinson, ya sea en su día a día o durante la realización de alguna rutina de ejercicios que facilite la identificación de los síntomas de esta enfermedad. 
+\newline
+
+Además el sistema sera capaz de recopilar toda la información necesaria para contextualizar los datos recogidos como el horario en el que el paciente debe tomar la medicación o si este está realizando una actividad especifica. Esto añadirá un contexto a los datos recogidos por los sensores que sera de gran utilidad en la fase de análisis de datos.
+\newline
+
+Por otro lado una vez implementado un sistema capaz de recopilar toda esa información el objetivo sera implementar una interfaz que permita visualizar la información de una forma amigable para el usuario y que facilite el trabajo de aquel que tenga que interpretarla, probablemente un medico que no tiene por que tener conocimientos en informática.
+\newline
+
+\subsection{Plan de trabajo}
+El plan de trabajo del proyecto cuenta con 4 fases explicadas a continuación:
+
+\subsubsection{Fase 1: Documentación y estado del arte}
+Durante esta primera fase el objetivo es documentarnos lo máximo y ponernos en contexto sobre el estado del arte actual en el problema de la monitorización mediante sensores de enfermos de Parkinson. Para ello los directores nos proporcionarán artículos con relación a esta temática que leeremos con la intención de ver que soluciones podrían ser compatibles con la nuestra y encontrar posibles mejoras.
+
+\subsection{Fase 2: Desarrollo Aplicación Android}
+En esta segunda fase se realizara el desarrollo de la aplicación Android que nos permitirá recoger la información de los sensores así como del contexto del paciente (medicación, actividades,...) para su posterior uso.
+
+\subsection{Fase 3: Implementación infraestructura auxiliar}
+Una vez implementada la aplicación Android capaz de recopilar los datos y almacenarlos locamente en el teléfono implementaremos la infraestructura necesaria para ser capaces de extraer esta información del teléfono y enviarla a un servidor o back-end donde será procesada.
+
+\subsection{Fase 4: Visualización de datos}
+Una vez implementada la aplicación que nos permite recopilar la información y la infraestructura necesaria para manipular esta información fuera del teléfono móvil del paciente implementaremos una aplicación web que servirá para visualizar los datos de una forma amigable para el medico que deba interpretar la información.
+
 \newpage
 
 \section{Estado del arte}
@@ -306,8 +363,8 @@ El botón de ayuda, muestra en cada pantalla cómo realizar todas las acciones p
 \end{figure}
 \newpage
 
-\section{Arquitectura de la aplicación Android}
-\subsection{Descripción}
+\subsection{Arquitectura de la aplicación}
+\subsubsection{Descripción}
 La aplicación no sigue ninguna arquitectura concreta. El patrón que más se le aproxima es Modelo Vista Controlador (MVC) De los tres elementos tendríamos bien diferenciados dos de ellos. Por un lado tenemos la vista, que la forman todos los layouts y por otro los modelos que serían las actividades de Android.
 \newline
 
@@ -319,14 +376,14 @@ Otro de los elementos importantes es la gestión de la conexión con los sensore
 
 El último elemento a destacar son las llamadas a la API Rest. Se hacen mediante una librería de Android (Volley) Se utilizan mensajes JSON para transmitir toda la información, tanto de la aplicación a la API como viceversa.
 
-\subsection{Diagrama}
+\subsubsection{Diagrama}
 \begin{figure}[h!]
   \centering
   \includegraphics[width=0.9\textwidth]{ArquitecturaAndroid.png}
   \caption{Arquitectura aplicación Android.}
 \end{figure}
 
-\subsection{Estructura de clases}
+\subsubsection{Estructura de clases}
 El código de la aplicación se está organizado en tres grandes grupos:
 
 \begin{itemize}
@@ -334,6 +391,7 @@ El código de la aplicación se está organizado en tres grandes grupos:
     \item {\bf Adaptadores: } son principalmente dos, uno para las actividades y otro para los medicamentos. Permiten la creación de listas personalizadas en Android. De esta forma podemos mostrar de una forma sencilla e intuitiva toda la información relacionada con cada elemento, así como editar y borrar cada uno de ellos.
     \item {\bf Clases: } aquí podemos encontrar gran variedad. Por un lado están las clases que representan cada objeto dentro de la aplicación. Por otro lado están los servicios que gestionan las conexión bluetooth con los sensores. Por último, se encuentra la clase que conecta la aplicación con la API rest.
 \end{itemize}
+\newpage
 
 \section{Sensores}
 \subsection{Texas Instrument: CC2650 - Ultra-low power wireless MCU}
@@ -474,6 +532,20 @@ Para desplegar la infraestructura sobre Docker hemos creado dos imágenes propia
 \subsubsection{Procesamiento de datos en el servidor}
 
 Pese a que por dificultades ajenas al proyecto no hemos podido realizar una fase de interacción con usuarios reales para recopilar datos con los que poder trabajar y aplicar las técnicas de datos necesarias para poder extraer información de utilidad, hemos implementado un programa en Python que se encarga de procesar los datos almacenados, por el API REST, en la base de datos remota para producir datos que pudiesen ser usados para entrenar algoritmos de machine learning de una forma sencilla.
+
+\section{Ciclo de uso completo}
+Un ciclo de uso completo de nuestro sistema tendría las siguientes fases:
+
+\subsection{Monitorización del paciente y recopilación de datos}
+En esta fase bien el paciente o la persona que este a cargo de este comenzaría a utilizar nuestra aplicación Android introduciendo la información sobre su medicación y los días y horas en los que debe tomarla. Para comenzar la monitorización se deberá marcar en la aplicación cual de los dos tipos de sensores soportados se va a utilizar y después emparejar estos con la aplicación. 
+
+Una vez comience la monitorización se irán introduciendo las actividades que el paciente vaya realizando para ofrecer un contexto a los datos recogido por los sensores.
+
+\subsection{Envío de datos}
+Periódicamente duran la monitorización o al final de esta se irán enviando los datos al servidor haciendo uso del API implementada.
+
+\subsection{Visualización de datos por parte del medico}
+Según el paciente o la persona a cargo de este vaya enviando los datos al servidor el medico los tendrá disponibles en la aplicación web para poder interpretarlos y valorar la evolución.
 \newpage
 
 \section{Conclusiones}
@@ -583,6 +655,7 @@ Aunque nos hemos organizado juntos, yo he puesto más hincapié en utilizar apli
     \bibitem{Texas Instruments} http://www.ti.com/product/CC2650/description
     \bibitem{Wiki TI} http://processors.wiki.ti.com/index.php/CC2650\_SensorTag\_User's\_Guide
     \bibitem{App TI} https://play.google.com/store/apps/details?id=com.ti.ble.sensortag\&hl=es
+    \bibitem{NINDS} National Institute of Neurological Disorders and Stroke (\url{https://espanol.ninds.nih.gov/trastornos/parkinson_disease_spanish.htm})
+    \bibitem{Asociación Parkinson Madrid} Asociación Parkinson Madrid (\url{https://www.parkinsonmadrid.org/el-parkinson/el-parkinson-definicion/})
 \end{thebibliography}
-
 \end{document}

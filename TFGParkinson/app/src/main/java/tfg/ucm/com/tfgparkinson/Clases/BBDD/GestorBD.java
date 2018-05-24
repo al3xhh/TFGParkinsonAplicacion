@@ -16,6 +16,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -57,22 +58,15 @@ public class GestorBD extends SQLiteOpenHelper {
                             "SENSOR VARCHAR NOT NULL,"+
                             "POSICIONES INTEGER NOT NULL, " +
                             "DB_TIMESTAMP DATETIME NOT NULL DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime')), " +
-                            "APP_TIMESTAMP DATETIME NOT NULL," +
+                            "FECHA VARCHAR NOT NULL," +
                             "DATOS VARCHAR NOT NULL," +
                             "TIPO_SENSOR VARCHAR NOT NULL CHECK (TIPO_SENSOR = '1' OR TIPO_SENSOR='2'), " +
                             "FOREIGN KEY (POSICIONES) REFERENCES TB_POSICIONES(ID));");
 
-        db.execSQL("CREATE TABLE TB_TEMBLORES ( " +
-                            "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                            "DURACION INTEGER NOT NULL, " +
-                            "OBSERVACIONES VARCHAR, " +
-                            "TIMESTAMP_INICIO DATETIME DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime'))," +
-                            "ENVIADO VARCHAR(1) DEFAULT ('N'));");
-
         db.execSQL("CREATE TABLE TB_MEDICAMENTOS ( " +
                             "NOMBRE VARCHAR PRIMARY KEY, " +
                             "DIAS VARCHAR NOT NULL, " +
-                            "HORA DATETIME NOT NULL, " +
+                            "HORA VARCHAR NOT NULL, " +
                             "MINUTOS_DESCARTAR NUMBER NOT NULL, " +
                             "ENVIADO VARCHAR(1) DEFAULT ('N'));");
 
@@ -85,6 +79,28 @@ public class GestorBD extends SQLiteOpenHelper {
                             "FECHA VARCHAR," +
                             "PRIMARY KEY (NOMBRE,HORA));");
 
+        db.execSQL("CREATE TABLE TB_TOMAS_MEDICAMENTOS ( " +
+                             "MEDICAMENTO VARCHAR," +
+                             "HORA VARCHAR," +
+                             "FECHA VARCHAR," +
+                             "TOMADO VARCHAR(1) NOT NULL CHECK (TOMADO = 'S' OR TOMADO = 'N')," +
+                             "ENVIADO VARCHAR(1) DEFAULT ('N')," +
+                             "PRIMARY KEY (MEDICAMENTO, FECHA, HORA)," +
+                             "FOREIGN KEY (MEDICAMENTO) REFERENCES TB_MEDICAMENTOS(NOMBRE));");
+    }
+
+    public void insertarToma(Medicamento medicamento, String tomado){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("MEDICAMENTO", medicamento.getNombre());
+        cv.put("FECHA", medicamento.getDiasFormateados());
+        cv.put("HORA", medicamento.getTimestamp().toString());
+        cv.put("TOMADO", tomado);
+
+        db.insert("TB_TOMAS_MEDICAMENTOS", null, cv);
+
+        db.close();
     }
 
     public void insertActividad(Actividad actividad) {
@@ -153,7 +169,7 @@ public class GestorBD extends SQLiteOpenHelper {
         String[] whereArgs = new String[]{medicamento.getNombre()};
 
         cv.put("DIAS", medicamento.getDiasFormateados());
-        cv.put("HORA", medicamento.getTimestamp().toString());
+        cv.put("HORA", medicamento.getHora());
         cv.put("MINUTOS_DESCARTAR", medicamento.getIntervalo());
 
         db.update("TB_MEDICAMENTOS", cv, "NOMBRE = ?", whereArgs);
@@ -221,63 +237,6 @@ public class GestorBD extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
-    public ArrayList<Temblor> getTemblores() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        ArrayList<Temblor> temblores = new ArrayList<Temblor>();
-
-        Cursor cursor = db.rawQuery("SELECT * FROM TB_TEMBLORES ORDER BY TIMESTAMP_INICIO ASC", null);
-
-        try{
-            while (cursor.moveToNext()) {
-                temblores.add(new Temblor(cursor.getInt(0), Timestamp.valueOf(cursor.getString(3)), cursor.getInt(1), cursor.getString(2))); }
-        } finally {
-            cursor.close();
-            db.close();
-        }
-
-        return temblores;
-
-    }
-
-    public void deleteTemblor(Temblor temblor) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int idTemblor = temblor.getId();
-        String[] whereArgs = new String[]{idTemblor+""};
-
-        db.delete("TB_TEMBLORES", "OID = ?", whereArgs);
-
-        db.close();
-    }
-
-    public void insertTemblor(Temblor temblor) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-
-        if (temblor.getTimestamp() != null)
-            cv.put("TIMESTAMP_INICIO", temblor.getTimestamp().toString());
-        cv.put("DURACION", temblor.getDuracion());
-        cv.put("OBSERVACIONES", temblor.getObservaciones());
-
-        db.insert("TB_TEMBLORES", null, cv);
-
-        db.close();
-    }
-
-    public void updateTemblor(Temblor temblor){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        String[] whereArgs = new String[]{""+temblor.getId()};
-
-        if (temblor.getTimestamp() != null)
-            cv.put("TIMESTAMP_INICIO", temblor.getTimestamp().toString());
-        cv.put("DURACION", temblor.getDuracion());
-        cv.put("OBSERVACIONES", temblor.getObservaciones());
-
-        db.update("TB_TEMBLORES", cv, "ID = ?", whereArgs);
-
-        db.close();
-    }
-
     public boolean checkPosicion(String posiciones){
         SQLiteDatabase db = this.getReadableDatabase();
         int count = -1;
@@ -330,12 +289,13 @@ public class GestorBD extends SQLiteOpenHelper {
 
     public void insertDatosSensor(float[] data, int posicionesID, String sensor, String tipo){
         Calendar calendar = Calendar.getInstance();
-        Timestamp ts = new Timestamp(calendar.getTimeInMillis());
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
         cv.put("POSICIONES", posicionesID);
-        cv.put("APP_TIMESTAMP", ts.toString());
+        cv.put("FECHA", dateFormat.format(calendar));
         cv.put("DATOS", floatArrayToString(data));
         cv.put("SENSOR", sensor);
         cv.put("TIPO_SENSOR", tipo);
@@ -391,10 +351,38 @@ public class GestorBD extends SQLiteOpenHelper {
                 tupla.put("sensor", cursor.getString(1));
                 tupla.put("posiciones", cursor.getInt(2));
                 tupla.put("db_timestamp", Timestamp.valueOf(cursor.getString(3)).getTime());
-                tupla.put("app_timestamp", Timestamp.valueOf(cursor.getString(4)).getTime());
+                tupla.put("fecha", Timestamp.valueOf(cursor.getString(4)).getTime());
                 tupla.put("datos", cursor.getString(5));
                 tupla.put("device_id", Secure.getString(context.getContentResolver(), Secure.ANDROID_ID));
                 tupla.put("tipo_sensor", cursor.getString(6));
+                tabla.put(tupla);
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+        finally {
+            cursor.close();
+            db.close();
+        }
+
+        return tabla;
+    }
+
+    public JSONArray getTb_tomas_medicamentos(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        JSONArray tabla = new JSONArray();
+        Cursor cursor = db.rawQuery("SELECT * FROM TB_TOMAS_MEDICAMENTOS WHERE ENVIADO = 'N'", null);
+
+        try{
+            while (cursor.moveToNext()){
+                JSONObject tupla = new JSONObject();
+
+                tupla.put("medicamento", cursor.getString(0));
+                tupla.put("hora", cursor.getString(1));
+                tupla.put("fecha", cursor.getString(2));
+                tupla.put("tomado", cursor.getString(3));
+                tupla.put("device_id", Secure.getString(context.getContentResolver(), Secure.ANDROID_ID));
                 tabla.put(tupla);
             }
         }
