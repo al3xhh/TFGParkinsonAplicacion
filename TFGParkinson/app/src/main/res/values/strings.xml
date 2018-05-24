@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">TFG Parkinson</string>
     <string name="guardar">Guardar</string>
+    <string name="empezar">Empezar</string>
     <string name="cancelar">Cancelar</string>
     <string name="campo_vacio">Debes introducir duración y observaciones.</string>
 

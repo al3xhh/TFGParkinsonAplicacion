@@ -44,7 +44,8 @@ public class InicioHexiWear extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 stopService(new Intent(InicioHexiWear.this, NotificationService.class));
-                Intent i = new Intent(InicioHexiWear.this, Main.class);
+                Intent i = new Intent(InicioHexiWear.this, Actividades.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
             }
         });

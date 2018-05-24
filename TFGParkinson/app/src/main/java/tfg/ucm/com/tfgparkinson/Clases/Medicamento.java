@@ -14,6 +14,7 @@ public class Medicamento {
     private int intervalo;
     private Timestamp timestamp;
     private ArrayList<String> dias;
+    private String hora;
 
     public Medicamento(String nombre, int intervalo, String hora, ArrayList<String> dias) {
         Calendar calendar = Calendar.getInstance();
@@ -32,6 +33,7 @@ public class Medicamento {
         this.intervalo = intervalo;
         this.timestamp = ts;
         this.dias = dias;
+        this.hora = hora;
     }
 
     public String getNombre() {
@@ -67,10 +69,7 @@ public class Medicamento {
     }
 
     public String getHora() {
-        String[] tokens = timestamp.toString().split(" ");
-        String[] hora = tokens[1].split(":");
-
-        return hora[0] + ":" + hora[1];
+        return hora;
     }
 
     public String getDiasFormateados() {

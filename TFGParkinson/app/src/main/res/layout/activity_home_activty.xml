@@ -29,7 +29,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="160dp"
-        android:text="Datos acelerómetro"
+        android:text="Grabando datos acelerómetro"
         android:textColor="@color/colorBlack"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"

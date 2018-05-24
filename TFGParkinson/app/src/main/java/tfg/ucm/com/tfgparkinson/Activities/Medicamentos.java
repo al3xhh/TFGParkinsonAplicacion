@@ -1,6 +1,10 @@
 package tfg.ucm.com.tfgparkinson.Activities;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,7 +24,14 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import tfg.ucm.com.tfgparkinson.Adaptadores.AdaptadorMedicamentos;
 import tfg.ucm.com.tfgparkinson.Clases.BBDD.GestorBD;
@@ -105,7 +116,7 @@ public class Medicamentos extends AppCompatActivity {
                     dias.add("D");
 
                 try {
-                    Medicamento medicamento = new Medicamento(nombreMedicacion.getText().toString(),
+                    final Medicamento medicamento = new Medicamento(nombreMedicacion.getText().toString(),
                             Integer.parseInt(intervaloMedicacion.getText().toString()), horaMedicacion.getHour() + ":" +
                             horaMedicacion.getMinute(), dias);
 
@@ -113,6 +124,28 @@ public class Medicamentos extends AppCompatActivity {
                     bd.insertMedicamento(medicamento);
                     Toast.makeText(getApplicationContext(), R.string.exito_registro_medicamento, Toast.LENGTH_SHORT).show();
                     reiniciarActivity();
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(medicamento.getHora().split(":")[0]));
+                    cal.set(Calendar.MINUTE, Integer.parseInt(medicamento.getHora().split(":")[1]));
+                    cal.set(Calendar.SECOND, 0);
+
+                    Date d = cal.getTime();
+                    Date now = new Date();
+                    long delay = d.getTime() - now.getTime();
+
+                    if (delay > 0) {
+                        ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
+                        ses.schedule(new Runnable() {
+                            @Override
+                            public void run() {
+                                SimpleDateFormat formatLetterDay = new SimpleDateFormat("EEEEE", Locale.getDefault());
+                                String letter = formatLetterDay.format(new Date());
+
+                                if (medicamento.getDias().contains(letter))
+                                    notificacion(medicamento.getNombre());
+                            }
+                        }, delay, TimeUnit.MILLISECONDS); // run in "delay" millis
+                    }
                 } catch (NumberFormatException e) {
                     Toast.makeText(getApplicationContext(), R.string.intervalo_no_valido, Toast.LENGTH_SHORT).show();
                 }
@@ -131,6 +164,38 @@ public class Medicamentos extends AppCompatActivity {
         dialogBuilder.setView(dialogView);
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
+    }
+
+    public void notificacion(String nombre) {
+        Intent intent = new Intent(this, RecibidorNotificaciones.class);
+        PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
+
+        Intent intentConfirm = new Intent(this, RecibidorNotificaciones.class);
+        intentConfirm.setAction("CONFIRM");
+        intentConfirm.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+
+        Intent intentCancel = new Intent(this, RecibidorNotificaciones.class);
+        intentCancel.setAction("CANCEL");
+        intentCancel.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        PendingIntent pendingIntentConfirm = PendingIntent.getBroadcast(this, 0, intentConfirm, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntentCancel = PendingIntent.getBroadcast(this, 1, intentCancel, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        // Build notification
+        // Actions are just fake
+        Notification noti = new Notification.Builder(this)
+                .setContentTitle("¿Se ha tomado la pastilla " + nombre + "?")
+                .setSmallIcon(R.drawable.ic_access_time_black_24dp)
+                .setContentIntent(pIntent)
+                .addAction(R.drawable.ic_done_black_24dp, "Si", pendingIntentConfirm)
+                .addAction(R.drawable.ic_clear_black_24dp, "No", pendingIntentCancel)
+                .build();
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        // hide the notification after its selected
+        noti.flags |= Notification.FLAG_AUTO_CANCEL;
+
+        notificationManager.notify(0, noti);
     }
 
     private void reiniciarActivity() {

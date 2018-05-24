@@ -2,6 +2,7 @@ package tfg.ucm.com.tfgparkinson.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 
 import android.os.Build;
@@ -87,7 +88,7 @@ public class Actividades extends AppCompatActivity {
         horaInicio.setIs24HourView(true);
 
         dialogBuilder.setTitle("Añadir actividad");
-        dialogBuilder.setPositiveButton(getString(R.string.guardar), new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton(getString(R.string.empezar), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
@@ -99,7 +100,9 @@ public class Actividades extends AppCompatActivity {
                     GestorBD gestorBD = new GestorBD(getApplicationContext());
                     gestorBD.insertActividad(actividad);
                     Toast.makeText(getApplicationContext(), R.string.exito_registro_actividad, Toast.LENGTH_SHORT).show();
-                    reiniciarActivity();
+
+                    Intent i = new Intent(Actividades.this, EmparejarSensores.class);
+                    startActivity(i);
                 } catch (NumberFormatException e) {
                     Toast.makeText(getApplicationContext(), R.string.duracion_no_valida, Toast.LENGTH_SHORT).show();
                 }
@@ -152,7 +155,8 @@ public class Actividades extends AppCompatActivity {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.dialogo));
         dialogBuilder.setTitle("Ayuda actividades");
         dialogBuilder.setMessage(Html.fromHtml("<p align=\"justify\">" +
-                "- Para añadir una actividad pulse en <strong>el botón de abajo a la derecha</strong> y rellene los campos. <br><br>" +
+                "- Para añadir una actividad pulse en <strong>el botón de abajo a la derecha</strong> y rellene los campos. " +
+                "A continuación se podrá conectar la aplicación con los sensores.<br><br>" +
                 "- Para editar una actividad pulse <strong>dentro de los tres puntitos de la actividad en editar</strong>. <br><br>" +
                 "- Para borrar una actividad pulse <strong>dentro de los tres puntitos de la actividad en borrar</strong>.</p>"));
 

@@ -137,9 +137,6 @@ public class Main extends AppCompatActivity implements RespuestaServidor {
                 enviarDatosServidor("http://147.96.80.41:5050/actividades", actividades);
             if (temblores.length() > 0)
                 enviarDatosServidor("http://147.96.80.41:5050/temblores", temblores);
-        } else {
-            i = new Intent(Main.this, EmparejarSensores.class);
-            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
@@ -222,8 +219,7 @@ public class Main extends AppCompatActivity implements RespuestaServidor {
         dialogBuilder.setMessage(Html.fromHtml("<p align=\"justify\">" +
                 "- Para ver las actividades pulse en <strong>Actividades</strong>. <br><br>" +
                 "- Para ver los medicamentos pulse en <strong>Medicamentos</strong>. <br><br>" +
-                "- Para enviar los datos al servidor pulse en el botón <strong>enviar</strong>, arriba en el menú.<br><br>" +
-                "- Para emparejar los sensores pulse en el botón <strong>emparejar</strong>, arriba en el menú.</p>"));
+                "- Para enviar los datos al servidor pulse en el botón <strong>enviar</strong>, arriba en el menú.</p>"));
 
         dialogBuilder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override

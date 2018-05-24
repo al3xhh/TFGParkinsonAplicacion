@@ -6,9 +6,4 @@
         android:orderInCategory="100"
         android:title="Enviar"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/emparejar_sensores"
-        android:orderInCategory="100"
-        android:title="Emparejar"
-        app:showAsAction="ifRoom" />
 </menu>
