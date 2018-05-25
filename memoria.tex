@@ -62,31 +62,28 @@
 
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
-El objetivo del proyecto es implementar una aplicación Android y toda la infraestructura necesaria para dar soporte a las funcionalidades de esta. La aplicación facilita tanto el día a día del paciente como el diagnostico de la enfermedad por parte del medico. En concreto, la aplicación permite al paciente (o al encargado del cuidado del mismo) añadir recordatorios con los días y horarios en los que debe tomar cada pastilla y tener un diario de las actividades que el paciente realiza como parte de su rutina de ejercicios, ya sea esta propia o recomendada por un medico. Todas estas acciones son monitorizadas por sensores BLE (Bluetooth de baja energía) conectados a la aplicación para después ser procesados y representados de forma amigable para el medico que deba interpretarlos. 
-\newline
 
-La aplicación Android se complementa con una aplicación web sencilla e intuitiva que permite proporcionar datos al médico. En ella, se pueden visualizar mediante gráficos la evolución de los datos recogidos por los sensores de cada paciente.
-\newline
-
-Tanto la aplicación Android como la aplicación web hacen uso de un API REST para enviar o recibir datos del back-end.
-\newline
-
-Como se ha dicho anteriormente, la aplicación permite monitorizar al paciente mediante sensores BLE. La aplicación soporta dos tipos de sensores, por un lado tenemos un sensor más “rudimentario” y por otro lado un sensor mas amigable con el usuario que lo lleve, con forma de pulsera y con una pantalla incorporada. Ambos sensores cuentan a su vez con varios servicios, de los cuales los utilizados para este proyecto han sido los acelerómetros y los giroscopios, ambos de tres ejes. La integración de la aplicación Android con los sensores BLE ha sido una de las mayores dificultades que nos hemos encontrado a la hora de llevar a cabo el proyecto debido a la compleja interfaz que ofrece Android para trabajar con este tipo de sensores.
-\newline
-
-Resumiendo, las tecnologías utilizadas han sido las siguientes:
+Este proyecto tiene como finalidad el desarrollo de un sistema para la supervision remota de actividad física de pacientes de Parkinson.El sistema a sido diseñado teniendo como objetivo ser lo menos intrusivo posible para el paciente para favorecer la comodidad de uso. El sistema esta formado por cuatro elementos:
 
 \begin{itemize}
-    \item Android para el desarrollo de la aplicación. 
-	\item SQLite para almacenar los datos dentro del teléfono. 
-	\item Bluetooth Low Energy para la comunicación con los sensores. 
-	\item Python para procesar los datos y para implementar el API REST
-    \item PHP, HTML5 y Bootstrap para el desarrollo de la web que permite visualizar los datos.
-	\item MongoDB para almacenar en el back-end todos los datos recogidos.
-    \item Apache como servidor web para hostear la aplicación web.
-    \item Docker para desplegar la infraestructura necesaria de forma automática (API REST, servidor web y MongoDB).  
+    \item Pulsera con sensores. 
+	\item Aplicación Android. 
+	\item Aplicación web de monitorización remota.
+    \item Servidor con servicios API REST y HTTP.
     \newline
 \end{itemize}
+
+Para llevar a cabo la supervision del paciente nuestro sistema recoge datos sobre como este realiza ciertas actividades, ya sean actividades cotidianas o alguna rutina de actividades marcada por un médico. Nuestro sistema soporta dos tipos de sensores ambos con conectividad BLE (Bluetooth de bajo consumo). De todos los servicios que ofrecen estos sensores nos hemos centrado en el acelerómetro y en el giroscopio ya que son los dos servicios que mas información aportan sobre com realiza los movimientos el paciente.
+\newline
+
+Para gestionar las pulseras y los datos generados por estas hemos desarrollado una Aplicacion Android. La aplicación almacena de forma local todos los datos generados por las pulseras mientras que se está grabando la realizacion de alguna actividad, una vez los datos han sido grabados, la aplicación permite enviarlos a un servidor remoto haciendo use de llamadas a un API REST. Además, la aplicacion permite añadir recordatorios sobre tomas de medicamentos, que pueden resultar de gran ayuda al paciente, y permite grabar los minutos posteriores a la toma de la medicacion para ver como afecta esta a los pacientes.
+\newline
+
+Una vez los datos han sido enviados al servidor, la aplicacion web de monitorizacion remota puede acceder a estos haciendo uso del API REST mencionado antes. Es aplicacion web permite al medico pueda supervisar de forma remota los avances del paciente mostrando los datos de una forma mas gráfica y amigable.
+\newline
+
+Toda la imfraestructura incluida en el servidor, el API REST, la base de datos MongoDB y el servidor HTTP son desplegados en forma de contenedores usando la herramienta opensource Docker.
+\newline
 
 {\bf Palabras clave:} aplicación Android, teléfono inteligente, Parkinson, bluetooth, Internet de las cosas, sensores, movimiento, actividades, medicamentos y visualización.
 
@@ -132,17 +129,22 @@ Summarizing, we have used the following technologies:
 \newpage
 \section{Introducción}
 
-La enfermedad del Parkinson es una enfermedad neurodegenerativa crónica que afecta al sistema nervioso central, y que progresa lentamente. Los síntomas del parkinson afectan mayoritariamente a las habilidades motrices, y son síntomas bastante variados. Los principales síntomas son temblores, rigidez muscular o resistencia al movimiento, bradicinesia que afecta a la velocidad de los movimientos y que provoca que los movimientos simples del día a día se conviertan en algo difícil de realizar e inestabilidad postural que hace que las personas afectadas pierdan el equilibro fácilmente, lo que puede provocar caídas.
+La enfermedad del Parkinson es una enfermedad neurodegenerativa crónica que afecta al sistema nervioso central, y que progresa lentamente. Los síntomas del Parkinson afectan mayoritariamente a las habilidades motrices, y son síntomas bastante variados. Los principales síntomas son temblores, rigidez muscular, inestabilidad postural que hace que las personas afectadas pierdan el equilibro fácilmente y bradicinesia, que afecta a la velocidad de los movimientos y que provoca que los movimientos simples del día a día se conviertan en algo difícil de realizar.
 \newline
 
 Como se puede observar los principales síntomas del Parkinson se pueden medir de alguna forma fijándonos en como se realizan algunos movimientos o en caso del temblor fijándonos en la presencia o no de este movimiento. Esto hace que la enfermedad del Parkinson se una enfermedad que se pueda ver ayudada por el gran avance de la tecnología IoT (Internet of things) que esta haciendo que cada vez sea mas sencillo contar con sensores con suficiente calidad como para caracterizar los movimientos de estas personas con precisión y permitir su estudio.
 \newline
 
-El estudio de estos síntomas puede tener grandes ventajas en el diagnostico previo y efectivo de la enfermedad ya que estados primarios los síntomas son puntuales y es difícil que se manifiesten justo cuando el paciente esta pasando consulta en el medico. Ademas en caso de ya estar diagnosticado el estudio del movimiento permitiría a un médico contar con datos sobre como avanza la enfermedad lo que ayudaría a la hora de seleccionar que y cuanta medicación debe tomar el paciente.
+El estudio de estos síntomas puede tener grandes ventajas en el diagnostico previo y efectivo de la enfermedad ya que en estados primarios los síntomas son puntuales y es difícil que se manifiesten justo cuando el paciente esta pasando consulta en el medico. Además, en caso de ya estar diagnosticado, el estudio del movimiento permitiría a un médico contar con datos sobre como avanza la enfermedad, lo que ayudaría a la hora de seleccionar que y cuanta medicación debe tomar el paciente.
+
+Por todo lo anterior creemos que el desarrollo de un sistema como el nuestro cubriría con gran eficacia las necesidades mencionadas anteriormente, además el hecho de usar sensores BLE permite abaratar el coste del sistema ya que tienen un precio bastante asequible y tienen un consumo de energia muy bajo, una alta fiabilidad y dado que son sensores inhalambricos son faciles de llevar y poco intrusivos para el paciente.
 
 \subsection{Antecedentes}
 
-Este Trabajo de fin de grado está precedido por otro realizado en el curso anterior llamado "Reconocimiento de actividad mediante pulsera con sensores" en el cual nuestros compañeros implementaron un sistema capaz de reconocer la ejecución de actividades cotidianas usando una aplicación Android y sensores BLE similares a los usados en este proyecto. Este otro Trabajo de fin de grado estaba dirigido por los mismos profesores que han dirigido este.
+Este Trabajo de fin de grado está precedido por otro realizado en el curso anterior \cite{TFG_Anterior}  en el cual nuestros compañeros implementaron un sistema capaz de reconocer la ejecución de actividades cotidianas usando una aplicación Android y sensores BLE similares a los usados en este proyecto, pero mas dificiles de llevar, ya que en nuestro proyecto hemos priorizado la seleccion de sensores que sean comodos de llevar para evitar que el paciente que los porte se sienta invadido por estos. 
+\newline
+
+Nuestro proyecto tratar de recoger esta idea y aplicarla al problema especifico del Parkinson, en lugar de tan solo reconocer actividades cotidianas nuestro objetivo es ver como evoluciona la ejecucion de estas actividades por pacientes diagnosticados de Parkinson y ayudar asi a su supervision. Este otro Trabajo de fin de grado estaba dirigido por los mismos profesores que han dirigido este.
 \newline
 
 Además del trabajo de fin de grado citado en el párrafo anterior este trabajo viene precedido por numerosos artículos científicos en los que se intenta identificar los síntomas del parkinson mediante la monitorización de pacientes a través de sensores que este lleva sujetos a alguna parte de su cuerpo. Se comentara en profundidad el alcance de estos artículos en la sección 2 de este documento.
@@ -167,8 +169,8 @@ Durante esta primera fase el objetivo es documentarnos lo máximo y ponernos en 
 \subsection{Fase 2: Desarrollo Aplicación Android}
 En esta segunda fase se realizara el desarrollo de la aplicación Android que nos permitirá recoger la información de los sensores así como del contexto del paciente (medicación, actividades,...) para su posterior uso.
 
-\subsection{Fase 3: Implementación infraestructura auxiliar}
-Una vez implementada la aplicación Android capaz de recopilar los datos y almacenarlos locamente en el teléfono implementaremos la infraestructura necesaria para ser capaces de extraer esta información del teléfono y enviarla a un servidor o back-end donde será procesada.
+\subsection{Fase 3: Implementación de los servicios del servidor}
+Una vez implementada la aplicación Android capaz de recopilar los datos y almacenarlos locamente en el teléfono implementaremos los servicios necesarios para ser capaces de extraer esta información del teléfono y enviarla al servidor será procesada.
 
 \subsection{Fase 4: Visualización de datos}
 Una vez implementada la aplicación que nos permite recopilar la información y la infraestructura necesaria para manipular esta información fuera del teléfono móvil del paciente implementaremos una aplicación web que servirá para visualizar los datos de una forma amigable para el medico que deba interpretar la información.
@@ -664,20 +666,6 @@ Aunque nos hemos organizado juntos, yo he puesto más hincapié en utilizar apli
     \bibitem{App TI} https://play.google.com/store/apps/details?id=com.ti.ble.sensortag\&hl=es
     \bibitem{NINDS} National Institute of Neurological Disorders and Stroke (\url{https://espanol.ninds.nih.gov/trastornos/parkinson_disease_spanish.htm})
     \bibitem{Asociación Parkinson Madrid} Asociación Parkinson Madrid (\url{https://www.parkinsonmadrid.org/el-parkinson/el-parkinson-definicion/})
+    \bibitem{TFG_Anterior} "Reconocimiento de actividad mediante pulsera con sensores"
 \end{thebibliography}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \end{document}
