@@ -37,7 +37,7 @@
     \vskip 1cm
     
     \centering
-    {\huge Reconocimiento de actividades domésticas en personas con enfermedades neurodegenerativas mediante una pulsera de sensores 
+    {\huge Sistema para la supervisión remota de actividad física de pacientes mediante pulseras de sensores 
     }
     \newline
     \newline
@@ -45,13 +45,13 @@
     \newline
     
 	\centering \large { Christian González García-Muñoz \\  Alejandro Huertas Herrero \\ 
-    					\bigskip Dirigido por: Javier Arroyo \\ Codirigido por: Marlon Cárdenas \\ \bigskip}
+    					\bigskip Directores: \\ Javier Arroyo y Marlon Cárdenas \\ \bigskip}
     \vskip 1cm
     \centering \Large { Trabajo de fin de grado del Grado en Ingeniería Informática }
 	\vskip 1cm
     \centering \large {Facultad de Informática \\ Universidad Complutense de Madrid \\ Curso 2017-2018}
     \vskip 0.5cm
-    \centering \large {21 Mayo de 2018}
+    \centering \large {28	 Mayo de 2018}
 
 \end{titlepage}
 \clearpage
@@ -176,31 +176,33 @@ Una vez implementada la aplicación que nos permite recopilar la información y 
 \newpage
 
 \section{Estado del arte}
-“La enfermedad de Parkinson (EP), también denominada mal de Parkinson, parkinsonismo idiopático, parálisis agitante o simplemente párkinson, es una enfermedad neurodegenerativa crónica caracterizada por bradicinesia (movimiento lento), rigidez (aumento del tono muscular) y temblor.” - Wikipedia
+“La enfermedad de Parkinson (EP), también denominada mal de Parkinson, parkinsonismo idiopático, parálisis agitante o simplemente párkinson, es una enfermedad neurodegenerativa crónica caracterizada por bradicinesia (movimiento lento), rigidez (aumento del tono muscular) y temblor.” \cite{Wikipedia} 
 \newline
 
-Gran parte de los síntomas de la enfermedad son motores, por eso decidimos hacer una aplicación basada en la utilización de sensores. Se han hecho numerosos estudios los cuales utilizan esta tecnología y a su vez utilizan los datos recogidos para aplicar técnicas de análisis de datos como machine learning sobre ellos.
+En el artículo \cite{resumen1} se cuenta cómo se ha desarrollado un sistema que permite la monitorización continua del paciente. De esta forma pueden, a su vez, tener un seguimiento objetivo de la vida del paciente, sin tener que hacer ejercicios guiados, lo cual permite obtener mejores resultados a la hora de analizar los datos obtenidos. 
 \newline
 
-Para introducirnos en el estado del arte, leímos numerosos artículos científicos, en concreto los más útiles e interesantes, son los que se listan a continuación:
+Este artículo \cite{resumen2} sigue la línea del anterior, se habla de la necesidad de recopilar información del paciente de forma objetivo y prolongada en el tiempo. Ya que, las visitas al médico pueden no llegar a ser suficientes para detectar ciertos síntomas que no se manifiestan siempre. También se comenta la importancia que tiene el ejercicio físico en estos pacientes, muchas veces detectar el sedentarismo con antelación puede ayudar en la evolución del paciente.
 \newline
 
-\begin{itemize}
-	\item Quantitative wearable sensors for objective assessment of Parkinson’s diseases.
-	\item Analysis of feature space for monitoring persons with Parkinson’s disease with application to a wireless wearable sensor system. 
-	\item Detection of walking periods and number of steps in older adults and patients with Parkinson’s disease: accuracy of a pedometer and an accelerometry-based method. 
-	\item Monitoring Motor Fluctuations in Patients With Parkinson’s Disease Using Wearable Sensors . 
-	\item Feasibility and effects of home-based smartphone-delivered automated feedback training for gait in people with Parkinson’s disease: A pilot randomized controlled trial.
-	\item An accelerometry-based study of lower and upper limb tremor in Parkinson’s disease. 
-	\item Detecting and monitoring the symptoms of Parkinson’s disease using smartphones: A pilot study.
-	\item A smartphone-base architecture to detect and quantify freezing of gait in parkinson’s disease.
-    \newline
-\end{itemize}
-
-Todos ellos tienen como nexo común, la utilización de sistemas basados en sensores para analizar las actividades que realizan los pacientes. La mayoría de ellos utilizan cuadros de actividades fijados previamente. 
+Mientras los artículos anteriores se centran en la continuidad y objetividad, el artículo \cite{resumen3} realiza una comparación de diferentes dispositivos para recoger datos del paciente. Comparan un sensor que tiene un acelerómetro con un podómetro y utilizan grabaciones en vídeo de los pacientes realizando las actividades para contrastar los resultados. A diferencia de los anteriores, se utilizan personas con y sin la enfermedad.
 \newline
 
-Nuestra aplicación está diseñada para poder usarla para monitorizar al paciente en un entorno libre, en su día a día, o mientras realiza una tabla de ejercicios previamente definida, en este caso nuestra aplicación permite cruzar los datos de monitorización obtenidos con los horarios de la toma de la medicación, de esta forma se podría ver el efecto que tienen los medicamentos sobre cada paciente.
+Por último, el artículo \cite{resumen4} presenta un análisis del uso de diferentes acelerómetros para la recogida de datos. Realizan varias pruebas colocando los sensores en diferentes partes del cuerpo y utilizando también diferentes modelos de sensores.
+\newline
+
+Ahora, veamos los diferentes síntomas en los que se centran cada uno de los artículos. Todos ellos tienen en común la utilización de dispositivos bluetooth colocados en el cuerpo del paciente para recoger los datos. En \cite{resumen1} se centran en detectar problemas motores, cómo son la “Bradykinesia” \cite{Hipocinesia} y la “Dyskinesia” \cite{Dyskinesia}. En el artículo \cite{resumen2} se centran en discapacidades motoras, como puede ser "Freezing of Gait" \cite{Gait} y en discapacidades no motoras, como pueden ser trastornos en el sueño. El artículo \cite{resumen3} no se centra en ningún síntoma en concreto, se centra en como caminan los pacientes. Para ello cada uno debe andar en línea recta, andando cada vez una distancia diferente. Por último, en \cite{resumen4} se centran en discapacidades motoras, en la severidad que tiene cada paciente.
+\newline
+
+Otro punto importante de todos los artículos es la utilización de técnicas de machine learning para analizar los datos y conseguir sacar conclusiones que ayuden a mejorar la vida de los pacientes. En \cite{resumen4} utilizan SVM "Support Vector Machine" \cite{SVM} siguiendo la idea de "uno contra todos".
+\newline
+
+En algunos de los artículos se desarrolla un sistema que permite tanto la recogida como el tratamiento de los datos. En \cite{resumen1} desarrollan un sistema que permite la monitorización continua. Para ello a nivel de hardware utilizan un SHIMMER de Intel. Con respecto a los sensores el SHIMMER lleva un acelerómetro triaxial. A nivel de software cuentan que tienen unas limitaciones computacionales que no les permiten analizar todos los datos en tiempo real ni tampoco un ancho de banda que les permita enviar los datos a una estación base que pueda hacerlo,. Respecto a la arquitectura del software consiste en 4 etapas. De las cuales dos (la 2o y 3o) vienen dadas por las limitaciones computacionales ya que no pueden procesar todos los
+datos en profundidad y enviarlos a la estación base en tiempo real. En la primera procesa los datos que puede de forma rápida y en la ultima introduce los resultados en un clasificador para predecir puntuaciones clínicas.
+\newline
+
+Nuestro trabajo sigue la línea de la monitorización de actividades, tanto libres como tablas de ejercicios. El objetivo que tiene nuestro sistema es poder monitorizar a un paciente de forma remota, se centra en la recogida de datos y en el almacenamiento de los mismos. Posteriormente, dichos datos pueden ser visualizados por el médico y en un futuro podrán ser analizados en mayor profundidad. Otro de los objetivos, es observar como afecta al paciente la toma de la medicación, para ello se incluyen recordatorios dentro de la aplicación y se graban las actividades después de la toma de cada medicamento. De esta forma se puede ver como varían los datos recogidos haciendo la actividad sin medicación y con.
+
 \newpage
 
 \section{Aplicación Android}
@@ -569,12 +571,12 @@ La aplicación podría ser completada añadiendo los siguientes elementos:
 
 \begin{itemize}
 	\item Gráficas en tiempo real con los datos que son recogidos por los sensores.
-    \item Gestión de los temblores, que en un primer momento se planteó, pero que con el cambio del rumbo del TFG se descartó.
-    \item Recordatorios personalizables para las pastillas. Ahora mismo la aplicación sólo manda una notificación a la hora en el día que se tiene que tomar la pastilla.
+    \item Gestión de los temblores, que en un primer momento se planteó, pero que con el cambio del rumbo del TFG se descartó. La gestión de temblores consiste en permitir al paciente indicar cuando está teniendo un temblor o cuando lo tuvo y de esta forma poder contrastar esos datos con datos de otras actividad, consiguiendo así diferenciar cuando el paciente está teniendo un temblor de cuando está realizando otra actividad.
+    \item Recordatorios personalizables para las pastillas. Ahora mismo la aplicación sólo manda una notificación a la hora en el día que se tiene que tomar la pastilla. La idea es que el paciente pudiera indicar si quiere que el terminal vibre o suene cuando salte la notificación, ya que ahora mismo sólo se muestra y ya.
     \item Varias vistas de tal forma que el paciente vea una parte de la aplicación y su cuidador pueda acceder a otros datos.
-    \item Que la comunicación con la pulsera sea bidireccional, de forma que se puedan enviar notificaciones a la pulsera.
+    \item Que la comunicación con la pulsera sea bidireccional, de forma que se puedan enviar notificaciones a la pulsera. Esto sería útil para que el recordatorio de toma de la pastilla pudiera ser visto en la pantalla de la pulsera, de esta forma el paciente no necesitaría tener el móvil siempre cerca. Además se podría ver la posibilidad de que la pulsera vibrara con cada recordatorio, de esta forma el paciente sabría en todo momento que pastilla se tiene que tomar.
     \item Utilizar vibración o sonidos dentro de las notificaciones o a la hora de alcanzar valores extraños por parte de los sensores, como por ejemplo que el sensor se ha desconectado o que el sensor está devolviendo valores erróneos.
-    \item Por último, el diseño de la aplicación es bastante mejorable, aunque ahora es muy sencilla e intuitiva, quizás vendría bien tener diferentes diseños según el dominio del paciente.
+    \item Por último, el diseño de la aplicación es bastante básico. Pero se podría personalizar para adaptarlo a personas mayores o con problemas para el manejo de pantallas táctiles de pequeñas dimensiones.
 \end{itemize}
 
 \subsection{Aplicación Web}
@@ -652,10 +654,30 @@ Aunque nos hemos organizado juntos, yo he puesto más hincapié en utilizar apli
     BAUKJE DIJKSTRA, WIEBREN ZIJLSTRA, ERIK SCHERDER, YVO KAMSMA. "Detection of walking periods and 	     number of steps in older adults and patients with Parkinson’s disease: accuracy of a pedometer and       an accelerometry-based method"
     \bibitem{resumen4}
     Shyamal Patel, Konrad Lorincz, Richard Hughes, Nancy Huggins, John Growdon, David Standaert, Metin       Akay, Fellow, IEEE, Jennifer Dy, Matt Welsh, Member, IEEE, and Paolo Bonato, Senior Member, IEEE.       "Monitoring Motor Fluctuations in Patients With Parkinson’s Disease Using Wearable Sensors"
+    \bibitem{Wikipedia} (\url{https://es.wikipedia.org/wiki/Enfermedad_de_Parkinson})
+    \bibitem{Hipocinesia} https://es.wikipedia.org/wiki/Hipocinesia
+    \bibitem{Dyskinesia} https://en.wikipedia.org/wiki/Dyskinesia
+    \bibitem{Gait} (\url {https://en.wikipedia.org/wiki/Parkinsonian_gait})
+    \bibitem{SVM} (\url {https://en.wikipedia.org/wiki/Support_vector_machine})
     \bibitem{Texas Instruments} http://www.ti.com/product/CC2650/description
     \bibitem{Wiki TI} http://processors.wiki.ti.com/index.php/CC2650\_SensorTag\_User's\_Guide
     \bibitem{App TI} https://play.google.com/store/apps/details?id=com.ti.ble.sensortag\&hl=es
     \bibitem{NINDS} National Institute of Neurological Disorders and Stroke (\url{https://espanol.ninds.nih.gov/trastornos/parkinson_disease_spanish.htm})
     \bibitem{Asociación Parkinson Madrid} Asociación Parkinson Madrid (\url{https://www.parkinsonmadrid.org/el-parkinson/el-parkinson-definicion/})
 \end{thebibliography}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \end{document}
