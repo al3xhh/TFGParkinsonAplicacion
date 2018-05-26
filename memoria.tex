@@ -343,7 +343,7 @@ En todas las pantallas de la aplicación puede verse un botón flotante abajo a 
 El botón de ayuda, muestra en cada pantalla cómo realizar todas las acciones permitidas en dicha pantalla. Como podemos ver en este caso muestra cómo acceder a cada apartado, así como enviar datos y conectar los sensores. Resalta en negrita las partes más importantes, para que puedan ser vistas de forma sencilla y rápida.
 \newpage
 
-\subsection{Diagramas UML (Casos de uso)}
+\subsubsection{Diagramas UML (Casos de uso)}
 \begin{figure}[!htb]
 \minipage{0.5\textwidth}
   \includegraphics[width=\linewidth]{AplicacionUML.png}
@@ -367,34 +367,46 @@ El botón de ayuda, muestra en cada pantalla cómo realizar todas las acciones p
 \end{figure}
 \newpage
 
-\subsection{Arquitectura de la aplicación}
-\subsubsection{Descripción}
-La aplicación no sigue ninguna arquitectura concreta. El patrón que más se le aproxima es Modelo Vista Controlador (MVC) De los tres elementos tendríamos bien diferenciados dos de ellos. Por un lado tenemos la vista, que la forman todos los layouts y por otro los modelos que serían las actividades de Android.
+\subsubsection{Aspectos importantes de la implementación}
+{\bf Descripción}
+\newline
+\newline
+La aplicación no sigue ninguna arquitectura concreta. Se diferencian la capa del modelo y la capa de la vista. La vista está formada por todos los layouts de Android y el modelo por las activities de Android.
 \newline
 
 Entrando más en detalle en los elementos que forman la aplicación. El almacenamiento de datos dentro del teléfono se realiza gracias a SQLite ("SQLite es una librería escrita en lenguaje C que implementa un manejador de base de datos SQL embebido.") En ella se guardan todos los datos del sensor que aún no han sido enviados al servidor (una vez se envían se borran de la base de datos local) los medicamentos y actividades (estos disponen de un campo que indica si se han enviado al servidor o no, porque a diferencia de los datos de los sensores, éstos no se borran nunca del teléfono) El diagrama entidad relación es el siguiente:
 \newline
 
-Otro de los elementos importantes es la gestión de la conexión con los sensores. La conexión con cada tipo de sensor se hace de forma diferente, ambas se realizan con librerías que se hemos encontrado en GitHub y hemos adaptado a nuestras necesidades. La aplicación permite conectar varios sensores de Texas Instruments a la vez, mientras que sólo permite conectar un sensor del tipo Hexiwear.
+Otro de los elementos importantes es la gestión de la conexión con los sensores. La conexión con cada tipo de sensor se hace de forma diferente, ambas se realizan con librerías que se hemos encontrado en GitHub y hemos adaptado a nuestras necesidades. La aplicación permite conectar varios sensores de Texas Instruments a la vez, mientras que sólo permite conectar un sensor del tipo Hexiwear. Para mantener la conexión activa con los sensores aunque la aplicación no esté en primer plano hemos utilizado los servicios de Android. De tal forma que aunque la aplicación esté en multitarea o el móvil se encuentre bloqueado, los sensores siguen conectados y enviando datos al teléfono. Con esto conseguimos que el paciente no tenga que tener el móvil siempre a mano ni estar pendiente de él mientras realiza cada actividad. Debido a que usamos BLE que es bluetooth de bajo consumo, la conexión con los sensores se dificultad, ya que se pierde con mayor facilidad, por ello los servicios ayudan a mantener en todo momento la conexión activa.
 \newline
 
 El último elemento a destacar son las llamadas a la API Rest. Se hacen mediante una librería de Android (Volley) Se utilizan mensajes JSON para transmitir toda la información, tanto de la aplicación a la API como viceversa.
+\newline
 
-\subsubsection{Diagrama}
+{\bf Diagrama}
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.9\textwidth]{ArquitecturaAndroid.png}
+  \includegraphics[width=0.6\textwidth]{ArquitecturaAndroid.png}
   \caption{Arquitectura aplicación Android.}
 \end{figure}
+\newpage
 
-\subsubsection{Estructura de clases}
+{\bf Estructura de clases}
+\newline
+\newline
 El código de la aplicación se está organizado en tres grandes grupos:
 
 \begin{itemize}
-	\item {\bf Actividades: } en este paquete se encuentran todas las actividades que forman la aplicación de Android. Esto se corresponde con cada una de las funcionalidades de la aplicación, es decir, actividades, medicamentos y recogida de los datos recogidos por los sensores.
+	\item {\bf Actividades: } en este paquete se encuentran todas las actividades que forman la aplicación de Android. Esto se corresponde con cada una de las funcionalidades de la aplicación, es decir, actividades, medicamentos y recogida de los datos emitidos por los sensores.
     \item {\bf Adaptadores: } son principalmente dos, uno para las actividades y otro para los medicamentos. Permiten la creación de listas personalizadas en Android. De esta forma podemos mostrar de una forma sencilla e intuitiva toda la información relacionada con cada elemento, así como editar y borrar cada uno de ellos.
     \item {\bf Clases: } aquí podemos encontrar gran variedad. Por un lado están las clases que representan cada objeto dentro de la aplicación. Por otro lado están los servicios que gestionan las conexión bluetooth con los sensores. Por último, se encuentra la clase que conecta la aplicación con la API rest.
+\newline
 \end{itemize}
+
+Entrando un poco más en detalle, vamos a explicar cómo funcionan los adaptadores, ambos funcionan igual, ya que controlan una funcionalidad parecida. Los adaptadores, son una forma que ofrece Android de personalizar las listas. En nuestro caso tenemos dos listas principales, la de medicamentos y la de actividades, el adaptador se encarga de mostrar toda la información de cada actividad y medicamento en concreto, de una forma sencilla para su lectura. A su vez, el adaptador permite también llevar a cabo las operaciones de editar y borrar cada elemento de la lista.
+\newline
+
+Por otro lado, todas las activities funcionan de una forma similar. Las activities es una funcionalidad que ofrece Android. Cada una de ellas se corresponden con cada una de las pantallas que se ven a lo largo del uso de la aplicación. Cada una cuenta con un layout, que define la forma en la que se va a ver todo en esa pantalla. A su vez, mediante mecanismos de Android, se pueden coger datos del layout, esto es, detectar pulsaciones en botones y recoger los datos de los diferentes formularios.
 \newpage
 
 \section{Sensores}
