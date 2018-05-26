@@ -204,40 +204,55 @@ datos en profundidad y enviarlos a la estación base en tiempo real. En la prime
 \newline
 
 Nuestro trabajo sigue la línea de la monitorización de actividades, tanto libres como tablas de ejercicios. El objetivo que tiene nuestro sistema es poder monitorizar a un paciente de forma remota, se centra en la recogida de datos y en el almacenamiento de los mismos. Posteriormente, dichos datos pueden ser visualizados por el médico y en un futuro podrán ser analizados en mayor profundidad. Otro de los objetivos, es observar como afecta al paciente la toma de la medicación, para ello se incluyen recordatorios dentro de la aplicación y se graban las actividades después de la toma de cada medicamento. De esta forma se puede ver como varían los datos recogidos haciendo la actividad sin medicación y con.
-
 \newpage
 
-\section{Aplicación Android}
-\subsection{Descripción}
-La aplicación ha sido desarrollada para dispositivos Android, con una versión igual o superior a Android 4.4 (KitKat) Cuenta con un diseño sencillo e intuitivo, ya que está pensada para personas que pueden tener temblores mientras la usen o pueden encontrarse en una avanzada edad. Toda la recogida de datos de los sensores está automatizada, el paciente sólo tiene que conectar la aplicación con cada sensor y puede olvidarse del teléfono en ese momento. Se ha intentado que la aplicación sea lo menos invasiva posible, para ello tan sólo cuenta con notificaciones cuando se tiene que tomar las pastillas. Cada notificación indica la pastilla que debe tomarse y cuenta con dos opciones, de esta forma se puede llevar un control de las pastillas que se ha tomado (esto quedaría pendiente como trabajo futuro)
+\section{Sistema}
+\subsection{Aplicación Android}
+\subsubsection{Descripción de la funcionalidad}
+La aplicación ha sido desarrollada para dispositivos Android, con una versión igual o superior a Android 4.4 (KitKat) Cuenta con un diseño sencillo e intuitivo, ya que está pensada para personas que pueden tener temblores mientras la usen o pueden encontrarse en una avanzada edad. Toda la recogida de datos de los sensores está automatizada, el paciente sólo tiene que conectar la aplicación con cada sensor y puede olvidarse del teléfono en ese momento. Se ha intentado que la aplicación sea lo menos invasiva posible, para ello tan sólo cuenta con notificaciones cuando se tiene que tomar las pastillas. Cada notificación indica la pastilla que debe tomarse y cuenta con dos opciones, de esta forma se puede llevar un control de las pastillas que se ha tomado.
 \newline
 
-\subsection{Capturas}
-\subsubsection{Menú inicio}
-\begin{figure}[!htb]
+La aplicación ofrece las dos siguientes funciones principales:
+
+\begin{itemize}
+	\item {\bf Bitácora de actividades}: cuenta con una lista de todas las actividades que realiza el paciente. Cada vez que se añade una nueva se graba la actividad con los sensores. En todo el sistema en general, esta es la parte que permite obtener los datos del sensor.
+    \item {\bf Bitácora de medicamentos}: cuenta con una lista de toda la medicación que tiene que tomar el paciente. La aplicación le notifica al paciente cada vez que se tiene que tomar un medicamento y le da la posibilidad de grabar la actividad después de la toma. En todo el sistema en general, esta es la parte que permite recoger datos de la toma del medicamento, así como del efecto que causa en el paciente.
+\end{itemize}
+
+A continuación, se muestran capturas de la aplicación y cómo funciona cada apartado de la misma.
+\newline
+
+{\bf Menú inicio}
+\begin{figure}[h!]
 \centering
 \includegraphics[width=0.25\textwidth]{Inicio.jpg}
 \caption{Pantalla principal de la aplicación.}
 \end{figure}
-Esta es la pantalla que aparece cuando se inicia la aplicación. Podemos ver dos grandes botones, el primero de ellos permite acceder a todo lo relacionado con las actividades y el segundo a todo lo relacionado con los medicamentos.
-\newline
-
-Puede verse como en el menú superior hay dos botones. El botón de enviar, permite enviar todos los datos al servidor. El botón emparejar permite acceder al menú dónde se configuran y se emparejan los sensores con la aplicación.
 \newpage
 
-\subsubsection{Actividades}
+Esta es la pantalla que aparece cuando se inicia la aplicación. Podemos ver dos grandes botones, el primero de ellos permite acceder a todo lo relacionado con las actividades y el segundo a todo lo relacionado con los medicamentos. Para iniciar la aplicación, no es necesario tener los sensores a mano ni conectados a la aplicación. De esta forma, la aplicación puede ser usada simplemente para consultar datos y no para recogerlos.
+\newline
+
+Puede verse como en el menú superior hay un botón. Este botón permite enviar los datos al servidor remoto. El botón sólo aparece cuando hay datos disponibles que enviar, mientras no los haya el botón no aparece. De esta forma el paciente sabe en todo momento si tiene algo que enviar.
+\newline
+
+{\bf Gestión de las actividades}
+\newline
 \begin{figure}[!htb]
 \minipage{0.32\textwidth}
   \includegraphics[width=\linewidth]{Actividades.jpg}
   \caption{Actividades}
+  \label{Actividades}
 \endminipage\hfill
 \minipage{0.32\textwidth}
   \includegraphics[width=\linewidth]{AnyadirActividad.jpg}
   \caption{Añadir actividad}
+  \label{Añadir actividad}
 \endminipage\hfill
 \minipage{0.32\textwidth}%
   \includegraphics[width=\linewidth]{MenuActividades.jpg}
   \caption{Menú actividad}
+  \label{Menú actividad}
 \endminipage
 \end{figure}
 
@@ -250,34 +265,41 @@ La información que se guarda de cada actividad es:
 	\item {\bf Nombre} de la actividad.
 	\item {\bf Duración} de la actividad.
 	\item {\bf Hora y fecha} en las que se realizó la actividad.
-	\item Cualquier {\bf observación} que pueda hacer que los datos recogidos por los sensores en esa actividad no sean válidos.
+	\item {\bf Observaciones} se trata de un texto libre en el que el paciente puede indicar cualquier información relevante ocurrida durante la realización de la actividad, o si ocurrió algo que impidió que la realizara con normalidad.
 \end{itemize}
 
-La actividad puede ser añadida antes o después de realizarla, lo importante es que mientras se realice los sensores están conectados y recogiendo datos.
+Una vez se añade la actividad, la aplicación pedirá al paciente que conecte los sensores, para comenzar a grabar los datos de la actividad. Una vez estén conectados los sensores, aparecerá una pantalla que muestra los datos emitidos por el sensor en tiempo real, con un botón de parar, que detendrá la recogida de datos.
 \newline
 
-Al pulsar en el botón de añadir actividad (botón flotante de abajo a la derecha) se nos abre un cuadro de diálogo en el que podemos rellenar cada uno de los campos. Las actividades están prefijadas de antemano, sólo se incorporan aquellas que son más importantes para posteriores estudios.
+Al pulsar en el botón de añadir actividad (botón flotante de abajo a la derecha) \ref{Actividades} se nos abre un cuadro de diálogo en el que podemos rellenar cada uno de los campos. El campo de actividad se ha dejado libre, aunque lo más normal es que el paciente introduzca actividades cotidianas o de su rutina de ejercicios.
 \newline
 
-Por último, cada actividad cuenta con tres puntitos, los cuales despliegan el menú de opciones. Las opciones disponibles son editar y borrar. Editar abrirá un cuadro de diálogo como el de añadir, pero con todos los campos rellenos con la información de dicha actividad (aparecerán bloqueados aquellos que no se puedan editar) Borrar abrirá un cuadro de diálogo preguntando si de verdad se desea borrar la actividad, en caso afirmativo la actividad será borrada de la lista que contiene todas las actividades.
+Por último, cómo se ve en \ref{Menú actividad} para cada actividad se puede desplegar un menú contextual a través del icono de los "Tres puntos" en el que tenemos dos opciones disponibles: editar y borrar. Editar abrirá un cuadro de diálogo como el de añadir, pero con todos los campos rellenos con la información de dicha actividad (aparecerán bloqueados aquellos que no se puedan editar, es decir, todo menos las observaciones) Borrar abrirá un cuadro de diálogo preguntando si de verdad se desea borrar la actividad, en caso afirmativo la actividad será borrada de la lista que contiene todas las actividades.
+\newline
 
-\subsubsection{Medicamentos}
+{\bf Gestión de los medicamentos}
+\newline
+\newline
+Los medicamentos están formados por dos partes. En primer lugar se permite añadir medicamentos y así poder tener una lista de todos los medicamentos que se toma el paciente. Cada vez que se añade un medicamento, se programa una notificación, la cual saltará en el momento de la toma, en ese momento el paciente puede indicar que se ha tomado la pastilla o que no, de esta forma se tiene un histórico de las tomas del paciente. En segundo lugar, si el paciente indica que se la ha tomado, se le dará la posibilidad de grabar con los sensores alguna actividad, de esta forma se podrá ver el efecto de la medicación.
 \begin{figure}[!htb]
 \minipage{0.32\textwidth}
   \includegraphics[width=\linewidth]{Medicamentos.jpg}
   \caption{Medicamentos}
+  \label{Medicamentos}
 \endminipage\hfill
 \minipage{0.32\textwidth}
   \includegraphics[width=\linewidth]{AnyadirMedicamento.jpg}
   \caption{Añadir medicamento}
+  \label{Añadir medicamento}
 \endminipage\hfill
 \minipage{0.32\textwidth}%
   \includegraphics[width=\linewidth]{MenuMedicamentos.jpg}
   \caption{Menú medicamento}
+  \label{Menú medicamento}
 \endminipage
 \end{figure}
 
-Las tres pantallas de arriba muestran cómo se trabaja con los medicamentos. La pantalla principal cuenta con una lista de todos los medicamentos que tiene que tomar el paciente y con un botón que permite añadir un nuevo medicamento al sistema.
+Las tres pantallas de arriba muestran cómo se trabaja con los medicamentos. La pantalla principal \ref{Medicamentos} cuenta con una lista de todos los medicamentos que tiene que tomar el paciente y con un botón que permite añadir un nuevo medicamento al sistema.
 \newline
 
 La información que se guarda de cada medicamento es:
@@ -289,49 +311,27 @@ La información que se guarda de cada medicamento es:
 	\item {\bf Hora} a la que se tiene que tomar la medicación.
 \end{itemize}
 
-Una vez es añadido el medicamento, la próxima vez que se inicie la aplicación se programarán notificaciones que avisarán al paciente de cuándo se tiene que tomar cada medicamento ese día.
+Al pulsar en el botón de añadir medicamento (botón flotante de abajo a la derecha) \ref{Medicamentos} se nos abre un cuadro de diálogo en el que podemos rellenar cada uno de los campos.
 \newline
 
-Al pulsar en el botón de añadir medicamento (botón flotante de abajo a la derecha) se nos abre un cuadro de diálogo en el que podemos rellenar cada uno de los campos.
+Por último, cómo se ve en \ref{Menú medicamento} para cada medicamento se puede desplegar un menú contextual a través del icono de los "Tres puntos" en el que tenemos dos opciones disponibles: editar y borrar. Editar abrirá un cuadro de diálogo como el de añadir, pero con todos los campos rellenos con la información de dicho medicamento (aparecerán bloqueados aquellos que no se puedan editar, es decir, el nombre) Borrar abrirá un cuadro de diálogo preguntando si de verdad se desea borrar el medicamento, en caso afirmativo el medicamento será borrado de la lista que contiene todos los medicamentos.
 \newline
 
-Por último, cada medicamento cuenta con tres puntitos, los cuales despliegan el menú de opciones. Las opciones disponibles son editar y borrar. Editar abrirá un cuadro de diálogo como el de añadir, pero con todos los campos rellenos con la información de dicho medicamento (aparecerán bloqueados aquellos que no se puedan editar) Borrar abrirá un cuadro de diálogo preguntando si de verdad se desea borrar el medicamento, en caso afirmativo el medicamento será borrado de la lista que contiene todos los medicamentos.
-
-\subsubsection{Servidor}
+{\bf Envío de datos al servidor remoto}
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.25\textwidth]{EnviarDatos.jpg}
 \caption{Enviar datos al servidor.}
 \end{figure}
 
-El botón de enviar que se encuentra situado arriba a la derecha, permite enviar todos los datos al servidor. Se enviarán los datos recogidos por los sensores, las actividades realizadas por el paciente y los medicamentos que se tiene que tomar.
+El botón de enviar que se encuentra situado arriba a la derecha. Permite enviar todos los datos que aún no han sido enviados al servidor, de forma que no se tendrán datos repetidos en el servidor. Si algo falla durante el envío, los datos podrán ser enviados en otro momento. Se enviarán los datos recogidos por los sensores, las actividades realizadas por el paciente y los medicamentos que se tiene que tomar.
 \newline
 
 Una vez pulsamos el botón, se abre el cuadro de progreso que puede verse en la imagen. Desaparece una vez todos los datos han sido enviados. Después se informa al usuario de si ha ido todo bien o ha fallado algo.
 \newline
 
-\subsubsection{Configuración}
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=0.25\textwidth]{Emparejar_1_.jpg}
-\caption{Pantalla de configuración.}
-\end{figure}
-
-Cuando pulsamos en el botón emparejar que puede verse en la parte superior derecha (anterior imagen) nos aparece esta pantalla.
-
-En ella se pueden configurar los sensores. Permite indicar el rango del acelerómetro (“es el rango de amplitud máxima que puede medir el acelerómetro antes que la señal de salida resulte distorsionada o recortada. Normalmente se especifica en "g".”)
-\newline
-
-El periodo con el que se desean recoger los datos.
-Qué sensores se desean activar.
-Y en qué parte del cuerpo se va a poner cada uno de los sensores.
-\newline
-
-Una vez le demos a comenzar, podremos emparejar el sensor con la aplicación y comenzar a recoger datos.
-\newline
-
-\subsubsection{Ayuda}
-\begin{figure}[!htb]
+{\bf Ayuda}
+\begin{figure}[h!]
 \centering
 \includegraphics[width=0.25\textwidth]{Ayuda.jpg}
 \caption{Ayuda menú inicio.}
@@ -398,6 +398,16 @@ El código de la aplicación se está organizado en tres grandes grupos:
 \newpage
 
 \section{Sensores}
+Durante el trabajo hemos utilizado dos tipos de sensores, que se presentan a continuación. Ambos sensores están pensados para llevar como pulsera, aunque se podrían poner en otra parte del cuerpo si fuera necesario. Aquí puede verse un ejemplo de cómo quedaría uno de ellos en la muñeca.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.5\textwidth]{ManoSensor.jpg}
+  \caption{Sensor Hexiwear puesto.}
+\end{figure}
+
+El teléfono no es necesario que esté siempre con el paciente, para recoger datos basta con conectar los sensores al teléfono, toda la conexión es totalmente inalámbrica, a diferencia de la mayoría de artículos que utilizaban sensores conectados con cables. La aplicación desarrollada en Android, puede trabajar con ambos sensores de la misma forma, lo único que se necesita es buscar el dispositivo en la lista que aparece, seleccionarlo y a continuación se realizará la conexión. Todo el proceso es transparente al usuario, de tal forma que simplifica mucho el uso de la aplicación. También es importante mencionar, que la aplicación es capaz con trabajar con varios sensores a la vez, de forma que recoge datos de todos ellos. Aunque esta funcionalidad sólo está pensada para los sensores de Texas Instruments, ya que los de Hexiwear al tener pantalla incorporada, tiene más sentido que sólo se use uno cada vez.
+\newline
+
 \subsection{Texas Instrument: CC2650 - Ultra-low power wireless MCU}
 {\bf Descripción}
 \newline
@@ -434,17 +444,18 @@ El dispositivo contiene un procesador ARM de 32 bits que funciona a 48 MHz, el c
   \includegraphics[width=\textwidth]{ArquitecturaTexas.jpg}
   \caption{Arquitectura interna sensor texas.}
 \end{figure}
+\newpage
 
 {\bf Software}
 \newline
 
-Para interactuar con el sensor se puede utilizar cualquier dispositivo que tenga bluetooth, desde un dispositivo móvil hasta un ordenador. Existen librerías en Python que facilitan la interacción con el mismo. Para acceder a los sensores se utilizan direcciones físicas, conocidas como UUID (Universally Unique Identifier) También hay UUID que permiten configurar el sensor para cambiar parámetros como la frecuencia de funcionamiento, que sensores deben activarse, etc...
+Para interactuar con el sensor se puede utilizar cualquier dispositivo que tenga bluetooth, desde un dispositivo móvil hasta un ordenador. Existen librerías en Python que facilitan la interacción con el mismo, aunque debido a que hemos conectado los sensores con un teléfono móvil con Android, estas librerías no han sido usadas, pues usar Python en el terminal habría sido demasiado costoso y poco eficiente. Para acceder a los sensores se utilizan direcciones físicas, conocidas como UUID (Universally Unique Identifier) También hay UUID que permiten configurar el sensor para cambiar parámetros como la frecuencia de funcionamiento, que sensores deben activarse, etc...
 \newline
 
-{\bf Uso}
+{\bf Integración con la aplicación Android}
 \newline
 
-El sensor lo hemos utilizado con Android. Para ello hemos creado una aplicación móvil que se conecta al sensor y obtiene los datos de él. Para la conexión con el sensor se utiliza la dirección MAC que tiene asociada. Antes de realizar la conexión, se indican que servicios se desean activar y con que frecuencia se quieren recoger datos. Después, se realiza un escaneo y al seleccionar el sensor se empareja con él y comienza a leer datos. Los datos son almacenados en el teléfono y posteriormente son enviados a la nube para su posterior tratamiento.
+La integración con nuestra aplicación se realiza a través de la propia aplicación, sin el uso de aplicaciones externas. Se pueden recoger datos de todos sus sensores (acelerómetro, giroscopio y magnetómetro) Una vez se conecta, se empiezan a recoger datos que son almacenados en la base de datos local. Todos esos datos pueden ser enviados posteriormente al servidor remoto, en ese momento son borrados de la base de datos local.
 
 \subsection{Hexiwear}
 {\bf Descripción}
@@ -453,7 +464,7 @@ El sensor lo hemos utilizado con Android. Para ello hemos creado una aplicación
 Es un dispositivo pensado para IoT (Internet de las cosas) bastante pequeño y con un diseño amigable que permite usarlo como reloj inteligente. Hexiwear es un sensor bastante versátil completamente software libre.
 \newline
 
-\begin{figure}
+\begin{figure}[h!]
   \centering
   \includegraphics[width=6cm]{sensorHexiwearCorrea.png}
   \caption{Sensor Hexiwar con correa.}
@@ -487,7 +498,7 @@ de 1.1'', interfaz táctil y un led RGB. Ademas cuenta con los siguientes sensor
 Hexiwear ofrece aplicaciones tanto en iOS como en Android para interactuar con sus sensores, además ofrece una nube a traves de la cual recuperar los datos del sensor haciendo uso de un API REST. Dado que nuestra aplicación esta diseñada para ser capaz de monitorizar a un paciente en cualquier momento no podíamos hacer uso de la nube ya que necesita conexión a Internet. Nuestra aplicación integra la comunicación con el sensor haciendo uso de BLE.
 \newline
 
-{\bf Uso}
+{\bf Integración con la aplicación Android}
 \newline
 
 Como se menciona en el apartado anterior la interacción con el sensor se hace a través de nuestra propia aplicación Android. Mientras el dispositivo esta conectado con la aplicación se recogen los datos de acelerómetro y giroscopio y se almacenan en la base de datos local de la aplicación para posteriormente enviarlos y procesarlos en el servidor remoto.
@@ -553,13 +564,21 @@ Según el paciente o la persona a cargo de este vaya enviando los datos al servi
 \newpage
 
 \section{Conclusiones}
-El trabajo lo comenzamos en julio del año pasado, la idea inicial era crear un sistema capaz de diferenciar temblores de cualquier otra actividad. Finalmente el trabajo ha ido en otra línea, pero todo lo que hemos hecho puede ser utilizado para el propósito inicial.
+El trabajo lo comenzamos en julio del año pasado. El objetivo inicial era desarrollar una aplicación móvil que permitiera la monitorización de algún fenómeno con cierta relevancia médica. Al no conseguir el apoyo médico, optamos por seguir la línea del desarrollo de un sistema más genérico que permite la supervisión remota del paciente. Nuestro sistema está inspirado en el que se puede ver en el artículo \cite{resumen1}, aunque tiene ciertas diferencias. La supervisión del paciente se facilita mucho debido a que se puede hacer de forma remota, en todo momento el médico y cuidador pueden disponer de los datos del paciente.
 \newline
 
-A pesar de todas las dificultades que hemos tenido debido a que no hemos encontrado pacientes con los que probar la aplicación, ni médicos dispuestos a darnos feedback, hemos hecho un trabajo bastante completo. Hemos creado un sistema capaz de recoger todos los datos de las actividades que realiza el paciente y que permite al médico visualizarlos en una aplicación web.
+El sistema puede tener varios usos, en los que hemos pensado principalmente son los siguientes:
+
+\begin{itemize}
+	\item Monitorización de tablas de ejercicios: el paciente puede hacer diariamente los ejercicios que le mande su médico y se almacenan todos los datos recogidos por los sensores, así cómo las posibles observaciones que pueda hacer el paciente después de realizar la actividad.
+    \item Monitorización del efecto de la medicación: los sensores recogen datos tanto antes como después de la toma de la medicación. Esto permite ver el efecto que está teniendo la medicación y podría permitir la médico ver si la medicación es la correcta.
+    \item Bitácora: sirve para llevar un control de las pastillas que se toma el paciente, así como de si se las ha tomado o no. A su vez también se lleva un control del seguimiento de la tabla de ejercicios.
+\end{itemize}
+
+Nuestro trabajo sigue la línea de los que vimos en los artículos del estado del arte. Aunque, en nuestro caso hemos querido centrarnos más en otros aspectos y no tanto en el análisis de datos posterior. El sistema ayuda al paciente a recordar la toma de sus pastillas y le permite una vez tomada la pastilla grabar la actividad con los sensores, de forma que posteriormente el médico puede tener una visión completa del efecto que tiene la medicación. Mientras que en la mayoría de artículos se centraban en el ejercicio supervisado, nuestro sistema deja ese apartado libre, pudiendo el paciente realizar su tabla de ejercicios o ejercicio libre. Todos los datos recogidos, pueden ser visualizados por el médico de forma sencilla y filtrando dependiendo del tipo de datos que quiera ver. De esta forma, de manera remota puede tener el control de todos sus pacientes y puede tomar decisiones en cualquier momento. De esta forma se quiere seguir la línea de objetividad y continuidad que planteaban muchos artículos, cómo por ejemplo el \cite{resumen2}
 \newline
 
-El trabajo que hemos hecho se parece bastante a muchos sistemas que vimos cuando estudiamos el estado del arte. Aunque, nuestro sistema está más orientado al paciente, ya que incluye todo el apartado de los medicamentos. Con ello también queremos que se pueda estudiar el efecto que tienen los medicamentos sobre el paciente. Por otro lado, los estudios que vimos en los artículos del estado del arte se centraban en la recogida y el análisis de datos, nosotros hemos querido centrarnos también en el médico, de forma que pueda visualizar los datos y poder ayudar al paciente en cierta forma.
+Todos los datos que se recogen, son almacenados en el sistema, tanto en el móvil como en el servidor. Son utilizados para ser visualizados por parte del médico en la aplicación web. A su vez, se guardan de tal forma que en el futuro podrían ser analizados en mayor profundidad e incluso se podría realizar machine learning con ellos.
 \newline
 
 Como conclusión final, a pesar de la falta de personas que prueben nuestra aplicación, se ha desarrollado un trabajo muy completo y cerrado. Es completamente funcional y se podría poner en funcionamiento en cualquier momento y a partir de esto ampliar y seguir con la idea inicial del proyecto.
@@ -668,4 +687,19 @@ Aunque nos hemos organizado juntos, yo he puesto más hincapié en utilizar apli
     \bibitem{Asociación Parkinson Madrid} Asociación Parkinson Madrid (\url{https://www.parkinsonmadrid.org/el-parkinson/el-parkinson-definicion/})
     \bibitem{TFG_Anterior} "Reconocimiento de actividad mediante pulsera con sensores"
 \end{thebibliography}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \end{document}
