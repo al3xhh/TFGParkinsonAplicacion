@@ -266,7 +266,7 @@ Una vez los datos recolectados están en la base de datos del servidor, accesibl
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=6cm]{components-interaction.png}
+  \includegraphics[width=5cm]{components-interaction.png}
   \caption{Diagrama de interacción de los componentes del sistema.}
 \end{figure}
 
@@ -286,18 +286,20 @@ El teléfono no es necesario que esté siempre con el paciente, para recoger dat
 \newline
 
 El dispositivo es un sensor BLE (Bluetooth Low Energy) es decir, es bluetooth de bajo consumo. Cuenta con varios sensores dentro del propio dispositivo. Se puede conectar con cualquier dispositivo que disponga de bluetooth, en nuestro caso se ha utilizado conectándolo con un teléfono móvil. 
+\newline
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.5\textwidth]{SensorTexas.jpg}
+  \includegraphics[width=0.2\textwidth]{SensorTexas.jpg}
   \caption{Sensor CC2650.}
 \end{figure}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.5\textwidth]{FundaTexas.png}
+  \includegraphics[width=0.2\textwidth]{FundaTexas.png}
   \caption{Aspecto del sensor con la funda.}
 \end{figure}
+\newpage
 
 {\bf Hardware}
 \newline
@@ -342,6 +344,7 @@ Es un dispositivo pensado para IoT (Internet de las cosas) bastante pequeño y c
   \includegraphics[width=6cm]{sensorHexiwearCorrea.png}
   \caption{Sensor Hexiwar con correa.}
 \end{figure}
+\newpage
 
 {\bf Harwdare}
 \newline
@@ -375,7 +378,7 @@ Hexiwear ofrece aplicaciones tanto en iOS como en Android para interactuar con s
 \newline
 
 Como se menciona en el apartado anterior la interacción con el sensor se hace a través de nuestra propia aplicación Android. Mientras el dispositivo esta conectado con la aplicación se recogen los datos de acelerómetro y giroscopio y se almacenan en la base de datos local de la aplicación para posteriormente enviarlos y procesarlos en el servidor remoto.
-
+\newpage
 
 \section{Aplicación Android}
 \subsection{Descripción de la funcionalidad}
@@ -488,6 +491,7 @@ Por último, cómo se ve en \ref{Menú medicamento} para cada medicamento se pue
 \newline
 
 {\bf Envío de datos al servidor remoto}
+\newline
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.25\textwidth]{EnviarDatos.jpg}
@@ -499,6 +503,7 @@ El botón de enviar que se encuentra situado arriba a la derecha. Permite enviar
 
 Una vez pulsamos el botón, se abre el cuadro de progreso que puede verse en la imagen. Desaparece una vez todos los datos han sido enviados. Después se informa al usuario de si ha ido todo bien o ha fallado algo.
 \newline
+\newpage
 
 {\bf Ayuda}
 \begin{figure}[h!]
@@ -634,6 +639,7 @@ Para desplegar la infraestructura sobre Docker hemos creado dos imágenes propia
 \subsubsection{Procesamiento de datos en el servidor}
 
 Pese a que por dificultades ajenas al proyecto no hemos podido realizar una fase de interacción con usuarios reales para recopilar datos con los que poder trabajar y aplicar las técnicas de datos necesarias para poder extraer información de utilidad, hemos implementado un programa en Python que se encarga de procesar los datos almacenados, por el API REST, en la base de datos remota para producir datos que pudiesen ser usados para entrenar algoritmos de machine learning de una forma sencilla.
+\newpage
 
 \section{Conclusiones}
 El trabajo lo comenzamos en julio del año pasado. El objetivo inicial era desarrollar una aplicación móvil que permitiera la monitorización de algún fenómeno con cierta relevancia médica. Al no conseguir el apoyo médico, optamos por seguir la línea del desarrollo de un sistema más genérico que permite la supervisión remota del paciente. Nuestro sistema está inspirado en el que se puede ver en el artículo \cite{resumen1}, aunque tiene ciertas diferencias. La supervisión del paciente se facilita mucho debido a que se puede hacer de forma remota, en todo momento el médico y cuidador pueden disponer de los datos del paciente.
@@ -940,4 +946,19 @@ Aunque nos hemos organizado juntos, yo he puesto más hincapié en utilizar apli
     \bibitem{Asociación Parkinson Madrid} Asociación Parkinson Madrid (\url{https://www.parkinsonmadrid.org/el-parkinson/el-parkinson-definicion/})
     \bibitem{TFG_Anterior} "Reconocimiento de actividad mediante pulsera con sensores"
 \end{thebibliography}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \end{document}
