@@ -114,7 +114,7 @@ Este proyecto tiene como finalidad el desarrollo de un sistema para la supervisi
 Para llevar a cabo la supervision del paciente nuestro sistema recoge datos sobre como este realiza ciertas actividades, ya sean actividades cotidianas o alguna rutina de actividades marcada por un médico. Nuestro sistema soporta dos tipos de sensores ambos con conectividad BLE (Bluetooth de bajo consumo). De todos los servicios que ofrecen estos sensores nos hemos centrado en el acelerómetro y en el giroscopio ya que son los dos servicios que mas información aportan sobre com realiza los movimientos el paciente.
 \newline
 
-Para gestionar las pulseras y los datos generados por estas hemos desarrollado una Aplicacion Android. La aplicación almacena de forma local todos los datos generados por las pulseras mientras que se está grabando la realizacion de alguna actividad, una vez los datos han sido grabados, la aplicación permite enviarlos a un servidor remoto haciendo use de llamadas a un API REST. Además, la aplicacion permite añadir recordatorios sobre tomas de medicamentos, que pueden resultar de gran ayuda al paciente, y permite grabar los minutos posteriores a la toma de la medicacion para ver como afecta esta a los pacientes.
+Para gestionar las pulseras y los datos generados por estas hemos desarrollado una Aplicacion Android. La aplicación almacena de forma local todos los datos generados por las pulseras mientras que se está grabando la realizacion de alguna actividad, una vez los datos han sido grabados, la aplicación permite enviarlos a un servidor remoto haciendo uso de llamadas a un API REST. Además, la aplicacion permite añadir recordatorios sobre tomas de medicamentos, que pueden resultar de gran ayuda al paciente, y permite grabar los minutos posteriores a la toma de la medicacion para ver como afecta esta a los pacientes.
 \newline
 
 Una vez los datos han sido enviados al servidor, la aplicacion web de monitorizacion remota puede acceder a estos haciendo uso del API REST mencionado antes. Es aplicacion web permite al medico pueda supervisar de forma remota los avances del paciente mostrando los datos de una forma mas gráfica y amigable.
@@ -123,37 +123,34 @@ Una vez los datos han sido enviados al servidor, la aplicacion web de monitoriza
 Toda la imfraestructura incluida en el servidor, el API REST, la base de datos MongoDB y el servidor HTTP son desplegados en forma de contenedores usando la herramienta opensource Docker.
 \newline
 
-{\bf Palabras clave:} aplicación Android, teléfono inteligente, Parkinson, bluetooth, Internet de las cosas, sensores, movimiento, actividades, medicamentos y visualización.
-
+{\bf Palabras clave:} aplicación Android, sistema supervisión, Parkinson, bluetooth, Internet de las cosas, sensores, movimiento, actividades, medicamentos y visualización.
 \newpage
 
 \blankpage
 
 \section*{Abstract}
-The aim of this project is to develop an Android application and all the infrastructure necessary to support its functionalities. The aplication helps the patient into his everyday life and the diagnosis of the ilness by the doctor. More specific the aplication allows the patient (or the one in charge) to add pills reminders and have a history of all the activities that patient makes in its routine either the routine is set by a doctor or not. All the activitys are recorded by BLE sensors conected with the application in order to the data can be processed  and ploted later for the doctor who needs to interpret it.
-\newline
-
-The android application is complemented by a web application which allow the doctor see the plotted data.
-\newline
-
-As said before, the application allows to record the patient through BLE sensors. The application allows two different types of sensors, a rudimentary one which makes his job but is more uncomfortable to wear it and other one more comfortable with a watch band. Both sensors count with multiple services, we have made use of the acellerometer and gyroscope. The integration of the BLE sensors with the application have been one of our bigest challenge because of the complex interface that Android provide.
-\newline
-
-Summarizing, we have used the following technologies:
+The aim of this project is to develop a system for remote supervision about physical activities of Parkinson's patients. The system has been developed trying to be not too much intrusive for the patient, so its use is more confortable. The system has four principal components:
 
 \begin{itemize}
-    \item Android to develop the application. 
-	\item SQLite to store data inside the smartphone. 
-	\item Bluetooth Low Energy for the communication with the sensors. 
-	\item Python to develop the server which stores and proccess the data (Eve framework)
-    \item PHP, HTML5 y Bootstrap to develop the web application.
-	\item Mongodb to store the data in the server.
-    \item Apache as a web server for hosting the web application.
-    \item Docker for deploy the infrastructure automatically (REST API, web server and MongoDB). 
-    \newline
+	\item Sensors bracelet.
+    \item Android application.
+    \item Remote monitoring application web.
+    \item Server with REST API and HTTP.
 \end{itemize}
 
-{\bf Keywords:} Android app, smartphone, Parkinson, bluetooth, Internet of things, sensors, movement, activities, medicines y ploting.
+In order to supervise the patient, our system records data about how the patient does certains activities, they can be daily activities or some routine table advised by a doctor. The system supports two sensors types, both are BLE (Bluetooth Low Energy) We have focused in acelerometer and gyroscope, which are the ones that give us more information about how the patient does each movement.
+\newline
+
+To manage the bracelets and the data generated by them, we have developed an Android application. The application stores the data locally while some activity is been recording, when the data have been recorded, the data can be sent to a remote server using an REST API. The application also allows the user to add reminders for each medicine, which can be really usefull for the patient, minutes after taking the medicine can be recorded with the sensors, so the doctor can see how medicine affects to the patient.
+\newline
+
+The web application can access to stored data using the REST API mentioned before. This application allows doctor to supervise the patient remotly. It shows the data in some simple and friendly graphics.
+\newline
+
+All the infrastructure including the server, the REST API, the MongoDB and the HTTP server are deployed in containers using the open source project Docker.
+\newline
+
+{\bf Keywords:} Android app, supervised system, Parkinson, bluetooth, Internet of things, sensors, movement, activities, medicines y ploting.
 
 \newpage
 \blankpage
@@ -186,7 +183,7 @@ Este Trabajo de fin de grado está precedido por otro realizado en el curso ante
 Nuestro proyecto tratar de recoger esta idea y aplicarla al problema especifico del Parkinson, en lugar de tan solo reconocer actividades cotidianas nuestro objetivo es ver como evoluciona la ejecución de estas actividades por pacientes diagnosticados de Parkinson y ayudar así a su supervisión. Este otro Trabajo de fin de grado estaba dirigido por los mismos profesores que han dirigido este.
 \newline
 
-Además del trabajo de fin de grado citado en el párrafo anterior este trabajo viene precedido por numerosos artículos científicos en los que se intenta identificar los síntomas del parkinson mediante la monitorización de pacientes a través de sensores que este lleva sujetos a alguna parte de su cuerpo. Se comentara en profundidad el alcance de estos artículos en la sección 2 de este documento.
+Además del trabajo de fin de grado citado en el párrafo anterior este trabajo viene precedido por numerosos artículos científicos en los que se intenta identificar los síntomas del parkinson mediante la monitorización de pacientes a través de sensores que este lleva sujetos a alguna parte de su cuerpo. Se comentara en profundidad el alcance de estos artículos en la sección 3 de este documento.
 
 \subsection{Objetivos}
 
@@ -214,6 +211,54 @@ Una vez implementada la aplicación Android capaz de recopilar los datos y almac
 \subsection{Fase 4: Visualización de datos}
 Una vez implementada la aplicación que nos permite recopilar la información y la infraestructura necesaria para manipular esta información fuera del teléfono móvil del paciente implementaremos una aplicación web que servirá para visualizar los datos de una forma amigable para el medico que deba interpretar la información.
 
+\newpage
+
+\section{Introduction}
+
+The Parkinson disease, is a chronic neurodegenerative disease that affects to the central nervous system and advance slowly. The symptoms affect mostly to the motor habilities. The main symptoms are tremors, muscular stiffness, postural instability which make the people who suffer it to overbalance easily and bradykinesia which affect to de speed of the movements and which turn the easy movements into something hard.
+\newline
+
+It's easy to see that the main Parkinson's symptoms can be measured looking at the way some movements are executed or in case of the tremor just looking at its presence. This makes that the study of the Parkinson desease can be helped by the great advanceds made at IoT (Internet of Things) technology which makes easier to achive sensors with enough accuracy and quality to allow the study of these movements
+\newline
+
+For all the previous reasons we believe that the development of a system like our will cover the needs mentioned above, besides the use of BLE sensors allow to decrease the costs of the systems and provide a high reliability and a very low consume. And because they are wireless the are so confortable to weare on for the patient.
+\newline
+
+\subsection{Previous work}
+
+This project are preceded by another made the previous year \cite{TFG_Anterior} in which our mates develop a system capable of recognize common activities using an Android app and BLE sensors like ours but more difficult to wear because our project priorize to select wearables sensors.
+\newline
+
+Our project try to take this idea and apply it to the specific problem of the Parkinson disease, instead of just recognize common activities our target is to observe how the execution of these activities by Parkinson patients evolve and help the supervision of these activities. These previos project was directed by the same profesors than ours.
+\newline
+
+Additionally our project is preceded by many scientific articles which try to identify Parkinson symptoms using wearables sensors. These articles will be discous deeply at the section three of this document
+\newline
+
+\subsection{Objetives}
+
+Once all the collected data are at the remote server they will be available through a web app, also developed by us, which will use the same REST API of the Android app for get the collected data and which will allow the continuos supervise of the patient by the doctor withou need any date for get the data.
+\newline
+
+\subsection{Workplan}
+
+The project work plan have 4 phases each one explained below:
+
+\subsubsection{Phase 1: Documentation and state of art}
+
+During these first phase the objective is to documentate ourselves about the current state of the art at the monitoring using wearables sensors in Parkinson patients. In order to achive it ours director will provide us with scientific articles related with this subject.
+
+\subsubsection{Phase 2: Develop an Android App}
+
+In this second phase we will develop an Android app which will allow us to collect the sensors information and the patient context for it's later use.
+
+\subsubsection{Phase 3: Implementation of the server services}
+
+Once the Android app is capable of collect the sensor data and store it locally we will implement the needed services for be able to extract these data from the smartphone and send it to the remote server.
+
+\subsubsection{Phase 4: Data visualization}
+
+Once the app is capable to store the sensor data and we have al the services needed to extract the data from the smartphone and send it to the server we will develop a web app which will allow to visualize the data in order the doctor can analize it.
 \newpage
 
 \section{Estado del arte}
@@ -518,27 +563,38 @@ En todas las pantallas de la aplicación puede verse un botón flotante abajo a 
 El botón de ayuda, muestra en cada pantalla cómo realizar todas las acciones permitidas en dicha pantalla. Como podemos ver en este caso muestra cómo acceder a cada apartado, así como enviar datos y conectar los sensores. Resalta en negrita las partes más importantes, para que puedan ser vistas de forma sencilla y rápida.
 \newpage
 
-\subsection{Diagramas UML (Casos de uso)}
+\subsection{Diagramas Casos de uso}
+A continuación se muestran los diagramas de casos de uso correspondientes a la aplicación web:
+\newline
 \begin{figure}[!htb]
 \minipage{0.5\textwidth}
   \includegraphics[width=\linewidth]{AplicacionUML.png}
   \caption{Aplicación}
 \endminipage\hfill
 \minipage{0.5\textwidth}
-  \includegraphics[width=\linewidth]{ActividadesUML.png}
+  \includegraphics[width=0.8\linewidth]{ActividadesUML.png}
   \caption{Actividades}
 \endminipage\hfill
 \end{figure}
 
 \begin{figure}[!htb]
 \minipage{0.5\textwidth}%
-  \includegraphics[width=\linewidth]{MedicamentosUML.png}
+  \includegraphics[width=0.8\linewidth]{MedicamentosUML.png}
   \caption{Medicamentos}
 \endminipage
 \minipage{0.5\textwidth}%
   \includegraphics[width=\linewidth]{SensoresUML.png}
   \caption{Sensores}
 \endminipage
+\end{figure}
+\newpage
+
+\subsection{Diagramas de actividad}
+A continuación, vamos a hacer el diagrama de actividad más representativo de la aplicación, se corresponde con grabar una actividad.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.5\linewidth]{GrabarActividadUML.png}
+  \caption{Diagrama de activad grabar actividad.}
 \end{figure}
 \newpage
 
@@ -570,7 +626,6 @@ El último elemento a destacar son las llamadas a la API Rest. Se hacen mediante
   \includegraphics[width=0.6\textwidth]{ArquitecturaAndroid.png}
   \caption{Arquitectura aplicación Android.}
 \end{figure}
-\newpage
 
 {\bf Estructura de clases}
 \newline
@@ -591,6 +646,108 @@ Por otro lado, todas las activities funcionan de una forma similar. Las activiti
 \newpage
 
 \newpage
+\section{Aplicación web}
+\subsection{Descripción de la funcionalidad}
+La aplicación web permite, al medico encargado de supervisar a un paciente de Parkinson, seguir la evolución de este. La aplicación web muestra tanto la información recogida por las pulseras con sensores BLE correspondiente a la ejecución de las distintas actividades por parte del paciente como la información recogida en la bitácora de medicamentos para que el medico pueda conocer cuando el paciente a dejado de tomarse la medicación y tener esto en cuenta a la hora de visualizar los datos.
+\newline
+
+La aplicación web ha sido diseñada para ser lo más simple e intuitiva posible y mostrar solo la información necesaria para que el médico pueda interpretar los datos recogidos por los sensores.
+\newline
+
+A continuación se muestran las tres vistas con las que cuenta la aplicación web, a excepción de la pantalla de inicio de sesión que se ha excluido de esta sección por su simpleza:
+\newline
+
+\textbf{Pantalla principal}
+\newline
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=15cm]{InicioWEB.png}
+  \caption{Pantalla principal de la Aplicación web.}
+\end{figure}
+
+En la pantalla principal se muestra el numero total de pacientes que están registrados en el sistema y un listado de estos con su nombre e identificador además de dos botones que nos permiten acceder a la información de las actividades y la medicación de cada paciente.
+\newline
+\newline
+
+\textbf{Pantalla de actividades}
+\newline
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=15cm]{ActividadesWEB.png}
+  \caption{Pantalla de actividades de un paciente de la Aplicación web.}
+\end{figure}
+
+En la pantalla de actividades se muestra la información recopilada por las pulseras con sensores BLE mientras que el paciente ejecutaba las actividades. Para visualizar los datos se debe seleccionar la actividad que se quiere visualizar y las fechas entre las que se quiere ver esa actividad.
+\newline
+
+Una vez seleccionados los filtros se mostrará una gráfica por eje de cada sensor disponible en la que se compararán los datos disponibles de actividades de ese tipo realizadas entre las fechas seleccionadas. Esto permitirá al médico ver de una forma clara el nivel en el que ha evolucionado la forma en la que el paciente realiza las actividades.
+\newline
+
+Esta es una de las pantallas que mas información aporta al médico ya que es aquí donde puede ver de una forma gráfica y sencilla la evolución del paciente.
+\newline
+\newpage
+
+\textbf{Pantalla de medicación}
+\newline
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=15cm]{MedicamentosWEB.png}
+  \caption{Pantalla de medicación de un paciente de la Aplicación web.}
+\end{figure}
+
+La pantalla de medicación hace uso de la bitácora de medicamentos para proporcionar al medico información sobre las tomas de la medicación del paciente. El médico tan solo tiene que seleccionar el nombre del fármaco que quiere consultar y rango de fechas y se le mostrará las fechas en las que el paciente debía haber tomado esa medicina y no la tomó. Esta información sirve tanto para aportar un contexto a los datos mostrados en la ventana de actividades como para detectar si hay algún problema con el paciente o con la medicación que tiene asignada.
+
+\subsection{Diagramas de casos de uso}
+
+A continuación se muestran los diagramas de casos de uso correspondientes a la aplicación web:
+\newline
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=5cm]{pantalla-principal.png}
+  \caption{Caso de uso - Pantalla principal de la Aplicación web..}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=5cm]{ver_actividad.png}
+  \caption{Caso de uso - Pantalla de actividades de un paciente de la Aplicación web.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=5cm]{ver_mediacmento.png}
+  \caption{Caso de uso - Pantalla de medicación de un paciente de la Aplicación web.}
+\end{figure}
+
+
+\subsection{Diagramas de actividad}
+A continuación se muestra el diagrama de actividad de la principal actividad de la aplicación web, ver los datos de las actividades de un paciente:
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[height=6cm]{actividad-web.png}
+  \caption{Diagrama actividad - Ver datos de la actividad de un paciente.}
+\end{figure}
+
+\subsection{Aspectos importantes de la implementación}
+
+La aplicación web esta desarrollada usando principalmente HTML, Bootstrap y JavaScript, aunque hacemos uso de PHP para gestionar las sesiones y hacer las llamadas al API REST.
+\newline
+
+Todos los datos mostrados en la aplicación se recogen a través de JavaScript haciendo uso del API REST. Para evitar problemas de CORS (Intercambio de Recursos de Origen Cruzado), que surgen al realizar peticiones HTTP a un dominio diferente del de la aplicación web, hemos implementado una pagina PHP que recibe mediante JavaScript la consulta que se quiere realizar al API REST y la realiza desde el backend devolviendo los datos tal cual para su posterior procesado mediante el propio código JavaScript.
+\newline
+
+Hemos seleccionado PHP para implementar la parte de backend ya que que el uso que le damos es mínimo y no creemos que sea necesario el uso de otras tecnologías usadas en proyectos de mayor tamaños.
+\newline
+
+El hecho de usar el API REST para recuperar los datos y el uso tan reducido que hacemos del backend nos permite poder migrar la aplicación web de una forma muy sencilla. En caso de que alguien quisiese usar nuestra aplicación con una tecnología distinta a PHP tan solo tendría que crear una pagina que realizase llamadas HTTP al API REST y modificar en JavaScript la ruta de las llamadas.
+\newpage
+
+
 \section{Servicios del servidor}
 En esta sección se describen los diferentes servicios ejecutados en la parte del servidor que sirven principalmente para el envió bidireccional, almacenamiento y procesamiento de los datos obtenidos de la grabación de las actividades realizadas por los pacientes a través de las pulseras con sensores.
 
@@ -634,9 +791,8 @@ Para desplegar la infraestructura sobre Docker hemos creado dos imágenes propia
   \includegraphics[width=10cm]{containers-interaction.png}
   \caption{Diagrama de interacción de los contenedores de Docker.}
 \end{figure}
-\newpage
 
-\subsubsection{Procesamiento de datos en el servidor}
+\subsection{Procesamiento de datos en el servidor}
 
 Pese a que por dificultades ajenas al proyecto no hemos podido realizar una fase de interacción con usuarios reales para recopilar datos con los que poder trabajar y aplicar las técnicas de datos necesarias para poder extraer información de utilidad, hemos implementado un programa en Python que se encarga de procesar los datos almacenados, por el API REST, en la base de datos remota para producir datos que pudiesen ser usados para entrenar algoritmos de machine learning de una forma sencilla.
 \newpage
@@ -648,9 +804,9 @@ El trabajo lo comenzamos en julio del año pasado. El objetivo inicial era desar
 El sistema puede tener varios usos, en los que hemos pensado principalmente son los siguientes:
 
 \begin{itemize}
-	\item Monitorización de tablas de ejercicios: el paciente puede hacer diariamente los ejercicios que le mande su médico y se almacenan todos los datos recogidos por los sensores, así cómo las posibles observaciones que pueda hacer el paciente después de realizar la actividad.
-    \item Monitorización del efecto de la medicación: los sensores recogen datos tanto antes como después de la toma de la medicación. Esto permite ver el efecto que está teniendo la medicación y podría permitir la médico ver si la medicación es la correcta.
-    \item Bitácora: sirve para llevar un control de las pastillas que se toma el paciente, así como de si se las ha tomado o no. A su vez también se lleva un control del seguimiento de la tabla de ejercicios.
+	\item {\bf Monitorización de tablas de ejercicios}: el paciente puede hacer diariamente los ejercicios que le mande su médico y se almacenan todos los datos recogidos por los sensores, así cómo las posibles observaciones que pueda hacer el paciente después de realizar la actividad.
+    \item {\bf Monitorización del efecto de la medicación}: los sensores recogen datos tanto antes como después de la toma de la medicación. Esto permite ver el efecto que está teniendo la medicación y podría permitir la médico ver si la medicación es la correcta.
+    \item {\bf Bitácora}: sirve para llevar un control de las pastillas que se toma el paciente, así como de si se las ha tomado o no. A su vez también se lleva un control del seguimiento de la tabla de ejercicios.
 \end{itemize}
 
 Nuestro trabajo sigue la línea de los que vimos en los artículos del estado del arte. Aunque, en nuestro caso hemos querido centrarnos más en otros aspectos y no tanto en el análisis de datos posterior. El sistema ayuda al paciente a recordar la toma de sus pastillas y le permite una vez tomada la pastilla grabar la actividad con los sensores, de forma que posteriormente el médico puede tener una visión completa del efecto que tiene la medicación. Mientras que en la mayoría de artículos se centraban en el ejercicio supervisado, nuestro sistema deja ese apartado libre, pudiendo el paciente realizar su tabla de ejercicios o ejercicio libre. Todos los datos recogidos, pueden ser visualizados por el médico de forma sencilla y filtrando dependiendo del tipo de datos que quiera ver. De esta forma, de manera remota puede tener el control de todos sus pacientes y puede tomar decisiones en cualquier momento. De esta forma se quiere seguir la línea de objetividad y continuidad que planteaban muchos artículos, cómo por ejemplo el \cite{resumen2}
@@ -660,6 +816,28 @@ Todos los datos que se recogen, son almacenados en el sistema, tanto en el móvi
 \newline
 
 Como conclusión final, a pesar de la falta de personas que prueben nuestra aplicación, se ha desarrollado un trabajo muy completo y cerrado. Es completamente funcional y se podría poner en funcionamiento en cualquier momento y a partir de esto ampliar y seguir con la idea inicial del proyecto.
+\newpage
+
+\section{Conclusions}
+
+The work was started in the past July. The initial objective was to develop a smartphone application for monitoring some phenomenon with medical relevance.We didn’t get medical support, so we follow the line of developing a more generic system which allows patient’s remote supervision. Our system is inspired in the one which can be seen in the article \cite{resumen1}, although it has some differences. The patient’s supervision is facilitated because it can be done remotely, in each moment the doctor and the carer can have the patient’s data.
+\newline
+
+The system can be used in different ways, these are the main:
+
+\begin{itemize}
+	\item {\bf Monitoring of activities tables}: the patient could dailly do the exercises that his doctor tells, all the data, received from the sensors, are stored. Any observation that the patient does about the activity can be stored too.
+	\item {\bf Monitoring of the medicine affect}: the application stores data before and after taking the medicine. This can be used by the doctor to check if the medicine is working well.
+	\item {\bf Binnacle}: it can be used to see if the patient is taking all the medicines and also it allows to follow all the activities. 
+\end{itemize}
+
+Our work follows the line of some of the articles we read. Although, we wanted to focus more in other aspects and not as much in the data analysis. The system helps the patient to remind the medicine taking and it allows to record the activity after that using the sensors. So the doctor can have a complete vision of the medicine effect. While the majority of the articles used supervised activities, our system can be used also in daily activities. All the data can be seen and filtered by the doctor. In this way, the doctor can remotely supervise the patient. So we can follow the objective and continuation line that some articles follows, for example \cite {resumen2}.
+\newline
+
+All the data are stored in the system, in the smartphone and in the server. They are used in the web application. They are stored in a way that in the future can be used to do machine learning with them.
+\newline
+
+Finally, although any person has tested our work, we have developed a complete work. It is functional and can be used in any moment.
 \newpage
 
 \section{Trabajo futuro}
@@ -924,6 +1102,17 @@ Aunque nos hemos organizado juntos, yo he puesto más hincapié en utilizar apli
 }
 \end{lstlisting}
 \newpage
+
+\subsection{Repositorios GitHub}
+Todo el código del sistema se encuentra en tres repositorios de GitHub, son los siguientes:
+
+\begin{itemize}
+	\item Aplicación Android: \url https://github.com/al3xhh/TFGParkinsonAplicacion
+    \item Aplicación Web: \url https://github.com/al3xhh/TFGParkinsonAplicacion
+    \item API rest y docker: \url https://github.com/christian7007/TFGParkinsonAPI
+\end{itemize}
+
+\newpage
 \begin{thebibliography}{10}
 	\bibitem{resumen1}
     Shyamal Patel, Konrad Lorincz, Richard Hughes, Nancy Huggins, John H. Growdon, Matt Welsh, Paolo 		Bonato, Senior Member, IEEE. "Analysis of Feature Space for Monitoring Persons with Parkinson’s
@@ -946,19 +1135,4 @@ Aunque nos hemos organizado juntos, yo he puesto más hincapié en utilizar apli
     \bibitem{Asociación Parkinson Madrid} Asociación Parkinson Madrid (\url{https://www.parkinsonmadrid.org/el-parkinson/el-parkinson-definicion/})
     \bibitem{TFG_Anterior} "Reconocimiento de actividad mediante pulsera con sensores"
 \end{thebibliography}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \end{document}
